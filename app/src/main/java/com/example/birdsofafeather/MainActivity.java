@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,17 +24,29 @@ import java.util.concurrent.Executors;
 public class MainActivity extends AppCompatActivity {
 
     Handler mainHandler = new Handler();
+    ImageView imageView; // new
+    TextView URLText; // new
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
     }
 
     public void onConfirmClicked(View view) {
     }
 
+    // new
+    public void onDoneClicked(View view){
+        imageView = findViewById(R.id.pfp);
+        URLText = findViewById(R.id.URL);
+        String URLString = URLText.getText().toString();
+        Glide.with(this).load(URLString).into(imageView);
+    }
+
+
+/*
     public void onDoneClicked(View view) throws IOException {
         TextView URLText = findViewById(R.id.URL);
         ImageView img = findViewById(R.id.pfp);
@@ -68,5 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }
-    }
+    } */
+
+
 }
