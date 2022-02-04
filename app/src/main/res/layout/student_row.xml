@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="64sp"
+    android:layout_marginLeft="0sp"
+    android:layout_marginRight="0sp"
+    android:gravity="center_vertical"
+    android:background="@drawable/border">
+
+    <TextView
+        android:id="@+id/student_row_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16sp"
+        android:layout_marginTop="16sp"
+        android:height="32sp"
+        android:lineHeight="32sp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:text="@tools:sample/full_names"/>
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginRight="26sp"
+        android:layout_marginTop="7sp"
+        android:layout_gravity="right"
+        app:srcCompat="@drawable/resource_default" />
+
+</FrameLayout>
