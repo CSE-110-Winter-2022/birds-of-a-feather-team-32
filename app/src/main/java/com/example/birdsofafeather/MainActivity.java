@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
 
             editor.putString("image_url", url);
             editor.apply();
+            Log.d("<onConfirm>", "URL is valid");
 
         } catch (Exception e) {
             Glide.with(this)
                     .load(R.drawable.ic_baseline_android_24)
                     .into(imageView);   //load default image if url is invalid
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
+            Log.d("<onConfirm>", "URL is invalid");
         }
-
-
     }
 
     public void onDoneClicked(View view){
