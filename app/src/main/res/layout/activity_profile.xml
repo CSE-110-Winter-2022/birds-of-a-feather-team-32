@@ -28,14 +28,14 @@
         android:layout_marginBottom="44dp"
         android:text="Placeholder"
         android:textSize="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
+        app:layout_constraintBottom_toTopOf="@+id/courseRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.51"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/courseRecyclerView"
         android:layout_width="328dp"
         android:layout_height="408dp"
         android:layout_marginStart="16dp"

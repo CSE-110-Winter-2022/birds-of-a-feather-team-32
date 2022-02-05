@@ -7,4 +7,11 @@ public class Course {
     private int year;
     private String quarter;
 
+    public Course(String courseName){
+        this.courseName = courseName;
+    }
+
+    public String getCourseName(){
+        return this.courseName;
+    }
 }
