@@ -24,7 +24,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected Course[] data = {
             new Course("CSE 21"),
-            /*
             new Course("CSE 30"),
             new Course("CSE 100"),
             new Course("CSE 1"),
@@ -33,8 +32,6 @@ public class ProfileActivity extends AppCompatActivity {
             new Course("CSE 4"),
             new Course("CSE 5"),
             new Course("CSE 6"),
-             */
-
     };
 
     @Override
