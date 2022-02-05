@@ -15,6 +15,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     protected RecyclerView studentRecyclerView;
     protected RecyclerView.LayoutManager studentLayoutManager;
     protected ListOfBoFViewAdapter studentViewAdapter;
+
     protected Student[] data = {
             new Student("Marc"),
             new Student("Allison"),

@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    private AppDatabase db; // note that this is the class that we made
+    //private AppDatabase db; // note that this is the class that we made
                             // composition!
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
@@ -24,8 +24,16 @@ public class ProfileActivity extends AppCompatActivity {
 
     protected Course[] data = {
             new Course("CSE 21"),
+            /*
             new Course("CSE 30"),
             new Course("CSE 100"),
+            new Course("CSE 1"),
+            new Course("CSE 2"),
+            new Course("CSE 3"),
+            new Course("CSE 4"),
+            new Course("CSE 5"),
+            new Course("CSE 6"),
+             */
 
     };
 
@@ -34,9 +42,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+
         // Get extra information from intents
-        Intent intent = getIntent();
-        String studentName = intent.getStringExtra("student_name");
+        //Intent intent = getIntent();
+        //String studentName = intent.getStringExtra("student_name");
 
 
         // get information from database
@@ -44,7 +53,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         // set title
-        setTitle(studentName);
+        //setTitle(studentName);
 
         // use some logic to filter out the classes that we don't want to see
         // right now, let's just try to display some data from the database
@@ -56,6 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         profileActivityViewAdapter = new ProfileActivityViewAdapter(Arrays.asList(data));
         coursesRecyclerView.setAdapter(profileActivityViewAdapter);
+
 
     }
 
