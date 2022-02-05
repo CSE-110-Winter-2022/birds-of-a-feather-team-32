@@ -24,7 +24,7 @@ public class Course {
 
     public Course(int id, String dept, String num, String year, String qtr) {
         this.id = id;
-        this.dept = dept;
+        this.dept = dept.toUpperCase();
         this.num = num;
         this.year = year;
         this.qtr = qtr;
