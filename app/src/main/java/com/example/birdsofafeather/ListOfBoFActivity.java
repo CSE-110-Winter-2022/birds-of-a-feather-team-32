@@ -25,7 +25,9 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class ListOfBoFActivity extends AppCompatActivity {
@@ -63,6 +65,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private FakedMessageListener testListener;
     private int buttonState = 0;
 
+    private HashSet<String> seenMessages;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Initialize ownCourse somehow? HashSet?
 
         // Initialize a HashSet of messages that we've seen so far
+        seenMessages = new HashSet<String>();
 
         studentRecyclerView = findViewById(R.id.student_view);
 
@@ -93,6 +98,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String rawString = new String(message.getContent());
                 String[] data;
                 Log.d(TAG, "Found message: " + rawString);
+
+
                 data = rawString.split("\n");
                 Log.d(TAG, data[0]);
                 // TODO:
@@ -101,6 +108,94 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Parse message, compare, insert into database
                  */
             }
+
+            public void parseStudentMessage(String studentMessage){
+                String studentName;
+                String photoUrl;
+                List<Course> courses = new ArrayList();
+
+                // set up some variables to keep track of indices
+                int i = 0;
+                int photoUrlStart = 0;
+                int coursesStart = 0;
+
+                // get the students name
+                while(true) {
+                    // find the three commas, that's when it ends
+                    if(studentMessage.charAt(i) == ','){
+                        studentName = studentMessage.substring(0, i);
+                        i += 3;
+                        photoUrlStart = i;
+                        break;
+                    }
+                    i ++;
+                }
+
+
+                // get the photoUrl
+                while(true){
+                    // find the three commas, that's when the URL ends
+                    if(studentMessage.charAt(i) == ','){
+                        photoUrl = studentMessage.substring(photoUrlStart, i);
+                        i += 4;
+                        coursesStart = i;
+                        break;
+                    }
+                    i ++;
+                }
+
+
+                // get the courses
+                while(i < studentMessage.length()){
+                    // the year and the quarter will always be 4 characters and 2 characters
+                    // respectively so we can extract them without checking the lengths
+                    String year = studentMessage.substring(i, i + 4);
+                    System.out.println(year);
+                    i += 5;
+                    String qtr = studentMessage.substring(i, i + 2);
+                    System.out.println(qtr);
+
+                    i += 3;
+
+                    // then we have to use a loop to determine the rest since those are variable
+                    // get the department name
+                    String dep;
+                    int depStart = i;
+                    while(true){
+                        if(studentMessage.charAt(i) == ','){
+                            dep = studentMessage.substring(depStart, i);
+                            i ++;
+                            break;
+                        }
+                        i++;
+                    }
+
+                    // get the course number
+                    String num;
+                    int numStart = i;
+                    while(true){
+                        // because the num can end either with a new line
+                        // or because we are at the end of the string
+                        // we have to check for both and adjust accordingly
+                        if(i == studentMessage.length() - 1 ||
+                                studentMessage.charAt(i + 1) == '\n' ) {
+                            num = studentMessage.substring(numStart, i + 1);
+                            i += 2;
+                            break;
+                        }
+                        i++;
+                    }
+
+                    // for id and studentId, we should have some field variable
+                    // keeping track of how many there are
+                    // maybe using the size of the HashSet?
+                    // this is just a placeholder to test for now :/
+                    Course newCourse = new Course(1, 1, dep, num, year, qtr);
+                    courses.add(newCourse);
+
+                }
+            }
+
 
             @Override
             public void onLost(@NonNull Message message) {
