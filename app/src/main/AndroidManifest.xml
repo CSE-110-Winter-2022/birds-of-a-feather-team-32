@@ -9,6 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyDjg-lJFSP_0u-hmIFxk53ZEGpEjnVaeAg" />
         <activity
             android:name=".CourseActivity"
             android:exported="false" />
