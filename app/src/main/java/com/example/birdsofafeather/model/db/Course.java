@@ -6,9 +6,16 @@ import androidx.room.PrimaryKey;
 
 @Entity(tableName = "courses")
 public class Course {
+
+    // this is how we identify a certain course
     @PrimaryKey
     @ColumnInfo(name = "id")
     public int id;
+
+    // this is how we identify that this course belongs to
+    // a particular person
+    @ColumnInfo(name = "student_id")
+    public int studentId;
 
     @ColumnInfo(name = "dept")
     public String dept;

@@ -1,3 +1,8 @@
+/**
+ * CoursesActivity.java
+ * This file allows the user to add their own courses to the application.
+ * They can also see the courses that they have previously added.
+ */
 package com.example.birdsofafeather;
 
 import androidx.appcompat.app.AppCompatActivity;

@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.birdsofafeather.model.Student;
+import com.example.birdsofafeather.model.db.Student;
 
 import java.util.List;
 
@@ -43,6 +43,11 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         return this.students.size();
     }
 
+    public void addStudent(Student student){
+        this.students.add(student);
+        this.notifyItemInserted(this.students.size() - 1);
+    }
+
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
@@ -59,6 +64,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             this.student = student;
             this.studentNameView.setText(student.getName());
         }
+
 
         @Override
         public void onClick(View view) {

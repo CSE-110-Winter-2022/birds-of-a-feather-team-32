@@ -8,8 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.birdsofafeather.model.Course;
-import com.example.birdsofafeather.model.Student;
+import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.AppDatabase;
 
 import java.util.Arrays;
@@ -23,15 +22,7 @@ public class ProfileActivity extends AppCompatActivity {
     private ProfileActivityViewAdapter profileActivityViewAdapter;
 
     protected Course[] data = {
-            new Course("CSE 21"),
-            new Course("CSE 30"),
-            new Course("CSE 100"),
-            new Course("CSE 1"),
-            new Course("CSE 2"),
-            new Course("CSE 3"),
-            new Course("CSE 4"),
-            new Course("CSE 5"),
-            new Course("CSE 6"),
+            new Course(0, "CSE","21", "2020", "Fall" ),
     };
 
     @Override

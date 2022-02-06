@@ -6,8 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import com.example.birdsofafeather.model.db.Course;
-
+import java.util.HashSet;
 import java.util.List;
 
 @Dao
@@ -27,4 +26,5 @@ public interface CoursesDao {
 
     @Delete
     void delete(Course course);
+
 }
