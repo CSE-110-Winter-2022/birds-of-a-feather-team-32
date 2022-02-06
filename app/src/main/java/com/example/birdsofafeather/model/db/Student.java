@@ -15,33 +15,32 @@ public class Student {
     @ColumnInfo(name = "id")
     public int studentId;
 
+    @ColumnInfo(name = "numClassOverlap")
+    public int numClassOverlap;
+
     @ColumnInfo(name = "name")
     public String name;
 
     @ColumnInfo(name = "photoURL")
     public String photoURL;
 
-    //@ColumnInfo
-    //public List<Course> courses;
-
     // placeholder constructor to use for testing purposes
     @Ignore
     public Student(String name) {
         this.name = name;
         this.photoURL = null;
-        //this.courses = null;
     }
 
-    public Student(String name, String photoURL) {
+    public Student(String name, String photoURL, int numClassOverlap) {
         this.name = name;
         this.photoURL = photoURL;
-        //this.courses = courses;
+        this.numClassOverlap = numClassOverlap;
     }
 
     public String getName() {
         return this.name;
     }
-    public String getPhotoURL(){ return this.photoURL;}
-    //public HashSet<Course> getCourses() {return this.courses;}
+    public String getPhotoURL(){ return this.photoURL; }
+    public int getStudentId() { return studentId; }
 
 }

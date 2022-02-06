@@ -29,11 +29,43 @@ public class Course {
     @ColumnInfo(name = "qtr")
     public String qtr;
 
+    @ColumnInfo(name = "courseFullString")
+    public String courseFullString;
+
     public Course(int id, String dept, String num, String year, String qtr) {
         this.id = id;
         this.dept = dept.toUpperCase();
         this.num = num;
         this.year = year;
         this.qtr = qtr;
+        courseFullString = dept + " " + num + " " + qtr + " " + year;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Course courseObj = (Course) obj;
+        if (this.courseFullString.equals(courseObj.getCourseFullString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getCourseFullString() {
+        return courseFullString;
+    }
+
+    @Override
+    public int hashCode() {
+        return courseFullString.hashCode();
+    }
+
 }

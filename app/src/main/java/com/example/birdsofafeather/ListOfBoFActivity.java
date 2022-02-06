@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
-import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 
 public class ListOfBoFActivity extends AppCompatActivity {
 
@@ -51,8 +51,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boflist);
 
-        db = AppDatabase.singleton(this);
-
         studentRecyclerView = findViewById(R.id.student_view);
 
         studentLayoutManager = new LinearLayoutManager(this);
@@ -64,14 +62,18 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
 
     public void onRunButtonClicked(View view) {
+
+        db = AppDatabase.singleton(this);
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+
         // insert new people into the thing
         //Course testCourse = new Course(0, "testDept", "testNum", "testYear", "testQtr");
         //HashSet<Course> testCourses = new HashSet<>();
         //testCourses.add(testCourse);
 
-        Student testStudent = new Student("testStudent", "testPhotoURL");
+        Student testStudent = new Student("testStudent", "testPhotoURL", 1);
 
-        db.StudentWithCoursesDao().insert(testStudent);
+        // db.StudentWithCoursesDao().insert(testStudent);
         studentViewAdapter.addStudent(testStudent);
         // populate the thing with new stuff
 

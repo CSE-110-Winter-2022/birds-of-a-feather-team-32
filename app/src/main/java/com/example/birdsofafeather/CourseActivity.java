@@ -34,7 +34,6 @@ public class CourseActivity extends AppCompatActivity {
 
         db = AppDatabase.singleton(this);
         List<Course> courses = db.coursesDao().getAll();
-
         coursesRecyclerView = findViewById(R.id.courses_view);
 
         coursesLayoutManager = new LinearLayoutManager(this);

@@ -3,7 +3,7 @@ package com.example.birdsofafeather.model.db;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import java.util.HashSet;
+import java.util.List;
 
 public class StudentWithCourses {
     @Embedded
@@ -12,13 +12,17 @@ public class StudentWithCourses {
     @Relation(parentColumn = "id",
             entityColumn = "student_id",
             entity = Course.class,
-            projection = {"text"})
-    //public HashSet<Course> courses;
-
+            projection = {"courseFullString"})
+    public List<String> courses;
 
     public String getName() {
         return this.student.name;
     }
-    public String getPhotoURL(){ return this.student.photoURL;}
-    //public HashSet<Course> getCourses() {return this.courses;}
+    public String getPhotoURL() { return this.student.photoURL;}
+    public List<String> getCourses() { return this.courses; }
+
+    public int getId() {
+        return this.student.studentId;
+    }
+
 }

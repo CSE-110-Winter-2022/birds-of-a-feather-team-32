@@ -1,6 +1,5 @@
 package com.example.birdsofafeather.model.db;
 
-import android.app.Person;
 import android.content.Context;
 
 import androidx.room.Database;
@@ -22,5 +21,5 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract CoursesDao coursesDao();
-    public abstract StudentWithCoursesDao StudentWithCoursesDao();
+    public abstract StudentWithCoursesDao studentWithCoursesDao();
 }
