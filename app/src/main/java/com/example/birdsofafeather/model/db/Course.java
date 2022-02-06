@@ -27,6 +27,7 @@ public class Course {
     public Course(int id, String dept, String num, String year, String qtr) {
         this.id = id;
         this.dept = dept.toUpperCase();
+        num = num.replaceAll("\\s", "");
         this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
