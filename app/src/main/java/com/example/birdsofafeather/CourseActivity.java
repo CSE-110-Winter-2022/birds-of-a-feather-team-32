@@ -20,8 +20,8 @@ import com.example.birdsofafeather.model.db.Course;
 import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
-    private AppDatabase db;
 
+    private AppDatabase db;
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
     private CoursesViewAdapter coursesViewAdapter;
