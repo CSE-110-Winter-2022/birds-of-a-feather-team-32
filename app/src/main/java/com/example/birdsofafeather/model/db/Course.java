@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.Locale;
+
 @Entity(tableName = "courses")
 public class Course {
     @PrimaryKey
@@ -24,17 +26,11 @@ public class Course {
 
     public Course(int id, String dept, String num, String year, String qtr) {
         this.id = id;
-<<<<<<< HEAD
-        this.dept = dept;
-=======
         this.dept = dept.toUpperCase();
->>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
-        this.num = num;
+        this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public boolean equals(Object other){
@@ -46,5 +42,4 @@ public class Course {
         }
         return false;
     }
->>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
 }

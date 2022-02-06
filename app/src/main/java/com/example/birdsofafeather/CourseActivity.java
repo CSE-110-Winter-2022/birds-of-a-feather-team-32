@@ -52,25 +52,18 @@ public class CourseActivity extends AppCompatActivity {
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
-<<<<<<< HEAD
-        Course newCourse = new Course(newCourseId, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
-        db.coursesDao().insert(newCourse);
-
-        coursesViewAdapter.addCourse(newCourse);
-=======
-
-
         if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") && !newCourseYearText.equals("")) {
             Course newCourse = new Course(newCourseId, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
             if(!db.coursesDao().getAll().contains(newCourse)){
                 db.coursesDao().insert(newCourse);
                 coursesViewAdapter.addCourse(newCourse);
             }
-
+            else {
+                ErrorUtilities.showAlert(this, "This class has already been added!");
+            }
         } else {
             ErrorUtilities.showAlert(this, "One or more of the fields is empty!");
         }
->>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
     }
 
     public void onHomeClicked(View view) {

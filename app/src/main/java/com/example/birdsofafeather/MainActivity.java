@@ -17,10 +17,5 @@ public class MainActivity extends AppCompatActivity {
     public void onViewClassesClicked(View view) {
         Intent intent = new Intent(this, CourseActivity.class);
         startActivity(intent);
-<<<<<<< HEAD
-=======
-
-
->>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
     }
 }
