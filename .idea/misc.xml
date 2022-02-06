@@ -9,6 +9,10 @@
         <entry key="..\:/Users/andre/AndroidStudioProjects/birds-of-a-feather-team-32/app/src/main/res/layout/activity_course.xml" value="0.264" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/birds-of-a-feather-team-32/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/andre/AndroidStudioProjects/birds-of-a-feather-team-32/app/src/main/res/layout/courses_row.xml" value="0.264" />
+<<<<<<< HEAD
+=======
+        <entry key="app/src/main/res/layout/activity_course.xml" value="0.296195652173913" />
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
       </map>
     </option>
   </component>

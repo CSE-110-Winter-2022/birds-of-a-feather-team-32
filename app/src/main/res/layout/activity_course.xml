@@ -24,7 +24,12 @@
         android:layout_height="56dp"
         android:ems="10"
         android:hint="Course Number"
+<<<<<<< HEAD
         android:inputType="textPersonName"
+=======
+        android:inputType="text"
+        android:maxLength="5"
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -39,6 +44,11 @@
         android:ems="10"
         android:hint="Course Department"
         android:inputType="textPersonName"
+<<<<<<< HEAD
+=======
+        android:maxLength="4"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -51,8 +61,14 @@
         android:layout_width="188dp"
         android:layout_height="56dp"
         android:ems="10"
+<<<<<<< HEAD
         android:inputType="textPersonName"
         android:hint="Year"
+=======
+        android:hint="Year"
+        android:inputType="number"
+        android:maxLength="4"
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.049"
         app:layout_constraintLeft_toLeftOf="parent"

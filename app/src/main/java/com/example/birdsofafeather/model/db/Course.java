@@ -24,9 +24,27 @@ public class Course {
 
     public Course(int id, String dept, String num, String year, String qtr) {
         this.id = id;
+<<<<<<< HEAD
         this.dept = dept;
+=======
+        this.dept = dept.toUpperCase();
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
         this.num = num;
         this.year = year;
         this.qtr = qtr;
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public boolean equals(Object other){
+        if(this == other) { return true;}
+        if(other == null || getClass() != other.getClass()) { return false;}
+        Course course = (Course) other;
+        if((this.dept.equals(course.dept)) && (this.num.equals(course.num)) && (this.qtr.equals(course.qtr)) && (this.year.equals(course.year))){
+            return true;
+        }
+        return false;
+    }
+>>>>>>> d96eccf4aa2ef1800ab15c730f640f0293863d84
 }
