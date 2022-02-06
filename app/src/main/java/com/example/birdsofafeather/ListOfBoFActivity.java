@@ -39,6 +39,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
             new Student("Student E")
     };
 
+    protected String exampleMessage = "Bill,,,\n" +
+            "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n" +
+            "2021,FA,CSE,210\n" +
+            "2022,WI,CSE,110\n" +
+            "2022,SP,CSE,110";
+
     private static final String TAG = "bofNearby";
     private MessageListener realListener;
     private FakedMessageListener testListener;
@@ -60,7 +66,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
         realListener = new MessageListener() {
             @Override
             public void onFound(@NonNull Message message) {
-                Log.d(TAG, "Found message: " + new String(message.getContent()));
+                String rawString = new String(message.getContent());
+                String[] data;
+                Log.d(TAG, "Found message: " + rawString);
+                data = rawString.split("\n");
+                Log.d(TAG, data[0]);
             }
 
             @Override
@@ -68,7 +78,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
             }
         };
-        this.testListener = new FakedMessageListener(realListener, 3, "Hello World");
+        this.testListener = new FakedMessageListener(realListener, 3, exampleMessage);
     }
 
     public void onStartClicked(View view) {
