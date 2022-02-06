@@ -11,7 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.birdsofafeather.model.Course;
+import com.example.birdsofafeather.model.db.Course;
 
 import java.util.List;
 
@@ -44,31 +44,20 @@ public class ProfileActivityViewAdapter extends RecyclerView.Adapter<ProfileActi
     }
 
     public static class ViewHolder
-            extends RecyclerView.ViewHolder
-            implements View.OnClickListener {
-        private final TextView courseNameView;
+            extends RecyclerView.ViewHolder {
+        private final TextView courseView;
         private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
-            this.courseNameView = itemView.findViewById(R.id.course_row_name);
-            itemView.setOnClickListener(this);
+            this.courseView = itemView.findViewById(R.id.course_row_name);
         }
 
         public void setCourse(Course course) {
             this.course = course;
-            this.courseNameView.setText(course.getCourseName());
+            this.courseView.setText(course.dept + " " + course.num + " " + course.year + " " + course.qtr);
 
         }
 
-        // probably shouldn't have this here but I'll keep it here
-        // as a placeholder since we need to override it
-        @Override
-        public void onClick(View view) {
-            Context context = view.getContext();
-            Intent intent = new Intent(context, ProfileActivity.class);
-            intent.putExtra("course_name", this.course.getCourseName()); // should we have an Id?
-            context.startActivity(intent);
-        }
     }
 }

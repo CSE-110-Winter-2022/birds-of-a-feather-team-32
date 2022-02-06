@@ -1,6 +1,14 @@
+/**
+ * ListOfBofActivity.java
+ * This class allows the user to see other students nearby them that share
+ * the same classes as they do.
+ * They are also able to click on an individual student to see all the
+ * classes that they have in common.
+ */
 package com.example.birdsofafeather;
 
 import android.os.Bundle;
+import android.view.View;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,14 +18,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.example.birdsofafeather.model.Student;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ListOfBoFActivity extends AppCompatActivity {
+
+    private AppDatabase db;
+    private Student student;
 
     protected RecyclerView studentRecyclerView;
     protected RecyclerView.LayoutManager studentLayoutManager;
@@ -95,10 +110,29 @@ public class ListOfBoFActivity extends AppCompatActivity {
         }
     }
 
+    public void onRunButtonClicked(View view) {
+
+        db = AppDatabase.singleton(this);
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+
+        // insert new people into the thing
+        //Course testCourse = new Course(0, "testDept", "testNum", "testYear", "testQtr");
+        //HashSet<Course> testCourses = new HashSet<>();
+        //testCourses.add(testCourse);
+
+        Student testStudent = new Student("testStudent", "testPhotoURL", 1);
+
+        // db.StudentWithCoursesDao().insert(testStudent);
+        studentViewAdapter.addStudent(testStudent);
+        // populate the thing with new stuff
+
+        // studentViewAdapter = new ListOfBoFViewAdapter(Arrays.asList(data));
+        //studentRecyclerView.setAdapter(studentViewAdapter);
+    }
+  
     @Override
     public void onStop() {
         super.onStop();
         Nearby.getMessagesClient(this).unsubscribe(realListener);
     }
-
 }

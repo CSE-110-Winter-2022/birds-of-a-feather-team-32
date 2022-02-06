@@ -13,6 +13,9 @@
             android:name="com.google.android.nearby.messages.API_KEY"
             android:value="AIzaSyDjg-lJFSP_0u-hmIFxk53ZEGpEjnVaeAg" />
         <activity
+            android:name=".CourseActivity"
+            android:exported="false" />
+        <activity
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
