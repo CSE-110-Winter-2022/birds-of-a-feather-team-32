@@ -12,17 +12,17 @@ import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.AppDatabase;
 
 import java.util.Arrays;
+import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    //private AppDatabase db; // note that this is the class that we made
-                            // composition!
+    private AppDatabase db;
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
     private ProfileActivityViewAdapter profileActivityViewAdapter;
 
     protected Course[] data = {
-            new Course(0, "CSE","21", "2020", "Fall" ),
+            new Course(0, 0,"CSE","21", "2020", "Fall" ),
     };
 
     @Override
@@ -30,15 +30,12 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        db = AppDatabase.singleton(this);
 
-        // Get extra information from intents
-        //Intent intent = getIntent();
-        //String studentName = intent.getStringExtra("student_name");
+        Intent intent = getIntent();
+        int studentId = intent.getIntExtra("student_id",0);
 
-
-        // get information from database
-        // db = AppDatabase.singleton(this);
-
+        List<Course> courses = db.studentWithCoursesDao().get(studentId).getCourses();
 
         // set title
         //setTitle(studentName);
@@ -51,7 +48,7 @@ public class ProfileActivity extends AppCompatActivity {
         coursesLayoutManager = new LinearLayoutManager(this);
         coursesRecyclerView.setLayoutManager(coursesLayoutManager);
 
-        profileActivityViewAdapter = new ProfileActivityViewAdapter(Arrays.asList(data));
+        profileActivityViewAdapter = new ProfileActivityViewAdapter(courses);
         coursesRecyclerView.setAdapter(profileActivityViewAdapter);
 
 

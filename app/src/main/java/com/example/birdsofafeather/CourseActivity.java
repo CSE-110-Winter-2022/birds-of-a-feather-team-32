@@ -56,7 +56,7 @@ public class CourseActivity extends AppCompatActivity {
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
-        Course newCourse = new Course(newCourseId, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
+        Course newCourse = new Course(newCourseId, 0, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
         db.coursesDao().insert(newCourse);
 
         coursesViewAdapter.addCourse(newCourse);

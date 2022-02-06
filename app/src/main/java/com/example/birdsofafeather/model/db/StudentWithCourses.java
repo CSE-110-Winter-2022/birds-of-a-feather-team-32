@@ -11,15 +11,14 @@ public class StudentWithCourses {
 
     @Relation(parentColumn = "id",
             entityColumn = "student_id",
-            entity = Course.class,
-            projection = {"courseFullString"})
-    public List<String> courses;
+            entity = Course.class)
+    public List<Course> courses;
 
     public String getName() {
         return this.student.name;
     }
     public String getPhotoURL() { return this.student.photoURL;}
-    public List<String> getCourses() { return this.courses; }
+    public List<Course> getCourses() { return this.courses; }
 
     public int getId() {
         return this.student.studentId;

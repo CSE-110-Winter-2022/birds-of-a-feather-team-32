@@ -31,7 +31,8 @@ public class Student {
         this.photoURL = null;
     }
 
-    public Student(String name, String photoURL, int numClassOverlap) {
+    public Student(int studentId, String name, String photoURL, int numClassOverlap) {
+        this.studentId = studentId;
         this.name = name;
         this.photoURL = photoURL;
         this.numClassOverlap = numClassOverlap;

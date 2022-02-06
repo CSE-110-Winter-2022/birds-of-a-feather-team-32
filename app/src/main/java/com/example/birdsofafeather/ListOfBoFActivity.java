@@ -10,7 +10,6 @@ package com.example.birdsofafeather;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
@@ -19,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.google.android.gms.nearby.Nearby;
@@ -31,7 +31,6 @@ import java.util.List;
 public class ListOfBoFActivity extends AppCompatActivity {
 
     private AppDatabase db;
-    private Student student;
 
     protected RecyclerView studentRecyclerView;
     protected RecyclerView.LayoutManager studentLayoutManager;
@@ -69,12 +68,23 @@ public class ListOfBoFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boflist);
 
+        // for testing purposes
+        // createStudents();
+
+        db = AppDatabase.singleton(this);
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+
+        List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+        // Initialize ownCourse somehow? HashSet?
+
+        // Initialize a HashSet of messages that we've seen so far
+
         studentRecyclerView = findViewById(R.id.student_view);
 
         studentLayoutManager = new LinearLayoutManager(this);
         studentRecyclerView.setLayoutManager(studentLayoutManager);
 
-        studentViewAdapter = new ListOfBoFViewAdapter(Arrays.asList(data));
+        studentViewAdapter = new ListOfBoFViewAdapter(students);
         studentRecyclerView.setAdapter(studentViewAdapter);
 
         realListener = new MessageListener() {
@@ -85,6 +95,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Log.d(TAG, "Found message: " + rawString);
                 data = rawString.split("\n");
                 Log.d(TAG, data[0]);
+                // TODO:
+                /*
+                Check the message string against our HashSet, and if found, ignore the message
+                Parse message, compare, insert into database
+                 */
             }
 
             @Override
@@ -109,20 +124,25 @@ public class ListOfBoFActivity extends AppCompatActivity {
         }
     }
 
-    public void onRunButtonClicked(View view) {
+    public void createStudents() {
 
         db = AppDatabase.singleton(this);
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
 
+        int newCourseId = db.coursesDao().numCourses() + 1;
+        Course testCourse = new Course(newCourseId,5,"POLI", "132", "2021", "FALL");
+        //Student testStudent = new Student(5,"student5", "testPhotoURL", 1);
+
+        //db.studentWithCoursesDao().insert(testStudent);
+        db.coursesDao().insert(testCourse);
+
+        // List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
         // insert new people into the thing
         //Course testCourse = new Course(0, "testDept", "testNum", "testYear", "testQtr");
         //HashSet<Course> testCourses = new HashSet<>();
         //testCourses.add(testCourse);
 
-        Student testStudent = new Student("testStudent", "testPhotoURL", 1);
-
         // db.StudentWithCoursesDao().insert(testStudent);
-        studentViewAdapter.addStudent(testStudent);
+        // studentViewAdapter.addStudent(testStudent);
         // populate the thing with new stuff
 
         // studentViewAdapter = new ListOfBoFViewAdapter(Arrays.asList(data));

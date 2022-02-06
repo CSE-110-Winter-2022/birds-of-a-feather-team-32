@@ -30,4 +30,11 @@
         android:layout_gravity="right"
         app:srcCompat="@drawable/resource_default" />
 
+    <TextView
+        android:id="@+id/studentId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:visibility="invisible" />
+
 </FrameLayout>

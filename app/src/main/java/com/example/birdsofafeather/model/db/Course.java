@@ -32,8 +32,9 @@ public class Course {
     @ColumnInfo(name = "courseFullString")
     public String courseFullString;
 
-    public Course(int id, String dept, String num, String year, String qtr) {
+    public Course(int id, int studentId, String dept, String num, String year, String qtr) {
         this.id = id;
+        this.studentId = studentId;
         this.dept = dept.toUpperCase();
         this.num = num;
         this.year = year;

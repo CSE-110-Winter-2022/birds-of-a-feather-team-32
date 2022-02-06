@@ -12,14 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 
 import java.util.List;
 
 public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdapter.ViewHolder> {
 
-    private final List<Student> students;
+    private final List<StudentWithCourses> students;
 
-    public ListOfBoFViewAdapter(List<Student> students) {
+    public ListOfBoFViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
     }
@@ -43,7 +45,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         return this.students.size();
     }
 
-    public void addStudent(Student student){
+    public void addStudent(StudentWithCourses student){
         this.students.add(student);
         this.notifyItemInserted(this.students.size() - 1);
     }
@@ -52,7 +54,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView studentNameView;
-        private Student student;
+        private StudentWithCourses student;
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -60,17 +62,17 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             itemView.setOnClickListener(this);
         }
 
-        public void setPerson(Student student) {
+        public void setPerson(StudentWithCourses student) {
             this.student = student;
             this.studentNameView.setText(student.getName());
         }
-
 
         @Override
         public void onClick(View view) {
             Context context = view.getContext();
             Intent intent = new Intent(context, ProfileActivity.class);
-            intent.putExtra("student_name", this.student.getName()); // should we have an Id?
+            intent.putExtra("student_name", this.student.getName());// should we have an Id?
+            intent.putExtra("student_id", this.student.getId());
             context.startActivity(intent);
         }
     }
