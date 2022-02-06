@@ -32,17 +32,23 @@ public class MainActivity extends AppCompatActivity {
     public void onConfirmClicked(View view) {
         imageView = findViewById(R.id.pfp);
         URLText = findViewById(R.id.URL);
-        String url = URLText.toString();
+        String url = URLText.getText().toString();
         SharedPreferences pref = getPreferences(MODE_PRIVATE);  //save image url to sharedpref
         SharedPreferences.Editor editor = pref.edit();
 
         try {
-            InputStream is = (InputStream) new URL(url).getContent();
-            Drawable d = Drawable.createFromStream(is, "src name");
+            //InputStream is = (InputStream) new URL(url).getContent();
+            //Drawable d = Drawable.createFromStream(is, "src name");
 
             editor.putString("image_url", url);
             editor.apply();
             Log.d("<onConfirm>", "URL is valid");
+
+            // if user didn't press done, this would load image
+            Glide.with(this)
+                    .load(url)
+                    .error(R.drawable.ic_baseline_error_24)
+                    .into(imageView);
 
         } catch (Exception e) {
             Glide.with(this)
