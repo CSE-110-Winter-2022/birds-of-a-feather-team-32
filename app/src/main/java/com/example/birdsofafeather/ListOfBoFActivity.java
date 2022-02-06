@@ -79,7 +79,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
         List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
 
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
-        // Initialize ownCourse somehow? HashSet?
+
+        // reformat into a hashset to make it easier to compare later on
+        HashSet<Course> ownCoursesSet = new HashSet<>();
+        for(Course course: ownCourses){
+            ownCoursesSet.add(course);
+        }
 
         // Initialize a HashSet of messages that we've seen so far
         seenMessages = new HashSet<String>();
@@ -107,95 +112,71 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Check the message string against our HashSet, and if found, ignore the message
                 Parse message, compare, insert into database
                  */
+                if(!seenMessages.contains(rawString)){
+                    parseStudentMessage(rawString);
+                }
             }
 
             public void parseStudentMessage(String studentMessage){
                 String studentName;
                 String photoUrl;
-                List<Course> courses = new ArrayList();
+                ArrayList<Course> courses = new ArrayList();
 
-                // set up some variables to keep track of indices
-                int i = 0;
-                int photoUrlStart = 0;
-                int coursesStart = 0;
+                String[] data = studentMessage.split(",,,");
 
-                // get the students name
-                while(true) {
-                    // find the three commas, that's when it ends
-                    if(studentMessage.charAt(i) == ','){
-                        studentName = studentMessage.substring(0, i);
-                        i += 3;
-                        photoUrlStart = i;
-                        break;
-                    }
-                    i ++;
-                }
+                studentName = data[0];
+                photoUrl = data[1];
 
+                String[] coursesString = data[2].split("\n");
 
-                // get the photoUrl
-                while(true){
-                    // find the three commas, that's when the URL ends
-                    if(studentMessage.charAt(i) == ','){
-                        photoUrl = studentMessage.substring(photoUrlStart, i);
-                        i += 4;
-                        coursesStart = i;
-                        break;
-                    }
-                    i ++;
-                }
+                Course newCourse;
+                int currId = 0;
 
+                for(int i = 1; i < coursesString.length; i ++){
+                    String course = coursesString[i];
+                    String[] courseParts = course.split(",");
 
-                // get the courses
-                while(i < studentMessage.length()){
-                    // the year and the quarter will always be 4 characters and 2 characters
-                    // respectively so we can extract them without checking the lengths
-                    String year = studentMessage.substring(i, i + 4);
-                    System.out.println(year);
-                    i += 5;
-                    String qtr = studentMessage.substring(i, i + 2);
-                    System.out.println(qtr);
+                    int id = currId;
+                    int studentId = 1;
+                    String dept = courseParts[2];
+                    System.out.println("dept: " + dept);
+                    String num = courseParts[3];
+                    System.out.println("num: " + num);
 
-                    i += 3;
+                    String year = courseParts[0];
+                    System.out.println("year: " + year);
 
-                    // then we have to use a loop to determine the rest since those are variable
-                    // get the department name
-                    String dep;
-                    int depStart = i;
-                    while(true){
-                        if(studentMessage.charAt(i) == ','){
-                            dep = studentMessage.substring(depStart, i);
-                            i ++;
-                            break;
-                        }
-                        i++;
-                    }
+                    String qtr = courseParts[1];
+                    System.out.println("qtr: " + qtr);
 
-                    // get the course number
-                    String num;
-                    int numStart = i;
-                    while(true){
-                        // because the num can end either with a new line
-                        // or because we are at the end of the string
-                        // we have to check for both and adjust accordingly
-                        if(i == studentMessage.length() - 1 ||
-                                studentMessage.charAt(i + 1) == '\n' ) {
-                            num = studentMessage.substring(numStart, i + 1);
-                            i += 2;
-                            break;
-                        }
-                        i++;
-                    }
-
-                    // for id and studentId, we should have some field variable
-                    // keeping track of how many there are
-                    // maybe using the size of the HashSet?
-                    // this is just a placeholder to test for now :/
-                    Course newCourse = new Course(1, 1, dep, num, year, qtr);
+                    newCourse = new Course(currId, studentId, dept, num, year, qtr);
                     courses.add(newCourse);
 
+                    currId ++;
                 }
+
+                int studentId = db.studentWithCoursesDao().count() + 1;
+                Student newStudent = new Student(studentId, studentName, photoUrl, 0);
+                checkForMatchingCourses(newStudent, courses);
             }
 
+            public void checkForMatchingCourses(Student newStudent, ArrayList<Course> newCourses){
+                int studentId = newStudent.getStudentId();
+                for(Course course: newCourses){
+                    // compare them with courses to see if there's a match
+                    if(ownCoursesSet.contains(course)){
+
+                        // not sure what the behavior is when you pass in a studentId
+                        // that doesn't exist? so check here if you're getting any errors
+                        if(db.studentWithCoursesDao().get(studentId) != null) {
+                            db.studentWithCoursesDao().insert(newStudent);
+                        }
+
+                        db.studentWithCoursesDao().get(studentId).student.incrementNumClassOverlap();
+                        db.coursesDao().insert(course);
+                    }
+                }
+            }
 
             @Override
             public void onLost(@NonNull Message message) {

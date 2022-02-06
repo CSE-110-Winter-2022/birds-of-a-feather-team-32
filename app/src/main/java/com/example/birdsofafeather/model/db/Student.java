@@ -43,5 +43,8 @@ public class Student {
     }
     public String getPhotoURL(){ return this.photoURL; }
     public int getStudentId() { return studentId; }
+    public void incrementNumClassOverlap(){
+        this.numClassOverlap++;
+    }
 
 }
