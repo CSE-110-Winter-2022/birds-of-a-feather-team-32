@@ -14,8 +14,9 @@ import android.content.SharedPreferences;
 @RunWith(AndroidJUnit4.class)
 public class ImageTest {
     @Before
-        public void init(){
+    public void init(){
     }
+
     @Test
     public void test1(){
         //assertEquals("https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0", SharedPreferences.);
