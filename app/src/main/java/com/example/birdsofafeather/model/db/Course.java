@@ -29,4 +29,15 @@ public class Course {
         this.year = year;
         this.qtr = qtr;
     }
+
+    @Override
+    public boolean equals(Object other){
+        if(this == other) { return true;}
+        if(other == null || getClass() != other.getClass()) { return false;}
+        Course course = (Course) other;
+        if((this.dept.equals(course.dept)) && (this.num.equals(course.num)) && (this.qtr.equals(course.qtr)) && (this.year.equals(course.year))){
+            return true;
+        }
+        return false;
+    }
 }
