@@ -58,7 +58,7 @@ public class ImageTest {
             activity.findViewById(R.id.confirm).performClick();
 
             SharedPreferences sp = activity.getPreferences(MODE_PRIVATE);
-            String retrievedURL = sp.getString("image_url","R.drawable.ic_baseline_android_24");
+            String retrievedURL = sp.getString("image_url",link);
 
             assertEquals(retrievedURL, link);
 
