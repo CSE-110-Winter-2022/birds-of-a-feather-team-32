@@ -58,7 +58,7 @@ public class ImageTest {
             activity.findViewById(R.id.confirm).performClick();
 
             SharedPreferences sp = activity.getPreferences(MODE_PRIVATE);
-            String retrievedURL = sp.getString("image_url",link);
+            String retrievedURL = sp.getString("image_url","R.drawable.ic_baseline_android_24");
 
             assertEquals(retrievedURL, link);
 
@@ -67,5 +67,31 @@ public class ImageTest {
 
         });
     }
+/*
+    // check invalid url link
+    @Test
+    public void checkInvalidURL() {
+        rule.getScenario().onActivity(activity -> {
+            // set text
+            TextView URLTextView = (TextView) activity.findViewById(R.id.URL);
+            String link = "ABCDEFG";
+            URLTextView.setText(link);
+
+            // check if text set correctly
+            assertEquals(link,URLTextView.getText().toString());
+
+            // press confirm
+            activity.findViewById(R.id.confirm).performClick();
+
+            SharedPreferences sp = activity.getPreferences(MODE_PRIVATE);
+            String defaultImage = sp.getString("image_url","R.drawable.ic_baseline_android_24");
+
+            assertEquals(defaultImage, "R.drawable.ic_baseline_android_24");
+
+
+
+
+        });
+    } */
 }
 

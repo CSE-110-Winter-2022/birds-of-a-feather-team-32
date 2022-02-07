@@ -48,22 +48,25 @@ public class MainActivity extends AppCompatActivity {
                     .error(R.drawable.ic_baseline_error_24)
                     .fitCenter()
                     .into(imageView);
+            //onDoneClicked(view);
 
-            Drawable loadDraw = imageView.getDrawable();
+            /*Drawable loadDraw = imageView.getDrawable();
             if (loadDraw.equals(R.drawable.ic_baseline_error_24)){
                 throw new Exception("invalid url");
-            }
+            } */
 
             editor.putString("image_url", url);
             editor.apply();
 
             Log.d("<onConfirm>", "URL is valid");
 
+
         } catch (Exception e) {
             Glide.with(this)
                     .load(R.drawable.ic_baseline_android_24)
                     .into(imageView);   //load default image if url is invalid
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
+            editor.apply();
             Log.d("<onConfirm>", "URL is invalid");
         }
 
