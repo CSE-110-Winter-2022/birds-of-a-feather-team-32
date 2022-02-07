@@ -1,6 +1,8 @@
 package com.example.birdsofafeather;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,15 +42,22 @@ public class MainActivity extends AppCompatActivity {
             //InputStream is = (InputStream) new URL(url).getContent();
             //Drawable d = Drawable.createFromStream(is, "src name");
 
-            editor.putString("image_url", url);
-            editor.apply();
-            Log.d("<onConfirm>", "URL is valid");
-
             // if user didn't press done, this would load image
             Glide.with(this)
                     .load(url)
                     .error(R.drawable.ic_baseline_error_24)
+                    .fitCenter()
                     .into(imageView);
+
+            Drawable loadDraw = imageView.getDrawable();
+            if (loadDraw.equals(R.drawable.ic_baseline_error_24)){
+                throw new Exception("invalid url");
+            }
+
+            editor.putString("image_url", url);
+            editor.apply();
+
+            Log.d("<onConfirm>", "URL is valid");
 
         } catch (Exception e) {
             Glide.with(this)
@@ -57,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             Log.d("<onConfirm>", "URL is invalid");
         }
+
     }
 
     public void onDoneClicked(View view){
