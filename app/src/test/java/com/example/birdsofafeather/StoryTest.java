@@ -12,6 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -49,6 +50,10 @@ public class StoryTest {
             assertEquals("110", course.num);
             assertEquals("2022", course.year);
             assertEquals("Winter", course.qtr);
+
+            if (db.isOpen()) {
+                db.close();
+            }
         });
     }
 }

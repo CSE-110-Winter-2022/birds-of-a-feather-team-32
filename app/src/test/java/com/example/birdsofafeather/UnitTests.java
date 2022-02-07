@@ -47,6 +47,10 @@ public class UnitTests {
             Course course = db.coursesDao().get(1);
             assertEquals("CSE", course.dept);
             assertEquals("110", course.num);
+
+            if (db.isOpen()) {
+                db.close();
+            }
         });
     }
 }
