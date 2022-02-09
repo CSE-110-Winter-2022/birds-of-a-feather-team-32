@@ -19,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.CoursesDao;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
@@ -56,7 +58,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     protected String exampleMessage = "Bill,,,\n" +
             "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0,,,\n" +
-            "2021,FA,CSE,210\n" +
+            "2021,Fall,CSE,210\n" +
             "2022,WI,CSE,110\n" +
             "2022,SP,CSE,110";
 
@@ -82,9 +84,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // reformat into a hashset to make it easier to compare later on
         HashSet<Course> ownCoursesSet = new HashSet<>();
-        for(Course course: ownCourses){
-            ownCoursesSet.add(course);
-        }
+        ownCoursesSet.addAll(ownCourses);
 
         // Initialize a HashSet of messages that we've seen so far
         seenMessages = new HashSet<String>();
@@ -104,23 +104,21 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String[] data;
                 Log.d(TAG, "Found message: " + rawString);
 
-
-                data = rawString.split("\n");
-                Log.d(TAG, data[0]);
-                // TODO:
-                /*
-                Check the message string against our HashSet, and if found, ignore the message
-                Parse message, compare, insert into database
-                 */
                 if(!seenMessages.contains(rawString)){
+                    seenMessages.add(rawString);
                     parseStudentMessage(rawString);
+                    List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+                    studentViewAdapter = new ListOfBoFViewAdapter(students);
+                    studentRecyclerView.setAdapter(studentViewAdapter);
                 }
             }
 
             public void parseStudentMessage(String studentMessage){
                 String studentName;
                 String photoUrl;
-                ArrayList<Course> courses = new ArrayList();
+                int numClassesOverlap = 0;
+
+                CoursesDao courseDao = db.coursesDao();
 
                 String[] data = studentMessage.split(",,,");
 
@@ -130,14 +128,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String[] coursesString = data[2].split("\n");
 
                 Course newCourse;
-                int currId = 0;
+                int studentId = db.studentWithCoursesDao().count() + 1;
 
                 for(int i = 1; i < coursesString.length; i ++){
                     String course = coursesString[i];
                     String[] courseParts = course.split(",");
 
-                    int id = currId;
-                    int studentId = 1;
+                    int currId = courseDao.numCourses()+1;
+
                     String dept = courseParts[2];
                     System.out.println("dept: " + dept);
                     String num = courseParts[3];
@@ -150,32 +148,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
                     System.out.println("qtr: " + qtr);
 
                     newCourse = new Course(currId, studentId, dept, num, year, qtr);
-                    courses.add(newCourse);
-
-                    currId ++;
-                }
-
-                int studentId = db.studentWithCoursesDao().count() + 1;
-                Student newStudent = new Student(studentId, studentName, photoUrl, 0);
-                checkForMatchingCourses(newStudent, courses);
-            }
-
-            public void checkForMatchingCourses(Student newStudent, ArrayList<Course> newCourses){
-                int studentId = newStudent.getStudentId();
-                for(Course course: newCourses){
-                    // compare them with courses to see if there's a match
-                    if(ownCoursesSet.contains(course)){
-
-                        // not sure what the behavior is when you pass in a studentId
-                        // that doesn't exist? so check here if you're getting any errors
-                        if(db.studentWithCoursesDao().get(studentId) != null) {
-                            db.studentWithCoursesDao().insert(newStudent);
-                        }
-
-                        db.studentWithCoursesDao().get(studentId).student.incrementNumClassOverlap();
-                        db.coursesDao().insert(course);
+                    if (ownCoursesSet.contains(newCourse)) {
+                        db.coursesDao().insert(newCourse);
+                        numClassesOverlap++;
                     }
                 }
+
+                Student newStudent = new Student(studentId, studentName, photoUrl, numClassesOverlap);
+                db.studentWithCoursesDao().insert(newStudent);
             }
 
             @Override
@@ -200,6 +180,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         }
     }
 
+    /*
     public void createStudents() {
 
         db = AppDatabase.singleton(this);
@@ -223,7 +204,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // studentViewAdapter = new ListOfBoFViewAdapter(Arrays.asList(data));
         //studentRecyclerView.setAdapter(studentViewAdapter);
-    }
+    } */
   
     @Override
     public void onStop() {
