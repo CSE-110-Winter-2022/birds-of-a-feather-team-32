@@ -30,7 +30,32 @@ public class Course {
         num = num.replaceAll("\\s", "");
         this.num = num.toUpperCase();
         this.year = year;
-        this.qtr = qtr;
+        switch(qtr){
+            case "FA":
+            case "Fall":
+                this.qtr = "FA";
+                break;
+            case "WI":
+            case "Winter":
+                this.qtr = "WI";
+                break;
+            case "SP":
+            case "Spring":
+                this.qtr = "SP";
+                break;
+            case "SS1":
+            case "Summer 1":
+                this.qtr = "SS1";
+                break;
+            case "SS2":
+            case "Summer 2":
+                this.qtr = "SS2";
+                break;
+            case "SSS":
+            case "Special Summer Session":
+                this.qtr = "SSS";
+                break;
+        }
     }
 
     @Override
