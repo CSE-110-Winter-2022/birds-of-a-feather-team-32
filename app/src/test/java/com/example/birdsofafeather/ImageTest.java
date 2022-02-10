@@ -62,9 +62,6 @@ public class ImageTest {
 
             assertEquals(retrievedURL, link);
 
-
-
-
         });
     }
 /*
