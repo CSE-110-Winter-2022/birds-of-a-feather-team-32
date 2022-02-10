@@ -49,7 +49,7 @@ public class StoryTest {
             assertEquals("CSE", course.dept);
             assertEquals("110", course.num);
             assertEquals("2022", course.year);
-            assertEquals("Winter", course.qtr);
+            assertEquals("WI", course.qtr);
 
             if (db.isOpen()) {
                 db.close();
