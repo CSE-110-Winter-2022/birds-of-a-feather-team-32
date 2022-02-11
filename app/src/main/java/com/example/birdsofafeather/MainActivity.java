@@ -1,5 +1,6 @@
 package com.example.birdsofafeather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,44 +21,26 @@ import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView imageView;
-    TextView URLText;
-    private FilterInputStream ImageIO;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-    public void onConfirmClicked(View view){
-        imageView = findViewById(R.id.pfp);
-        URLText = findViewById(R.id.URL);
-        String url = URLText.getText().toString();
-
-        SharedPreferences pref = getPreferences(MODE_PRIVATE);  //save image url to sharedpref
-        SharedPreferences.Editor editor = pref.edit();
-
-
-        if(url == ""){      //url is empty
-            editor.putString("image_url", "R.drawable.ic_baseline_android_24");
-            editor.apply();
-            Log.d("<onConfirm>", "URL is empty, loading default");
+    public void onEnterClicked(View view) {
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String userName = ((TextView)findViewById(R.id.name)).getText().toString();
+        if(userName.equals("")){
+            ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name");
+            Log.d("<onEnter>", "Empty Name");
         }
-        else {
-            editor.putString("image_url", url); //url is valid
+        else{
+            editor.putString("name", userName);
             editor.apply();
-            Log.d("<onConfirm>", "URL is valid");
+            Log.d("<onEnter>", preferences.getString("name", "No Name?"));
+            Intent intent = new Intent(this, ImageActivity.class);
+            startActivity(intent);
         }
-    }
-
-    public void onDoneClicked(View view){
-        imageView = findViewById(R.id.pfp);
-        URLText = findViewById(R.id.URL);
-        String URLString = URLText.getText().toString();
-        Glide.with(this)
-                .load(URLString)
-                .error(R.drawable.ic_baseline_error_24)
-                .into(imageView);
     }
 }

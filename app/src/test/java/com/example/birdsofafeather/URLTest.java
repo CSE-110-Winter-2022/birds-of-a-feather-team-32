@@ -20,7 +20,7 @@ import org.junit.runner.RunWith;
 public class URLTest {
 
     @Rule
-    public ActivityScenarioRule rule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule rule = new ActivityScenarioRule<>(ImageActivity.class);
 
     @Test
     public void testDoneButton() {

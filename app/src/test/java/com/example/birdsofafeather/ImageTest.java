@@ -38,7 +38,7 @@ public class ImageTest {
 public class ImageTest {
 
     @Rule
-    public ActivityScenarioRule rule = new ActivityScenarioRule<>(MainActivity.class);
+    public ActivityScenarioRule rule = new ActivityScenarioRule<>(ImageActivity.class);
 
     // click confirm after clicking done with valid url
     @Test
@@ -57,7 +57,7 @@ public class ImageTest {
             // press confirm
             activity.findViewById(R.id.confirm).performClick();
 
-            SharedPreferences sp = activity.getPreferences(MODE_PRIVATE);
+            SharedPreferences sp = activity.getSharedPreferences("BOF",MODE_PRIVATE);
             String retrievedURL = sp.getString("image_url","R.drawable.ic_baseline_android_24");
 
             assertEquals(retrievedURL, link);
@@ -84,9 +84,6 @@ public class ImageTest {
             String defaultImage = sp.getString("image_url","R.drawable.ic_baseline_android_24");
 
             assertEquals(defaultImage, "R.drawable.ic_baseline_android_24");
-
-
-
 
         });
     } */
