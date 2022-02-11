@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutionException;
 
 public class ImageActivity extends AppCompatActivity {
 
@@ -35,26 +36,23 @@ public class ImageActivity extends AppCompatActivity {
         URLText = findViewById(R.id.URL);
         String url = URLText.getText().toString();
 
-        SharedPreferences pref = getSharedPreferences("BOF",MODE_PRIVATE);  //save image url to sharedpref
-        SharedPreferences.Editor editor = pref.edit();
+        // SharedPreferences pref = getSharedPreferences("BOF",MODE_PRIVATE);  //save image url to sharedpref
+        // SharedPreferences.Editor editor = pref.edit();
 
+        try {
+            image = new CheckImageTask().execute(url).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
+        savePref(url);
 
-        Thread thread = new Thread(new Runnable() {
+        /*Thread thread = new Thread(new Runnable() {
 
-            @Override
             public void run() {
-                    try {
-                        URL urlObj = new URL(url);
-                        URLConnection connection = urlObj.openConnection();
-                        String contentType = connection.getHeaderField("Content-Type");
-                        image = contentType.startsWith("image/");
 
-                    } catch(MalformedURLException e) {
-
-                    } catch (IOException e) {
-
-                    }
 
             }
         });
@@ -63,7 +61,6 @@ public class ImageActivity extends AppCompatActivity {
 
         Thread thread1 = new Thread(new Runnable() {
 
-            @Override
             public void run() {
                 try {
                     thread.join();
@@ -75,7 +72,7 @@ public class ImageActivity extends AppCompatActivity {
             }
         });
 
-        thread1.start();
+        thread1.start();*/
 
 
 

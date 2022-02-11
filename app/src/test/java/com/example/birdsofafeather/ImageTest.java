@@ -21,6 +21,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.concurrent.CountDownLatch;
+
 /*
 @RunWith(AndroidJUnit4.class)
 public class ImageTest {
