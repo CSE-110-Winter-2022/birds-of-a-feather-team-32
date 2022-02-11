@@ -13,10 +13,16 @@ import androidx.core.content.res.ResourcesCompat;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 public class ImageActivity extends AppCompatActivity {
 
     ImageView imageView;
     TextView URLText;
+    boolean image = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,15 +38,84 @@ public class ImageActivity extends AppCompatActivity {
         SharedPreferences pref = getSharedPreferences("BOF",MODE_PRIVATE);  //save image url to sharedpref
         SharedPreferences.Editor editor = pref.edit();
 
+
+
+        Thread thread = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                    try {
+                        URL urlObj = new URL(url);
+                        URLConnection connection = urlObj.openConnection();
+                        String contentType = connection.getHeaderField("Content-Type");
+                        image = contentType.startsWith("image/");
+
+                    } catch(MalformedURLException e) {
+
+                    } catch (IOException e) {
+
+                    }
+
+            }
+        });
+
+        thread.start();
+
+        Thread thread1 = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    thread.join();
+                } catch (InterruptedException e) {
+
+                }
+                savePref(url);
+
+            }
+        });
+
+        thread1.start();
+
+
+
+
+
+
+/*
         if(url.equals("")){      //url is empty
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             editor.apply();
             Log.d("<onConfirm>", "URL is empty, loading default");
+        } else if (image == false) {
+            editor.putString("image_url", "R.drawable.ic_baseline_android_24");
+            editor.apply();
+            Log.d("<onConfirm>", "URL is invalid");
         }
-        /*  This section of code doesn't work yet. I can't find the right conditional to figure this out
-        else if(imageView.getDrawable() == ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_baseline_error_24)){
-            ErrorUtilities.showAlert(this, "Cool your jets, that's an invalid URL!");       //invalid url, but only when done is pressed and image is updated
-        }*/
+         // This section of code doesn't work yet. I can't find the right conditional to figure this out
+        //else if(imageView.getDrawable() == ContextCompat.getDrawable(getBaseContext(), R.drawable.ic_baseline_error_24)){
+          //  ErrorUtilities.showAlert(this, "Cool your jets, that's an invalid URL!");       //invalid url, but only when done is pressed and image is updated
+        //}
+
+        else {
+            editor.putString("image_url", url); //url is valid
+            editor.apply();
+            Log.d("<onConfirm>", "URL is valid");
+        } */
+    }
+
+    public void savePref(String url){
+        SharedPreferences pref = getSharedPreferences("BOF",MODE_PRIVATE);  //save image url to sharedpref
+        SharedPreferences.Editor editor = pref.edit();
+        if(url.equals("")){      //url is empty
+            editor.putString("image_url", "R.drawable.ic_baseline_android_24");
+            editor.apply();
+            Log.d("<onConfirm>", "URL is empty, loading default");
+        } else if (image == false) {
+            editor.putString("image_url", "R.drawable.ic_baseline_android_24");
+            editor.apply();
+            Log.d("<onConfirm>", "URL is invalid");
+        }
         else {
             editor.putString("image_url", url); //url is valid
             editor.apply();

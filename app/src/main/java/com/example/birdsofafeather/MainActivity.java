@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         String userName = ((TextView)findViewById(R.id.name)).getText().toString();
+
+
         if(userName.equals("")){
             ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name");
             Log.d("<onEnter>", "Empty Name");
