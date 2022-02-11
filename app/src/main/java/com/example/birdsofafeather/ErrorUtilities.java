@@ -8,7 +8,7 @@ public class ErrorUtilities {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 
         alertBuilder
-                .setTitle("Alert!")
+                .setTitle("Error!")
                 .setMessage(message)
                 .setPositiveButton("Ok",(dialog, id) -> {
                     dialog.cancel();
