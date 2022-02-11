@@ -18,5 +18,4 @@ public class ErrorUtilities {
         AlertDialog alertDialog = alertBuilder.create();
         alertDialog.show();
     }
-
 }
