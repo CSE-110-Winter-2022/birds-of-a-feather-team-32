@@ -54,17 +54,20 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView studentNameView;
+        private TextView numClassesOverlap;
         private StudentWithCourses student;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.studentNameView = itemView.findViewById(R.id.student_row_name);
+            this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
         }
 
         public void setPerson(StudentWithCourses student) {
             this.student = student;
             this.studentNameView.setText(student.getName());
+            this.numClassesOverlap.setText(student.student.getNumOverlap());
         }
 
         @Override

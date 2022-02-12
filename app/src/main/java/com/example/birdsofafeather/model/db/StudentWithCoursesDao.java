@@ -11,7 +11,7 @@ import java.util.List;
 public interface StudentWithCoursesDao {
 
     @Transaction
-    @Query("SELECT * FROM students")
+    @Query("SELECT * FROM students order by numClassOverlap desc")
     List<StudentWithCourses> getAll();
 
     @Query("SELECT * FROM students WHERE id=:id")

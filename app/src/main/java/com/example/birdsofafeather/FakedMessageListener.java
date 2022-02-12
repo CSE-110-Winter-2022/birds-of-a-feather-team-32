@@ -4,19 +4,26 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class FakedMessageListener extends MessageListener {
 
     private final MessageListener messageListener;
-    private final Message message;
+    private final ArrayList<Message> allMessages;
 
-    public FakedMessageListener(MessageListener realMessageListener, int frequency, String messageStr) {
+    public FakedMessageListener(MessageListener realMessageListener, int frequency, ArrayList<String> messages) {
         this.messageListener = realMessageListener;
-        this.message = new Message(messageStr.getBytes(StandardCharsets.UTF_8));
+        allMessages = new ArrayList<>();
+        for (String s : messages) {
+            Message newMessage = new Message(s.getBytes(StandardCharsets.UTF_8));
+            allMessages.add(newMessage);
+        }
     }
 
     public void getMessage() {
-        this.messageListener.onFound(message);
+        for (Message m : allMessages) {
+            this.messageListener.onFound(m);
+        }
         return;
     }
 }

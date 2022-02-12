@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onFindStudentsClicked(View view) {
-        Intent intent = new Intent(this, ListOfBoFActivity.class);
+        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.birdsofafeather.model.db;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
