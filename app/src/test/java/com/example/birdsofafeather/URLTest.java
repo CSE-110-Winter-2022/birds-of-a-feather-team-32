@@ -51,4 +51,36 @@ public class URLTest {
             assertEquals(profile,actualImg);
         });
     }
+/*
+    @Test
+    public void testInvalidURL() {
+        rule.getScenario().onActivity(activity -> {
+            // set text
+            TextView URLTextView = (TextView) activity.findViewById(R.id.URL);
+            String link = "https://lh3.googleusercontent.com/pw/AM-JKLXQ2ix4dg-PzLrPOSMOOy6M3PSUrijov9jCLXs4IGSTwN73B4kr-F6Nti_4KsiUU8LzDSGPSWNKnFdKIPqCQ2dFTRbARsW76pevHPBzc51nceZDZrMPmDfAYyI4XNOnPrZarGlLLUZW9wal6j-z9uA6WQ=w854-h924-no?authuser=0";
+            URLTextView.setText(link);
+
+            // check if text set correctly
+            assertEquals(link,URLTextView.getText().toString());
+
+
+            // press done
+            activity.findViewById(R.id.done).performClick();
+
+            // imageview after clicking button
+            ImageView profile = (ImageView) activity.findViewById(R.id.pfp);
+
+            ImageView actualImg = activity.findViewById(R.id.pfp);
+
+            // load actual image
+            Glide.with(activity)
+                    .load(link)
+                    .into(actualImg);
+
+            // check if imageview loaded matched expected image view
+            assertEquals(profile,actualImg);
+        });
+    }
+
+    */
 }
