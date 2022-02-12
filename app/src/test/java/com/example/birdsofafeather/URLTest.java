@@ -23,7 +23,7 @@ public class URLTest {
     public ActivityScenarioRule rule = new ActivityScenarioRule<>(ImageActivity.class);
 
     @Test
-    public void testDoneButton() {
+    public void test_Done_ValidURL() {
         rule.getScenario().onActivity(activity -> {
             // set text
             TextView URLTextView = (TextView) activity.findViewById(R.id.URL);
@@ -53,7 +53,7 @@ public class URLTest {
     }
 
     @Test
-    public void testInvalidURL() {
+    public void test_Done_InvalidURL() {
         rule.getScenario().onActivity(activity -> {
             // set text
             TextView URLTextView = (TextView) activity.findViewById(R.id.URL);
@@ -62,6 +62,36 @@ public class URLTest {
 
             // check if text set correctly
             assertEquals(invalidLink,URLTextView.getText().toString());
+
+
+            // press done
+            activity.findViewById(R.id.done).performClick();
+
+            // imageview after clicking button
+            ImageView profile = (ImageView) activity.findViewById(R.id.pfp);
+
+            ImageView actualImg = activity.findViewById(R.id.pfp);
+
+            // load actual image
+            Glide.with(activity)
+                    .load(R.drawable.ic_baseline_error_24)
+                    .into(actualImg);
+
+            // check if imageview loaded matched expected image view
+            assertEquals(profile,actualImg);
+        });
+    }
+
+    @Test
+    public void test_Done_EmptyURL() {
+        rule.getScenario().onActivity(activity -> {
+            // set text
+            TextView URLTextView = (TextView) activity.findViewById(R.id.URL);
+            String emptyLink = "";
+            URLTextView.setText(emptyLink);
+
+            // check if text set correctly
+            assertEquals(emptyLink,URLTextView.getText().toString());
 
 
             // press done
