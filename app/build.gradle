@@ -31,11 +31,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-    }
+
+    configurations { implementation.exclude group: 'org.jetbrains', module: 'annotations' }
 }
 
 dependencies {
@@ -48,6 +45,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-common:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "com.google.android.gms:play-services-nearby:18.0.2"
     testImplementation 'junit:junit:4.+'
     testImplementation 'androidx.test:core:1.4.0'
     androidTestImplementation 'androidx.test:core:1.4.0'

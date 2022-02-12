@@ -1,9 +1,15 @@
+/**
+ * CoursesActivity.java
+ * This file allows the user to add their own courses to the application.
+ * They can also see the courses that they have previously added.
+ */
 package com.example.birdsofafeather;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
@@ -15,8 +21,8 @@ import com.example.birdsofafeather.model.db.Course;
 import java.util.List;
 
 public class CourseActivity extends AppCompatActivity {
-    private AppDatabase db;
 
+    private AppDatabase db;
     private RecyclerView coursesRecyclerView;
     private RecyclerView.LayoutManager coursesLayoutManager;
     private CoursesViewAdapter coursesViewAdapter;
@@ -28,8 +34,7 @@ public class CourseActivity extends AppCompatActivity {
         setTitle("Modify Courses");
 
         db = AppDatabase.singleton(this);
-        List<Course> courses = db.coursesDao().getAll();
-
+        List<Course> courses = db.coursesDao().getCoursesFromStudentId(0);
         coursesRecyclerView = findViewById(R.id.courses_view);
 
         coursesLayoutManager = new LinearLayoutManager(this);
@@ -53,7 +58,7 @@ public class CourseActivity extends AppCompatActivity {
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
         if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") && !newCourseYearText.equals("")) {
-            Course newCourse = new Course(newCourseId, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
+            Course newCourse = new Course(newCourseId, 0, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
             if(!db.coursesDao().getAll().contains(newCourse)){
                 db.coursesDao().insert(newCourse);
                 coursesViewAdapter.addCourse(newCourse);
@@ -67,6 +72,7 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
-        finish();
+        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+        startActivity(intent);
     }
 }

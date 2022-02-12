@@ -9,6 +9,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Student;
+import com.example.birdsofafeather.model.db.StudentWithCourses;
+
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -36,4 +42,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    /*public void onFindStudentsClicked(View view) {
+        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+        startActivity(intent);
+    }
+     */
 }

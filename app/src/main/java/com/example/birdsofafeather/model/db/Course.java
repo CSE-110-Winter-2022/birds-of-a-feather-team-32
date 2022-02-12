@@ -1,5 +1,7 @@
 package com.example.birdsofafeather.model.db;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -8,9 +10,16 @@ import java.util.Locale;
 
 @Entity(tableName = "courses")
 public class Course {
+
+    // this is how we identify a certain course
     @PrimaryKey
     @ColumnInfo(name = "id")
     public int id;
+
+    // this is how we identify that this course belongs to
+    // a particular person
+    @ColumnInfo(name = "student_id")
+    public int studentId;
 
     @ColumnInfo(name = "dept")
     public String dept;
@@ -24,12 +33,17 @@ public class Course {
     @ColumnInfo(name = "qtr")
     public String qtr;
 
-    public Course(int id, String dept, String num, String year, String qtr) {
+    @ColumnInfo(name = "courseFullString")
+    public String courseFullString;
+
+    public Course(int id, int studentId, String dept, String num, String year, String qtr) {
         this.id = id;
+        this.studentId = studentId;
         this.dept = dept.toUpperCase();
         num = num.replaceAll("\\s", "");
         this.num = num.toUpperCase();
         this.year = year;
+        this.qtr = qtr;
         switch(qtr){
             case "FA":
             case "Fall":
@@ -56,8 +70,11 @@ public class Course {
                 this.qtr = "SSS";
                 break;
         }
-    }
+        this.courseFullString = this.dept + " " + this.num + " " + this.qtr + " " + this.year;
+        Log.d("qtr:", this.qtr);
 
+    }
+/*
     @Override
     public boolean equals(Object other){
         if(this == other) { return true;}
@@ -68,4 +85,33 @@ public class Course {
         }
         return false;
     }
+    */
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Course courseObj = (Course) obj;
+        if (this.courseFullString.equals(courseObj.getCourseFullString())) {
+            return true;
+        }
+        return false;
+    }
+
+    public String getCourseFullString() {
+        return courseFullString;
+    }
+
+    @Override
+    public int hashCode() {
+        return courseFullString.hashCode();
+    }
+
 }
