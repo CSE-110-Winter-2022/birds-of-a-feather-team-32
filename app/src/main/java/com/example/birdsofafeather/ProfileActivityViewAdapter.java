@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,11 +47,14 @@ public class ProfileActivityViewAdapter extends RecyclerView.Adapter<ProfileActi
     public static class ViewHolder
             extends RecyclerView.ViewHolder {
         private final TextView courseView;
+        private final ImageView imageView;
         private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.courseView = itemView.findViewById(R.id.course_row_name);
+            this.imageView = itemView.findViewById(R.id.imageView);
+            imageView.setVisibility(View.INVISIBLE);
         }
 
         public void setCourse(Course course) {

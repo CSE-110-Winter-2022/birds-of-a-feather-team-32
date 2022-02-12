@@ -1,5 +1,7 @@
 package com.example.birdsofafeather.model.db;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -69,6 +71,7 @@ public class Course {
                 break;
         }
         this.courseFullString = this.dept + " " + this.num + " " + this.qtr + " " + this.year;
+        Log.d("qtr:", this.qtr);
 
     }
 /*
