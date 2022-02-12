@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="class_quarters">
+        <item>Fall</item>
+        <item>Winter</item>
+        <item>Spring</item>
+        <item>Summer 1</item>
+        <item>Summer 2</item>
+        <item>Special Summer Session</item>
+    </string-array>
+</resources>

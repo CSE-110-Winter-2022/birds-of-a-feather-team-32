@@ -12,7 +12,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
+            android:name=".NearbyMessagesMockScreen"
+            android:exported="false" />
+
+        <meta-data
+            android:name="com.google.android.nearby.messages.API_KEY"
+            android:value="AIzaSyDjg-lJFSP_0u-hmIFxk53ZEGpEjnVaeAg" />
+
+        <activity
+            android:name=".CourseActivity"
+            android:exported="false">
+        </activity>
+        <activity
             android:name=".ImageActivity"
+            android:exported="false" >
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListOfBoFActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -1,7 +1,7 @@
 package com.example.birdsofafeather;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Activity;
 
 public class ErrorUtilities {
     public static void showAlert(Activity activity, String message){

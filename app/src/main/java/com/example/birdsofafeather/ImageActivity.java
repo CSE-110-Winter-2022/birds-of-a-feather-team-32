@@ -1,5 +1,6 @@
 package com.example.birdsofafeather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -108,6 +109,8 @@ public class ImageActivity extends AppCompatActivity {
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             editor.apply();
             Log.d("<onConfirm>", "URL is empty, loading default");
+            Intent intent = new Intent(this, CourseActivity.class);
+            startActivity(intent);
         } else if (image == false) {
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             editor.apply();
@@ -118,6 +121,8 @@ public class ImageActivity extends AppCompatActivity {
             editor.putString("image_url", url); //url is valid
             editor.apply();
             Log.d("<onConfirm>", "URL is valid");
+            Intent intent = new Intent(this, CourseActivity.class);
+            startActivity(intent);
         }
     }
 
