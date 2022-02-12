@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Spinner;
@@ -56,13 +57,22 @@ public class CourseActivity extends AppCompatActivity {
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
-        Course newCourse = new Course(newCourseId, 0, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
-        db.coursesDao().insert(newCourse);
-
-        coursesViewAdapter.addCourse(newCourse);
+        if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") && !newCourseYearText.equals("")) {
+            Course newCourse = new Course(newCourseId, 0, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
+            if(!db.coursesDao().getAll().contains(newCourse)){
+                db.coursesDao().insert(newCourse);
+                coursesViewAdapter.addCourse(newCourse);
+            }
+            else {
+                ErrorUtilities.showAlert(this, "This class has already been added!");
+            }
+        } else {
+            ErrorUtilities.showAlert(this, "One or more of the fields is empty!");
+        }
     }
 
     public void onHomeClicked(View view) {
-        finish();
+        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+        startActivity(intent);
     }
 }
