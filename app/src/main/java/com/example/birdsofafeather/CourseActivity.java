@@ -33,7 +33,7 @@ public class CourseActivity extends AppCompatActivity {
         setTitle("Modify Courses");
 
         db = AppDatabase.singleton(this);
-        List<Course> courses = db.coursesDao().getAll();
+        List<Course> courses = db.coursesDao().getCoursesFromStudentId(0);
         coursesRecyclerView = findViewById(R.id.courses_view);
 
         coursesLayoutManager = new LinearLayoutManager(this);
