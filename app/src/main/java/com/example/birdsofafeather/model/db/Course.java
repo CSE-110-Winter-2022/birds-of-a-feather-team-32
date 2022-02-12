@@ -42,7 +42,6 @@ public class Course {
         this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
-        courseFullString = dept + " " + num + " " + qtr + " " + year;
         switch(qtr){
             case "FA":
             case "Fall":
@@ -69,8 +68,10 @@ public class Course {
                 this.qtr = "SSS";
                 break;
         }
-    }
+        this.courseFullString = this.dept + " " + this.num + " " + this.qtr + " " + this.year;
 
+    }
+/*
     @Override
     public boolean equals(Object other){
         if(this == other) { return true;}
@@ -81,6 +82,7 @@ public class Course {
         }
         return false;
     }
+    */
 
     @Override
     public boolean equals(Object obj) {
