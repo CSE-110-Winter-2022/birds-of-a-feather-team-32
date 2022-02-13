@@ -1,9 +1,18 @@
+/**
+ * File: ErrorUtilities.java
+ * Description: Handles displaying error dialogs.
+ */
 package com.example.birdsofafeather;
 
 import android.app.AlertDialog;
 import android.app.Activity;
 
 public class ErrorUtilities {
+    /**
+     * Displays an error dialog with a description of the error.
+     * @param activity Current activity
+     * @param message Error description to display
+     */
     public static void showAlert(Activity activity, String message){
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(activity);
 
