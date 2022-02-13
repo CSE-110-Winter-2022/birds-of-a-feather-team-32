@@ -3,7 +3,7 @@
  *  Object used to store information about individual courses
  *  Will utilize CourseDao class in order to process the Course objects within the database
  *
- * @authors Marc Mendoza, Andrew Tang
+ * @authors Team 32
  */
 package com.example.birdsofafeather.model.db;
 

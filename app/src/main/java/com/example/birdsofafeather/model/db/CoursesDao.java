@@ -1,6 +1,8 @@
 /**
  * File: CoursesDao.java
  * Description: Database object to store Course objects that can be queried
+ *
+ * @author Team 32
  */
 
 package com.example.birdsofafeather.model.db;

@@ -3,7 +3,7 @@
  * Description: This activity allows the user to add their own courses to the application.
  * They can also see the courses that they have previously added.
  *
- * @authors Andrew Tang, Marc Mendoza
+ * @authors Team 32
  */
 package com.example.birdsofafeather;
 
