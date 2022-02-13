@@ -2,6 +2,8 @@
  * File: CoursesActivity.java
  * Description: This activity allows the user to add their own courses to the application.
  * They can also see the courses that they have previously added.
+ *
+ * @authors Andrew Tang, Marc Mendoza
  */
 package com.example.birdsofafeather;
 
@@ -62,15 +64,19 @@ public class CourseActivity extends AppCompatActivity {
         TextView newCourseNumTextView = findViewById(R.id.enter_class_number);
         TextView newCourseYearTextView = findViewById(R.id.enter_year);
         Spinner newCourseQtrSpinner = findViewById(R.id.pick_quarter);
+
         String newCourseDeptText = newCourseDeptTextView.getText().toString();
         String newCourseNumText = newCourseNumTextView.getText().toString();
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
+        // Check if any fields are empty
         if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") &&
                 !newCourseYearText.equals("")) {
             Course newCourse = new Course(newCourseId, 0, newCourseDeptText,
                     newCourseNumText, newCourseYearText, newCourseQtrText);
+
+            // Check duplicate courses
             if(!db.coursesDao().getAll().contains(newCourse)){
                 db.coursesDao().insert(newCourse);
                 coursesViewAdapter.addCourse(newCourse);
