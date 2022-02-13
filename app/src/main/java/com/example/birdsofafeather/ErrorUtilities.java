@@ -1,6 +1,8 @@
 /**
  * File: ErrorUtilities.java
  * Description: Handles displaying error dialogs.
+ *
+ * @author Team 32
  */
 package com.example.birdsofafeather;
 
