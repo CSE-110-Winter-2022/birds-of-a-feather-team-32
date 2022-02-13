@@ -24,6 +24,10 @@ public class StoryTest {
     @Rule
     public ActivityScenarioRule<CourseActivity> scenarioRule = new ActivityScenarioRule<>(CourseActivity.class);
 
+    /**
+     * Test to see if adding a valid course will be processed into the database correctly
+     */
+
     @Test
     public void test_add_valid_course() {
         ActivityScenario<CourseActivity> scenario = scenarioRule.getScenario();
@@ -31,6 +35,7 @@ public class StoryTest {
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
+            AppDatabase.useTestSingleton(activity);
             AppDatabase db = AppDatabase.singleton(activity);
 
             EditText deptView = activity.findViewById(R.id.enter_class_dept);

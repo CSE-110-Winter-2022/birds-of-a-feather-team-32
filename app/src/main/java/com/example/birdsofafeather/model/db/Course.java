@@ -1,3 +1,10 @@
+/**
+ * Course.java
+ *  Object used to store information about individual courses
+ *  Will utilize CourseDao class in order to process the Course objects within the database
+ *
+ * @authors Marc Mendoza, Andrew Tang
+ */
 package com.example.birdsofafeather.model.db;
 
 import android.util.Log;
@@ -36,6 +43,19 @@ public class Course {
     @ColumnInfo(name = "courseFullString")
     public String courseFullString;
 
+    /**
+     * Parameterized Contructor: Instantiates object with passed through
+     * values for the fields in object
+     *
+     * @param id
+     * @param studentId
+     * @param  dept
+     * @param year
+     * @param  qtr
+     *
+     * return Instantiated Course object
+     */
+
     public Course(int id, int studentId, String dept, String num, String year, String qtr) {
         this.id = id;
         this.studentId = studentId;
@@ -44,6 +64,7 @@ public class Course {
         this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
+
         switch(qtr){
             case "FA":
             case "Fall":
@@ -73,9 +94,12 @@ public class Course {
         this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num;
     }
 
-    public String getCourseFullString() {
-        return courseFullString;
-    }
+    /**
+     * Overriden equals() function to compare each Course Object
+     *
+     * @param obj: object being compared
+     * @return boolean: true if equivalent, false otherwise
+     */
 
     @Override
     public boolean equals(Object obj) {
@@ -91,6 +115,23 @@ public class Course {
         Course courseObj = (Course) obj;
         return this.courseFullString.equals(courseObj.getCourseFullString());
     }
+
+    /**
+     * Returns all fields in Course object concatenated into a single string
+     *
+     * @return String courseFullString
+     */
+  
+    public String getCourseFullString() {
+        return courseFullString;
+    }
+
+    /**
+     * Creates unique hash code for the concatenated string of fields
+     * of the Course Object
+     *
+     * @return int courseFullString's hashCode
+     */
 
     @Override
     public int hashCode() {
