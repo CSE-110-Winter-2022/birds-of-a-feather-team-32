@@ -70,7 +70,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         ownCoursesSet.addAll(ownCourses);
 
         // Initialize a HashSet of messages that we've seen so far
-        seenMessages = new HashSet<String>();
+        seenMessages = new HashSet<>();
 
         studentRecyclerView = findViewById(R.id.student_view);
 

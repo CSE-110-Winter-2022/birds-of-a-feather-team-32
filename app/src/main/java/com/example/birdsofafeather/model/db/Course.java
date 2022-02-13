@@ -73,6 +73,10 @@ public class Course {
         this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num;
     }
 
+    public String getCourseFullString() {
+        return courseFullString;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -85,14 +89,7 @@ public class Course {
             return false;
         }
         Course courseObj = (Course) obj;
-        if (this.courseFullString.equals(courseObj.getCourseFullString())) {
-            return true;
-        }
-        return false;
-    }
-
-    public String getCourseFullString() {
-        return courseFullString;
+        return this.courseFullString.equals(courseObj.getCourseFullString());
     }
 
     @Override
