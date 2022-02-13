@@ -41,10 +41,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    /*public void onFindStudentsClicked(View view) {
-        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
-        startActivity(intent);
-    }
-     */
 }

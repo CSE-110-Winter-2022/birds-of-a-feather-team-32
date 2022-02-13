@@ -75,7 +75,6 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             this.studentNameView.setText(student.getName());
             this.numClassesOverlap.setText(student.student.getNumOverlap());
             String url = student.student.getPhotoURL();
-
             url = url.trim();
             Glide.with(itemView)
                     .load(url)
