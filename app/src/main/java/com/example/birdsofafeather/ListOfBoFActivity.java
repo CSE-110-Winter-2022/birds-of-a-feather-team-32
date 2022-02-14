@@ -55,6 +55,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boflist);
+        Log.d("onCreate", "called onCreate");
 
         // Get list of messages from Nearby Messages Mock Screen
         Intent i = getIntent();
@@ -88,6 +89,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Use Fake Message Listener for the demo
         this.testListener = new FakedMessageListener(realListener, messages);
 
+        // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
         if (isBofSearchOn) {
@@ -97,6 +99,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         }
     }
 
+    // Restarts search for new bof if it was never turned off by user
     @Override
     public void onStart() {
         super.onStart();
@@ -113,11 +116,16 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     public void onStartClicked(View view) {
         Log.d("onStartClicked", "clicked onStart");
+
         Button startButton = findViewById(R.id.runButton);
+
+        // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
+
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
+        // Search is currently off
         if (buttonState == 0) {
             buttonState = 1;
             startButton.setText("Stop");
@@ -126,7 +134,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", true);
             editor.apply();
             testListener.getMessage();
-        } else {
+        } else { // Search is currently on
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
@@ -134,6 +142,36 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
         }
+    }
+
+    public String buildMessage() {
+
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String name = preferences.getString("name", "");
+        String photoURL = preferences.getString("image_url", "");
+
+        List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+
+        // Convert student data into desired format
+        String message = "";
+        message += name + ",,,\n";
+        message += photoURL + ",,,\n";
+
+        for (Course c : ownCourses) {
+            message += c.getCourseFullString() + "\n";
+        }
+        message.trim();
+
+        Log.d("My message:", message);
+
+        return message;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d("onStop", "onStop called");
+        Nearby.getMessagesClient(this).unsubscribe(realListener);
     }
 
     // Our custom Message Listener
@@ -215,34 +253,5 @@ public class ListOfBoFActivity extends AppCompatActivity {
         public void onLost(@NonNull Message message) {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
-    }
-
-    public String buildMessage() {
-
-        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        String name = preferences.getString("name", "");
-        String photoURL = preferences.getString("image_url", "");
-
-        List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
-
-        String message = "";
-        message += name + ",,,\n";
-        message += photoURL + ",,,\n";
-
-        for (Course c : ownCourses) {
-            message += c.getCourseFullString() + "\n";
-        }
-        message.trim();
-
-        Log.d("My message:", message);
-
-        return message;
-    }
-  
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("onStop", "onStop called");
-        Nearby.getMessagesClient(this).unsubscribe(realListener);
     }
 }
