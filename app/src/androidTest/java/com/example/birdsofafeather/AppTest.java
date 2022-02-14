@@ -1,4 +1,4 @@
-:wq::package com.example.birdsofafeather;
+package com.example.birdsofafeather;
 
 
 import androidx.test.espresso.DataInteraction;
