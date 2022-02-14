@@ -2,6 +2,8 @@
  * File: CourseViewAdapter.Java
  * Description: Class that binds our Course object data to each item in the recycler view in
  * our layout file activity_course.xml
+ *
+ * @author Team 32
  */
 
 package com.example.birdsofafeather;
@@ -129,7 +131,8 @@ public class CoursesViewAdapter extends RecyclerView.Adapter<CoursesViewAdapter.
 
         public void setCourse(Course course) {
             this.course = course;
-            this.courseView.setText(course.getCourseFullStringReadable());
+            String courseString = course.dept + " " + course.num + " " + course.qtr + " " + course.year;
+            this.courseView.setText(courseString);
         }
     }
 }

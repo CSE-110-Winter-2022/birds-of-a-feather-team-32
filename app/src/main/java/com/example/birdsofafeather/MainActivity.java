@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         // case when user entered nothing
         if(userName.equals("")){
-            ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name");
+            ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name!");
             Log.d("<onEnter>", "Empty Name");
         }
         // save name to shared preferences
