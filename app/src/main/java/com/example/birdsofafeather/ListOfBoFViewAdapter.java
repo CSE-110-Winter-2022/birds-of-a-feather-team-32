@@ -47,11 +47,6 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         return this.students.size();
     }
 
-    public void addStudent(StudentWithCourses student){
-        this.students.add(student);
-        this.notifyItemInserted(this.students.size() - 1);
-    }
-
     public static class ViewHolder
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
