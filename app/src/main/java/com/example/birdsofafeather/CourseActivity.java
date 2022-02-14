@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -76,6 +77,11 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
+        Log.d("<onDone>", "Number of courses: " + db.coursesDao().numCourses());
+        if (db.coursesDao().numCourses() < 1) {
+            ErrorUtilities.showAlert(this, "Please add at least one class before proceeding!");
+            return;
+        }
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
     }
