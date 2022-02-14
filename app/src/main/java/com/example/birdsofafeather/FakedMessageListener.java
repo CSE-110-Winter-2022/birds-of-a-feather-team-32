@@ -11,7 +11,7 @@ public class FakedMessageListener extends MessageListener {
     private final MessageListener messageListener;
     private final ArrayList<Message> allMessages;
 
-    public FakedMessageListener(MessageListener realMessageListener, int frequency, ArrayList<String> messages) {
+    public FakedMessageListener(MessageListener realMessageListener, ArrayList<String> messages) {
         this.messageListener = realMessageListener;
         allMessages = new ArrayList<>();
         for (String s : messages) {
