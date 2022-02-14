@@ -127,6 +127,16 @@ public class Course {
     }
 
     /**
+     * Returns all fields in Course object concatenated into a more readable single string
+     *
+     * @return String courseFullStringReadable
+     */
+
+    public String getCourseFullStringReadable() {
+        return this.dept + " " + this.num + " " + this.qtr + " " + this.year;
+    }
+
+    /**
      * Creates unique hash code for the concatenated string of fields
      * of the Course Object
      *

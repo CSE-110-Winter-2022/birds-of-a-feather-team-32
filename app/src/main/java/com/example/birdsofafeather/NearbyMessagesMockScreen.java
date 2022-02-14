@@ -17,6 +17,7 @@ public class NearbyMessagesMockScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby_messages_mock_screen);
+        this.setTitle("Nearby Messages Mock Screen");
         messages = new ArrayList<>();
     }
 
