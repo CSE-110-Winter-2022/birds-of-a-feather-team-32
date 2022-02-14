@@ -1,3 +1,10 @@
+/**
+ * Filename: ImageActivity.java
+ * Sources: Glide via CodePath
+ *
+ * Description: This file is responsible for displaying the appropriate image and saving the
+ * appropriate url to shared preferences for each user's profile picture.
+ */
 package com.example.birdsofafeather;
 
 import android.content.Intent;
@@ -26,18 +33,25 @@ public class ImageActivity extends AppCompatActivity {
     TextView URLText;
     boolean image = false;
 
+    /**
+     * Method that starts activity with loaded data from savedInstanceState
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
     }
 
-    // Method responsible for saving appropriate link after pressing confirm button
+    /**
+     * Method that executes after clicking the confirm button. It calls methods that checks image
+     * url and appropriately save it to shared preferences
+     * @param view
+     */
     public void onConfirmClicked(View view){
-        // reference profile ImageView and url TextView
+        // get string url from URL Text View
         imageView = findViewById(R.id.pfp);
         URLText = findViewById(R.id.URL);
-        // make TextView's url text into a string
         String url = URLText.getText().toString();
 
         // check if url is a valid image url
@@ -53,9 +67,14 @@ public class ImageActivity extends AppCompatActivity {
         savePref(url);
     }
 
-    // Method responsible for saving appropriate url into shared preferences
+    /**
+     * Method responsible for saving image url to SharedPreferences based on three cases:
+     * 1. empty URL: saves default
+     * 2. invalid URL: temporarily saves default, but alert appears to re-enter url
+     * 3. valid URL: saves url String
+     * @param url
+     */
     public void savePref(String url){
-        // getting shared preferences and declaring editor
         SharedPreferences pref = getSharedPreferences("BOF",MODE_PRIVATE);  //save image url to sharedpref
         SharedPreferences.Editor editor = pref.edit();
 
@@ -64,37 +83,38 @@ public class ImageActivity extends AppCompatActivity {
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             editor.apply();
             Log.d("<onConfirm>", "URL is empty, loading default");
-            // take user to next screen by starting activity
             Intent intent = new Intent(this, CourseActivity.class);
             startActivity(intent);
+
         // case when URL is not a valid image URL
         } else if (image == false) {
-            // saves default image to shared preferences
             editor.putString("image_url", "R.drawable.ic_baseline_android_24");
             editor.apply();
             Log.d("<onConfirm>", "URL is invalid");
-            // shows alert that url is not valid
             ErrorUtilities.showAlert(this, "Cool your jets, that's an invalid URL!");
-            // doesn't take user to next page until valid image URL is entered
         }
+
         // case when URL is a valid image URL
         else {
-            // saves default image to shared preferences
             editor.putString("image_url", url);
             editor.apply();
             Log.d("<onConfirm>", "URL is valid");
-            // take user to next screen by starting activity
             Intent intent = new Intent(this, CourseActivity.class);
             startActivity(intent);
         }
     }
 
     // Method responsible for loading appropriate image after clicking done button
+    /**
+     * Method responsible for loading appropriate image after clicking done button. Two cases:
+     * 1. empty URL or invalid URL: displays error image
+     * 3. valid URL: displays image from url
+     * @param view
+     */
     public void onDoneClicked(View view){
-        // reference profile ImageView and url TextView
+        // get string url from URL Text View
         imageView = findViewById(R.id.pfp);
         URLText = findViewById(R.id.URL);
-        // make TextView's text into a string
         String URLString = URLText.getText().toString();
         // load image if it is a valid image url, else load error image
         Glide.with(this)

@@ -1,3 +1,9 @@
+/**
+ * Filename: MainActivity.java
+ *
+ * Description: This file is responsible for saving the appropriate user name based on the
+ * Name Text View.
+ */
 package com.example.birdsofafeather;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,23 +22,30 @@ import com.example.birdsofafeather.model.db.StudentWithCourses;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    /**
+     * Method that starts activity with loaded data from savedInstanceState
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-    // Method responsible for saving name to shared preferences
+    /**
+     * Method that is responsible for saving name to shared preferences. Two cases:
+     * 1. entered text: save to SharedPreferences
+     * 2. empty text: show alert to that no name is entered
+     * @param view
+     */
     public void onEnterClicked(View view) {
-        // getting shared preferences and declaring editor
+        // get string userName from Name Text View
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        // make TextView's name text into a string
         String userName = ((TextView)findViewById(R.id.name)).getText().toString();
 
         // case when user entered nothing
         if(userName.equals("")){
-            // shows alert that no name is entered
             ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name");
             Log.d("<onEnter>", "Empty Name");
         }
@@ -41,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("name", userName);
             editor.apply();
             Log.d("<onEnter>", preferences.getString("name", "No Name?"));
-            // start activity to go to screen of adding image
             Intent intent = new Intent(this, ImageActivity.class);
             startActivity(intent);
         }
