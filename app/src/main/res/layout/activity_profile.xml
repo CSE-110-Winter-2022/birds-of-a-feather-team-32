@@ -34,13 +34,17 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/courseRecyclerView"
         android:layout_width="328dp"
-        android:layout_height="408dp"
-        android:layout_marginStart="41dp"
+        android:layout_height="350dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="28dp"
-        android:layout_marginEnd="42dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/backBtn"
