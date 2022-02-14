@@ -41,6 +41,14 @@ public class ImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
+
+        //if image already inputted, skip to next activity
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String retrievedImage = preferences.getString("image_url", "image not found");
+        if(retrievedImage != "image not found"){
+            Intent intent = new Intent(this, CourseActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**
