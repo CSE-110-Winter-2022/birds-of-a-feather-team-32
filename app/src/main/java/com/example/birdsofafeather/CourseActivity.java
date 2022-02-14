@@ -76,6 +76,10 @@ public class CourseActivity extends AppCompatActivity {
     }
 
     public void onHomeClicked(View view) {
+        if (db.coursesDao().getCoursesFromStudentId(0).size() == 0) {
+            ErrorUtilities.showAlert(this, "Please enter at least one class before continuing!");
+            return;
+        }
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
     }
