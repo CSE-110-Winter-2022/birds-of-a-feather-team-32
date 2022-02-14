@@ -91,23 +91,8 @@ public class Course {
                 this.qtr = "SSS";
                 break;
         }
-        this.courseFullString = this.dept + " " + this.num + " " + this.qtr + " " + this.year;
-        Log.d("qtr:", this.qtr);
-
+        this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num;
     }
-/*
-    @Override
-    public boolean equals(Object other){
-        if(this == other) { return true;}
-        if(other == null || getClass() != other.getClass()) { return false;}
-        Course course = (Course) other;
-        if((this.dept.equals(course.dept)) && (this.num.equals(course.num))
-            && (this.qtr.equals(course.qtr)) && (this.year.equals(course.year))){
-            return true;
-        }
-        return false;
-    }
-    */
 
     /**
      * Overriden equals() function to compare each Course Object
@@ -128,10 +113,7 @@ public class Course {
             return false;
         }
         Course courseObj = (Course) obj;
-        if (this.courseFullString.equals(courseObj.getCourseFullString())) {
-            return true;
-        }
-        return false;
+        return this.courseFullString.equals(courseObj.getCourseFullString());
     }
 
     /**
@@ -139,7 +121,7 @@ public class Course {
      *
      * @return String courseFullString
      */
-
+  
     public String getCourseFullString() {
         return courseFullString;
     }

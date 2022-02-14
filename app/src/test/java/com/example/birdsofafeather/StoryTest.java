@@ -35,7 +35,6 @@ public class StoryTest {
         scenario.moveToState(Lifecycle.State.CREATED);
 
         scenario.onActivity(activity -> {
-            AppDatabase.useTestSingleton(activity);
             AppDatabase db = AppDatabase.singleton(activity);
 
             EditText deptView = activity.findViewById(R.id.enter_class_dept);

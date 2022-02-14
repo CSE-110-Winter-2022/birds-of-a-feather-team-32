@@ -47,18 +47,13 @@ public class ProfileActivityViewAdapter extends RecyclerView.Adapter<ProfileActi
     public static class ViewHolder
             extends RecyclerView.ViewHolder {
         private final TextView courseView;
-        private final ImageView imageView;
-        private Course course;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.courseView = itemView.findViewById(R.id.course_row_name);
-            this.imageView = itemView.findViewById(R.id.imageView);
-            imageView.setVisibility(View.INVISIBLE);
         }
 
         public void setCourse(Course course) {
-            this.course = course;
             this.courseView.setText(course.dept + " " + course.num + " " + course.year + " " + course.qtr);
 
         }

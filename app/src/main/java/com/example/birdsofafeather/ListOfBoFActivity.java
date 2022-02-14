@@ -8,6 +8,7 @@
 package com.example.birdsofafeather;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.util.Log;
@@ -28,6 +29,7 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -68,7 +70,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         ownCoursesSet.addAll(ownCourses);
 
         // Initialize a HashSet of messages that we've seen so far
-        seenMessages = new HashSet<String>();
+        seenMessages = new HashSet<>();
 
         studentRecyclerView = findViewById(R.id.student_view);
 
@@ -151,16 +153,41 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     public void onStartClicked(View view) {
         Button startButton = findViewById(R.id.runButton);
+        Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
         if (buttonState == 0) {
             buttonState = 1;
             startButton.setText("Stop");
             Nearby.getMessagesClient(this).subscribe(realListener);
+            Nearby.getMessagesClient(this).publish(myMessage);
             testListener.getMessage();
         } else {
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
+            Nearby.getMessagesClient(this).unpublish(myMessage);
         }
+    }
+
+    public String buildMessage() {
+
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String name = preferences.getString("name", "");
+        String photoURL = preferences.getString("image_url", "");
+
+        List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+
+        String message = "";
+        message += name + ",,,\n";
+        message += photoURL + ",,,\n";
+
+        for (Course c : ownCourses) {
+            message += c.getCourseFullString() + "\n";
+        }
+        message.trim();
+
+        Log.d("My message:", message);
+
+        return message;
     }
   
     @Override
