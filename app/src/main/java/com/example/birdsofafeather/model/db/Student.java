@@ -24,13 +24,6 @@ public class Student {
     @ColumnInfo(name = "photoURL")
     public String photoURL;
 
-    // placeholder constructor to use for testing purposes
-    @Ignore
-    public Student(String name) {
-        this.name = name;
-        this.photoURL = null;
-    }
-
     public Student(int studentId, String name, String photoURL, int numClassOverlap) {
         this.studentId = studentId;
         this.name = name;
@@ -41,11 +34,13 @@ public class Student {
     public String getName() {
         return this.name;
     }
-    public String getPhotoURL(){ return this.photoURL; }
-    public int getStudentId() { return studentId; }
-    public String getNumOverlap() { return String.valueOf(this.numClassOverlap); }
-    public void incrementNumClassOverlap(){
-        this.numClassOverlap++;
+    public String getPhotoURL() {
+        return this.photoURL;
     }
-
+    public int getStudentId() {
+        return studentId;
+    }
+    public String getNumOverlap() {
+        return String.valueOf(this.numClassOverlap);
+    }
 }

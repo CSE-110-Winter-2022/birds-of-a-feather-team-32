@@ -6,11 +6,13 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
@@ -56,18 +58,27 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         private final TextView studentNameView;
         private TextView numClassesOverlap;
         private StudentWithCourses student;
+        private ImageView imageView;
+        private View itemView;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.studentNameView = itemView.findViewById(R.id.student_row_name);
             this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
+            imageView = itemView.findViewById(R.id.imageView);
+            this.itemView = itemView;
         }
 
         public void setPerson(StudentWithCourses student) {
             this.student = student;
             this.studentNameView.setText(student.getName());
             this.numClassesOverlap.setText(student.student.getNumOverlap());
+            String url = student.student.getPhotoURL();
+            url = url.trim();
+            Glide.with(itemView)
+                    .load(url)
+                    .into(imageView);
         }
 
         @Override

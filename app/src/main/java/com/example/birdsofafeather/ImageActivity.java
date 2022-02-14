@@ -51,7 +51,6 @@ public class ImageActivity extends AppCompatActivity {
 
         // call method to save appropriate url
         savePref(url);
-
     }
 
     // Method responsible for saving appropriate url into shared preferences
@@ -102,5 +101,6 @@ public class ImageActivity extends AppCompatActivity {
                 .load(URLString)
                 .error(R.drawable.ic_baseline_error_24)
                 .into(imageView);
+        Log.d("<onDone>", "Loaded!");
     }
 }

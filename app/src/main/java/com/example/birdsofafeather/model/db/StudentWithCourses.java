@@ -1,6 +1,5 @@
 package com.example.birdsofafeather.model.db;
 
-import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
@@ -18,11 +17,13 @@ public class StudentWithCourses {
     public String getName() {
         return this.student.name;
     }
-    public String getPhotoURL() { return this.student.photoURL;}
-    public List<Course> getCourses() { return this.courses; }
-
+    public String getPhotoURL() {
+        return this.student.photoURL;
+    }
+    public List<Course> getCourses() {
+        return this.courses;
+    }
     public int getId() {
         return this.student.studentId;
     }
-
 }
