@@ -1,3 +1,10 @@
+/**
+ * File: CoursesDao.java
+ * Description: Database object to store Course objects that can be queried
+ *
+ * @author Team 32
+ */
+
 package com.example.birdsofafeather.model.db;
 
 import androidx.room.Dao;
@@ -6,7 +13,6 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 
-import java.util.HashSet;
 import java.util.List;
 
 @Dao

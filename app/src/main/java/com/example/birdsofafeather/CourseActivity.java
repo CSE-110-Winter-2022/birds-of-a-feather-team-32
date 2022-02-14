@@ -1,9 +1,9 @@
 /**
- * CoursesActivity.java
- * This file allows the user to add their own courses to the application.
+ * File: CoursesActivity.java
+ * Description: This activity allows the user to add their own courses to the application.
  * They can also see the courses that they have previously added.
  *
- * @authors Andrew Tang, Marc Mendoza
+ * @authors Team 32
  */
 package com.example.birdsofafeather;
 
@@ -30,6 +30,11 @@ public class CourseActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager coursesLayoutManager;
     private CoursesViewAdapter coursesViewAdapter;
 
+    /**
+     * Initializes the database, RecyclerView, LayoutManager, and CoursesViewAdapter when the
+     * activity is created.
+     * @param savedInstanceState Most recent activity data
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,11 @@ public class CourseActivity extends AppCompatActivity {
         coursesRecyclerView.setAdapter(coursesViewAdapter);
     }
 
+    /**
+     * Gets strings from TextViews and checks for empty/duplicate entries before inserting into
+     * database.
+     * @param view View that was clicked
+     */
     public void onAddClassClicked(View view) {
         int newCourseId = db.coursesDao().numCourses() + 1;
         TextView newCourseDeptTextView = findViewById(R.id.enter_class_dept);
@@ -62,8 +72,12 @@ public class CourseActivity extends AppCompatActivity {
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
 
         // Check if any fields are empty
-        if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") && !newCourseYearText.equals("")) {
-            Course newCourse = new Course(newCourseId, 0, newCourseDeptText, newCourseNumText, newCourseYearText, newCourseQtrText);
+        if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") &&
+                !newCourseYearText.equals("")) {
+            Course newCourse = new Course(newCourseId, 0, newCourseDeptText,
+                    newCourseNumText, newCourseYearText, newCourseQtrText);
+
+            // Check duplicate courses
             if(!db.coursesDao().getAll().contains(newCourse)){
                 db.coursesDao().insert(newCourse);
                 coursesViewAdapter.addCourse(newCourse);
@@ -76,10 +90,14 @@ public class CourseActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Checks if there is at least one course added and moves to the next activity if so.
+     * @param view View that was clicked
+     */
     public void onHomeClicked(View view) {
-        Log.d("<onDone>", "Number of courses: " + db.coursesDao().numCourses());
         if (db.coursesDao().numCourses() < 1) {
-            ErrorUtilities.showAlert(this, "Please add at least one class before proceeding!");
+            ErrorUtilities.showAlert(this, "Please enter at least one course " +
+                    "before proceeding!");
             return;
         }
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);

@@ -2,6 +2,8 @@
  * File: CourseViewAdapter.Java
  * Description: Class that binds our Course object data to each item in the recycler view in
  * our layout file activity_course.xml
+ *
+ * @author Team 32
  */
 
 package com.example.birdsofafeather;
