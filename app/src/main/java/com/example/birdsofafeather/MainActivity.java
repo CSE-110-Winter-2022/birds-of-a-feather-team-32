@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    // Clicked enter
     public void onEnterClicked(View view) {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
