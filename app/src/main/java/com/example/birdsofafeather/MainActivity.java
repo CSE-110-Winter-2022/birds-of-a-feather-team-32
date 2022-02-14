@@ -30,6 +30,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //if name already inputted, skip to next activity
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String retrievedName = preferences.getString("name", "name not found");
+        if(retrievedName != "name not found"){
+            Intent intent = new Intent(this, ImageActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**

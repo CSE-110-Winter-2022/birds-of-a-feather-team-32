@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,14 @@ public class CourseActivity extends AppCompatActivity {
             db.coursesDao().delete(course);
         });
         coursesRecyclerView.setAdapter(coursesViewAdapter);
+
+        //if classes already inputted, skip to next activity
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String coursesDone = preferences.getString("done", "don't skip");
+        if(coursesDone != "don't skip"){
+            Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -100,6 +109,10 @@ public class CourseActivity extends AppCompatActivity {
                     "before proceeding!");
             return;
         }
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("done", "skip");
+        editor.apply();
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
     }
