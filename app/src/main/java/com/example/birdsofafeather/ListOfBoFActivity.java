@@ -4,9 +4,11 @@
  * the same classes as they do.
  * They are also able to click on an individual student to see all the
  * classes that they have in common.
+ * @quthor Allison Chan, Matthew Peng
  */
 package com.example.birdsofafeather;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.util.Log;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -92,11 +95,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
+
+        /*
         if (isBofSearchOn) {
             buttonState = 0;
             findViewById(R.id.runButton).performClick();
             Log.d("Performed Click", "True");
         }
+         */
     }
 
     // Restarts search for new bof if it was never turned off by user
@@ -107,14 +113,50 @@ public class ListOfBoFActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
         Log.d("isBofSearchOn", "" + isBofSearchOn);
+        /*
         if (isBofSearchOn) {
             buttonState = 0;
             findViewById(R.id.runButton).performClick();
             Log.d("Performed Click", "True");
         }
+         */
     }
 
     public void onStartClicked(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setCancelable(true);
+        builder.setTitle("Would you like to resume a previous session or create a new one?");
+        //builder.setMessage("Message");
+        String[] options = {"Resume Session", "New Session"};
+        builder.setItems(options, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                if(which == 0){
+                    Log.d("Resume was clicked", "Resume was clicked");
+                } else if(which == 1){
+                    Log.d("New was clicked", "New was clicked");
+
+                }
+                // The 'which' argument contains the index position
+                // of the selected item
+            }
+        });
+        /*builder.setPositiveButton("Resume",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+         */
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        /*
         Log.d("onStartClicked", "clicked onStart");
 
         Button startButton = findViewById(R.id.runButton);
@@ -142,6 +184,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
         }
+         */
     }
 
     public String buildMessage() {
@@ -160,7 +203,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         for (Course c : ownCourses) {
             message += c.getCourseFullString() + "\n";
         }
-        message.trim();
+        message = message.trim();
 
         Log.d("My message:", message);
 

@@ -1,3 +1,8 @@
+/**
+ * StudentWithCoursesDao File
+ * Data Access Object for Students with Courses
+ * Allows access and insertion of data into the database
+ */
 package com.example.birdsofafeather.model.db;
 
 import androidx.room.Dao;

@@ -17,8 +17,9 @@
         <entry key="app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.18425925925925926" />
         <entry key="app/src/main/res/drawable/ic_baseline_error_24.xml" value="0.18425925925925926" />
         <entry key="app/src/main/res/layout/activity_boflist.xml" value="0.35625" />
+        <entry key="app/src/main/res/layout/activity_course.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23697916666666666" />
-        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.30497929542055513" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
         <entry key="app/src/main/res/layout/course_row.xml" value="0.1" />
         <entry key="app/src/main/res/layout/courses_row.xml" value="0.1" />
         <entry key="app/src/main/res/layout/student_row.xml" value="0.1" />
