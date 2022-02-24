@@ -132,6 +132,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if(which == 0){
                     Log.d("Resume was clicked", "Resume was clicked");
+
+                    Intent intent = new Intent(ListOfBoFActivity.this, SavedSessionsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    startActivity(intent);
+
                 } else if(which == 1){
                     Log.d("New was clicked", "New was clicked");
 
@@ -140,18 +146,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 // of the selected item
             }
         });
-        /*builder.setPositiveButton("Resume",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                });
-        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-            }
-        });
-         */
 
         AlertDialog dialog = builder.create();
         dialog.show();
