@@ -36,6 +36,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class ListOfBoFActivity extends AppCompatActivity {
 
@@ -54,6 +57,9 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private HashSet<String> seenMessages;
     private HashSet<Course> ownCoursesSet;
 
+    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
+    private Future<Void> future;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,15 +70,36 @@ public class ListOfBoFActivity extends AppCompatActivity {
         Intent i = getIntent();
         ArrayList<String> messages = i.getStringArrayListExtra("messages");
 
-        // Get current data stored in database
-        db = AppDatabase.singleton(this);
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+        this.future = backgroundThreadExecutor.submit(() -> {
+            // use database client to either make a new database
+            // or to access a previous one
+            String testDbName = "TestDbName";
+            db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();
 
+            // Get current data stored in database
+            //db = AppDatabase.singleton(this);
+
+            List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+            studentViewAdapter = new ListOfBoFViewAdapter(students);
+            studentRecyclerView.setAdapter(studentViewAdapter);
+
+            // Get user's own Courses
+            List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+            // reformat these courses into a hashset to make comparisons easier
+            ownCoursesSet = new HashSet<>();
+            ownCoursesSet.addAll(ownCourses);
+
+            return null;
+        });
+
+
+        /*
         // Get user's own Courses
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
         // reformat these courses into a hashset to make comparisons easier
         ownCoursesSet = new HashSet<>();
         ownCoursesSet.addAll(ownCourses);
+        */
 
         // Initialize a HashSet of messages that we've seen so far
         seenMessages = new HashSet<>();
@@ -83,8 +110,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
         studentLayoutManager = new LinearLayoutManager(this);
         studentRecyclerView.setLayoutManager(studentLayoutManager);
 
-        studentViewAdapter = new ListOfBoFViewAdapter(students);
-        studentRecyclerView.setAdapter(studentViewAdapter);
+        //studentViewAdapter = new ListOfBoFViewAdapter(students);
+        //studentRecyclerView.setAdapter(studentViewAdapter);
 
         // Initialize our Message Listener
         realListener = new builtInMessageListener();
