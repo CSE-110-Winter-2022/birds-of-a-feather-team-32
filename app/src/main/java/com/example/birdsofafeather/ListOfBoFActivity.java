@@ -8,6 +8,7 @@
  */
 package com.example.birdsofafeather;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,6 +33,7 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -73,7 +75,19 @@ public class ListOfBoFActivity extends AppCompatActivity {
         this.future = backgroundThreadExecutor.submit(() -> {
             // use database client to either make a new database
             // or to access a previous one
-            String testDbName = "TestDbName";
+
+
+            String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
+            boolean exist = doesDatabaseExist(getApplicationContext(),testDbName);
+            Log.d("DatabaseExist", "Database exists: " + exist + " existence");
+            // finds current timestamp to name session if not already named
+            if (!exist) {
+                String time = new TimeStamp().getTime();
+                String timeAltered = new TimeStamp().getTimeAlt();
+                testDbName = timeAltered;
+                Log.d("NewDB", "DB is: " + timeAltered);
+            }
+            Log.d("DBNAME", "DB name is: " + testDbName);
             db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();
 
             // Get current data stored in database
@@ -317,5 +331,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
         public void onLost(@NonNull Message message) {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
+    }
+
+    private boolean doesDatabaseExist(Context context, String dbString) {
+        File dbFile = context.getDatabasePath(dbString);
+        return dbFile.exists();
     }
 }
