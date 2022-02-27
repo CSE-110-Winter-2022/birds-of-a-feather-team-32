@@ -6,9 +6,16 @@
  */
 package com.example.birdsofafeather;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.View;
 import android.content.SharedPreferences;
@@ -18,10 +25,22 @@ import android.widget.TextView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.GetSignInIntentRequest;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signInRequest;
+    private static final int REQ_ONE_TAP = 2;
     /**
      * Method that starts activity with loaded data from savedInstanceState
      * @param savedInstanceState
