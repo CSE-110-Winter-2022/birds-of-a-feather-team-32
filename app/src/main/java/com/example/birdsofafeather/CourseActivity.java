@@ -75,17 +75,19 @@ public class CourseActivity extends AppCompatActivity {
         TextView newCourseNumTextView = findViewById(R.id.enter_class_number);
         TextView newCourseYearTextView = findViewById(R.id.enter_year);
         Spinner newCourseQtrSpinner = findViewById(R.id.pick_quarter);
+        Spinner newCourseSizeSpinner = findViewById(R.id.pick_size);
 
         String newCourseDeptText = newCourseDeptTextView.getText().toString();
         String newCourseNumText = newCourseNumTextView.getText().toString();
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
+        String newCourseSizeText = newCourseSizeSpinner.getSelectedItem().toString();
 
         // Check if any fields are empty
         if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") &&
                 !newCourseYearText.equals("")) {
             Course newCourse = new Course(newCourseId, 0, newCourseDeptText,
-                    newCourseNumText, newCourseYearText, newCourseQtrText);
+                    newCourseNumText, newCourseYearText, newCourseQtrText, newCourseSizeText);
 
             // Check duplicate courses
             if(!db.coursesDao().getAll().contains(newCourse)){

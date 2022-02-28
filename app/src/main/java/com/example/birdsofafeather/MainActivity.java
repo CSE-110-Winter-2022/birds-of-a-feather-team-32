@@ -7,11 +7,7 @@
 package com.example.birdsofafeather;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,16 +15,14 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.birdsofafeather.model.db.AppDatabase;
-import com.example.birdsofafeather.model.db.Student;
-import com.example.birdsofafeather.model.db.StudentWithCourses;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
 
-import java.util.List;
+import com.google.android.gms.auth.api.identity.SignInClient;
 
 public class MainActivity extends AppCompatActivity {
+    private SignInClient oneTapClient;
+    private BeginSignInRequest signInRequest;
+    private static final int REQ_ONE_TAP = 2;
     /**
      * Method that starts activity with loaded data from savedInstanceState
      * @param savedInstanceState

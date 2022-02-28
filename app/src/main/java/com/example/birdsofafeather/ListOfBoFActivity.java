@@ -221,7 +221,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String course = coursesString[i];
                 String[] courseParts = course.split(",");
 
-                // Ensue that a new course ID is used
+                // Ensure that a new course ID is used
                 int currId = courseDao.numCourses()+1;
 
                 String dept = courseParts[2];
@@ -232,9 +232,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Log.d("Found new year", year);
                 String qtr = courseParts[1];
                 Log.d("Found new qtr", qtr);
+                // TODO: Verify the correctness of class comparison?
+                String size = courseParts[4];
+                Log.d("Found new size", size);
 
                 // Create new course
-                newCourse = new Course(currId, studentId, dept, num, year, qtr);
+                newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
 
                 // If new course matches with one of the user's courses, add it to the database
                 if (ownCoursesSet.contains(newCourse)) {

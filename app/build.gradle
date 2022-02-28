@@ -35,6 +35,8 @@ android {
     configurations { implementation.exclude group: 'org.jetbrains', module: 'annotations' }
 }
 
+apply plugin: 'com.android.application'
+
 dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.0-alpha03'
     def room_version = "2.4.1"
