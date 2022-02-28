@@ -1,5 +1,7 @@
+package com.example.birdsofafeather;
+
 public interface PrioritizationScoreStrategy {
 
-    int calculateScore();
+    double calculateScore();
 
 }

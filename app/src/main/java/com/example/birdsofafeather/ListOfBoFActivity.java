@@ -114,6 +114,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         }
     }
 
+    // NOTE: In order to display Bluetooth permissions dialog box, need to clear Google Play Services Data
     public void onStartClicked(View view) {
         Log.d("onStartClicked", "clicked onStart");
 

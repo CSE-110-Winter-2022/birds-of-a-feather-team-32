@@ -40,6 +40,15 @@ public class CourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
+
+        //if classes already inputted, skip to next activity
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String coursesDone = preferences.getString("done", "don't skip");
+        if(coursesDone != "don't skip"){
+            Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+            startActivity(intent);
+        }
+
         setTitle("Modify Courses");
 
         db = AppDatabase.singleton(this);
@@ -53,14 +62,6 @@ public class CourseActivity extends AppCompatActivity {
             db.coursesDao().delete(course);
         });
         coursesRecyclerView.setAdapter(coursesViewAdapter);
-
-        //if classes already inputted, skip to next activity
-        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        String coursesDone = preferences.getString("done", "don't skip");
-        if(coursesDone != "don't skip"){
-            Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
-            startActivity(intent);
-        }
     }
 
     /**

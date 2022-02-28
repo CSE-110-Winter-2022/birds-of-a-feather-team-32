@@ -47,6 +47,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
     implementation "com.google.android.gms:play-services-nearby:18.0.2"
+    implementation 'com.google.android.gms:play-services-auth:20.1.0'
 
     testImplementation 'junit:junit:4.+'
     testImplementation 'androidx.test:core:1.4.0'
