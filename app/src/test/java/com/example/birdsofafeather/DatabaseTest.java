@@ -66,9 +66,9 @@ public class DatabaseTest {
     @Test
     public void testCourseEntity() {
 
-        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter", "Small (40-75)");
+        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter", "Small (40–75)");
         Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI", "SMALL");
-        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA", "Huge (250-400)");
+        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA", "Huge (250–400)");
 
         assertEquals(course1, course2);
         assertNotEquals(course1, course3);
