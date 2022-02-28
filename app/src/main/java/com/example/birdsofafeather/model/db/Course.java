@@ -25,7 +25,7 @@ public class Course {
 
     // this is how we identify that this course belongs to
     // a particular person
-    @ColumnInfo(name = "student_id")
+    @ColumnInfo(name = "studentId")
     public int studentId;
 
     @ColumnInfo(name = "dept")

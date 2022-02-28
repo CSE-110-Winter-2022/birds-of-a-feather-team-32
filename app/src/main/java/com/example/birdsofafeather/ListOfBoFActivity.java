@@ -72,55 +72,20 @@ public class ListOfBoFActivity extends AppCompatActivity {
         Intent i = getIntent();
         ArrayList<String> messages = i.getStringArrayListExtra("messages");
 
-        this.future = backgroundThreadExecutor.submit(() -> {
-            // use database client to either make a new database
-            // or to access a previous one
 
-
-            String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
-            boolean exist = doesDatabaseExist(getApplicationContext(),testDbName);
-            Log.d("DatabaseExist", "Database exists: " + exist + " existence");
-            // finds current timestamp to name session if not already named
-            if (!exist) {
-                String time = new TimeStamp().getTime();
-                String timeAltered = new TimeStamp().getTimeAlt();
-                testDbName = timeAltered;
-                Log.d("NewDB", "DB is: " + timeAltered);
-            }
-            Log.d("DBNAME", "DB name is: " + testDbName);
-            db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();
-
-            // Get current data stored in database
-            //db = AppDatabase.singleton(this);
-
-            List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
-            studentViewAdapter = new ListOfBoFViewAdapter(students);
-            studentRecyclerView.setAdapter(studentViewAdapter);
-
-            // Get user's own Courses
-            List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
-            // reformat these courses into a hashset to make comparisons easier
-            ownCoursesSet = new HashSet<>();
-            ownCoursesSet.addAll(ownCourses);
-
-            return null;
-        });
-
-
-        /*
         // Get user's own Courses
+        db = AppDatabase.singleton(this);
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
         // reformat these courses into a hashset to make comparisons easier
         ownCoursesSet = new HashSet<>();
         ownCoursesSet.addAll(ownCourses);
-        */
+
 
         // Initialize a HashSet of messages that we've seen so far
         seenMessages = new HashSet<>();
 
         // Set up UI
         studentRecyclerView = findViewById(R.id.student_view);
-
         studentLayoutManager = new LinearLayoutManager(this);
         studentRecyclerView.setLayoutManager(studentLayoutManager);
 
@@ -181,7 +146,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
                 } else if(which == 1){
                     Log.d("New was clicked", "New was clicked");
-
+                    onNewSessionClicked();
                 }
                 // The 'which' argument contains the index position
                 // of the selected item
@@ -191,8 +156,46 @@ public class ListOfBoFActivity extends AppCompatActivity {
         AlertDialog dialog = builder.create();
         dialog.show();
 
-        /*
-        Log.d("onStartClicked", "clicked onStart");
+
+    }
+
+    public void onNewSessionClicked(){
+
+        this.future = backgroundThreadExecutor.submit(() -> {
+            // use database client to either make a new database
+            // or to access a previous one
+
+            String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
+            boolean exist = doesDatabaseExist(getApplicationContext(),testDbName);
+            Log.d("DatabaseExist", "Database exists: " + exist + " existence");
+            // finds current timestamp to name session if not already named
+            if (!exist) {
+                String time = new TimeStamp().getTime();
+                String timeAltered = new TimeStamp().getTimeAlt();
+                testDbName = timeAltered;
+                Log.d("NewDB", "DB is: " + timeAltered);
+            }
+            Log.d("DBNAME", "DB name is: " + testDbName);
+
+            // Get current data stored in database
+            //db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();
+            List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+            studentViewAdapter = new ListOfBoFViewAdapter(students);
+            studentRecyclerView.setAdapter(studentViewAdapter);
+
+            // Get user's own Courses
+            // AppDatabase ownCoursesDb = DatabaseClient.getInstance(getApplicationContext(), "ownCourses").getAppDatabase();
+
+            //List<Course> ownCourses = ownCoursesDb.coursesDao().getCoursesFromStudentId(0);
+            // reformat these courses into a hashset to make comparisons easier
+            //ownCoursesSet = new HashSet<>();
+            // ownCoursesSet.addAll(ownCourses);
+
+            return null;
+        });
+
+
+        Log.d("onNewSessionClicked", "clicked New Session");
 
         Button startButton = findViewById(R.id.runButton);
 
@@ -219,9 +222,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
         }
-         */
-    }
 
+    }
     public String buildMessage() {
 
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
@@ -320,9 +322,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 }
             }
 
+            int testSessionId = 0;
+
             // If new student has 1 or more shared courses, add them to the student database
             if (numClassesOverlap > 0) {
-                Student newStudent = new Student(studentId, studentName, photoUrl, numClassesOverlap);
+                Student newStudent = new Student(studentId, testSessionId, studentName, photoUrl, numClassesOverlap);
                 db.studentWithCoursesDao().insert(newStudent);
             }
         }
