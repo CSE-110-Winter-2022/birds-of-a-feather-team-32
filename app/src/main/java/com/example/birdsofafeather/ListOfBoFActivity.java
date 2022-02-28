@@ -129,32 +129,55 @@ public class ListOfBoFActivity extends AppCompatActivity {
     }
 
     public void onStartClicked(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        //builder.setCancelable(true);
-        builder.setTitle("Would you like to resume a previous session or create a new one?");
-        //builder.setMessage("Message");
-        String[] options = {"Resume Session", "New Session"};
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                if(which == 0){
-                    Log.d("Resume was clicked", "Resume was clicked");
+        Button startButton = findViewById(R.id.runButton);
 
-                    Intent intent = new Intent(ListOfBoFActivity.this, SavedSessionsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // Build user message to publish to other students
+        Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
 
-                    startActivity(intent);
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
 
-                } else if(which == 1){
-                    Log.d("New was clicked", "New was clicked");
-                    onNewSessionClicked();
+        // button is start
+        if (buttonState == 0) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.setCancelable(true);
+            builder.setTitle("Would you like to resume a previous session or create a new one?");
+            //builder.setMessage("Message");
+            String[] options = {"Resume Session", "New Session"};
+            builder.setItems(options, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        Log.d("Resume was clicked", "Resume was clicked");
+
+                        Intent intent = new Intent(ListOfBoFActivity.this, SavedSessionsActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                        startActivity(intent);
+
+                    } else if (which == 1) {
+                        Log.d("New was clicked", "New was clicked");
+                        onNewSessionClicked();
+                    }
+                    // The 'which' argument contains the index position
+                    // of the selected item
                 }
-                // The 'which' argument contains the index position
-                // of the selected item
-            }
-        });
+            });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+        // button is stop
+        } else {
+            buttonState = 0;
+            startButton.setText("Start");
+            Nearby.getMessagesClient(this).unsubscribe(realListener);
+            Nearby.getMessagesClient(this).unpublish(myMessage);
+            editor.putBoolean("bofSearchOn", false);
+            editor.apply();
+        }
+
+
+
 
 
     }
@@ -194,9 +217,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
             return null;
         });
 
-
-        Log.d("onNewSessionClicked", "clicked New Session");
-
         Button startButton = findViewById(R.id.runButton);
 
         // Build user message to publish to other students
@@ -205,8 +225,9 @@ public class ListOfBoFActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
 
+        // if start and new session is clicked
         // Search is currently off
-        if (buttonState == 0) {
+        //if (buttonState == 0) {
             buttonState = 1;
             startButton.setText("Stop");
             Nearby.getMessagesClient(this).subscribe(realListener);
@@ -214,14 +235,15 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", true);
             editor.apply();
             testListener.getMessage();
-        } else { // Search is currently on
+      /*  } else { // Search is currently on
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
             Nearby.getMessagesClient(this).unpublish(myMessage);
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
-        }
+        } */
+
 
     }
     public String buildMessage() {
