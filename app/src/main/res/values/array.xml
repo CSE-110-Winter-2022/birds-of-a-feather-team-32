@@ -8,4 +8,13 @@
         <item>Summer 2</item>
         <item>Special Summer Session</item>
     </string-array>
+
+    <string-array name="class_sizes">
+        <item>Tiny (&lt;40)</item>
+        <item>Small (40&#8211;75)</item>
+        <item>Medium (75&#8211;150)</item>
+        <item>Large (150&#8211;250)</item>
+        <item>Huge (250&#8211;400)</item>
+        <item>Gigantic (400+)</item>
+    </string-array>
 </resources>
