@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.CoursesDao;
+import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
@@ -188,17 +189,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
             // use database client to either make a new database
             // or to access a previous one
 
-            String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
-            boolean exist = doesDatabaseExist(getApplicationContext(),testDbName);
-            Log.d("DatabaseExist", "Database exists: " + exist + " existence");
-            // finds current timestamp to name session if not already named
-            if (!exist) {
-                String time = new TimeStamp().getTime();
-                String timeAltered = new TimeStamp().getTimeAlt();
-                testDbName = timeAltered;
-                Log.d("NewDB", "DB is: " + timeAltered);
-            }
-            Log.d("DBNAME", "DB name is: " + testDbName);
+           // String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
+
+            String defaultName = new TimeStamp().getTime();
+            Log.d("TimeShown", "timestamp is " + defaultName);
+            int sessionID = defaultName.hashCode(); // id of session
+
+            Session session = new Session(sessionID,defaultName);
+            db.sessionsWithStudentsDao().insert(session);
 
             // Get current data stored in database
             //db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();

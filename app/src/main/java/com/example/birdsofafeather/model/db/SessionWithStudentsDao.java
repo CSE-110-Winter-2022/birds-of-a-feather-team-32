@@ -11,7 +11,7 @@ import java.util.List;
 public interface SessionWithStudentsDao {
     @Transaction
     @Query("SELECT * FROM students")
-    List<StudentWithCourses> getAll();
+    List<SessionWithStudents> getAll();
 
     @Query("SELECT COUNT(*) from sessions")
     int count();

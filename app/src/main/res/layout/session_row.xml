@@ -19,6 +19,6 @@
         android:lineHeight="32sp"
         android:textSize="24sp"
         android:textStyle="bold"
-        tools:text="@tools:sample/full_names"/>
+        tools:text="@tools:sample/full_names[1]" />
 
 </FrameLayout>

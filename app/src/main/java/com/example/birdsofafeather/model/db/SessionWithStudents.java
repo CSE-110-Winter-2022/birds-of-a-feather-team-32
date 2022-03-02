@@ -10,7 +10,7 @@ public class SessionWithStudents {
     public Session session;
 
     @Relation(parentColumn = "sessionId",
-            entityColumn = "studentId",
+            entityColumn = "sessionId",
             entity = Student.class)
     public List<Student> students;
 
