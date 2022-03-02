@@ -17,4 +17,10 @@
         <item>Huge (250&#8211;400)</item>
         <item>Gigantic (400+)</item>
     </string-array>
+
+    <string-array name="sort_options">
+        <item>Default</item>
+        <item>Small Classes</item>
+        <item>Recent Classes</item>
+    </string-array>
 </resources>
