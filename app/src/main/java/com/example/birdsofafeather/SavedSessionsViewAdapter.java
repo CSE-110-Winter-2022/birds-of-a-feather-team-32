@@ -1,5 +1,6 @@
 package com.example.birdsofafeather;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,21 +10,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.SessionWithStudents;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.List;
 
 public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessionsViewAdapter.ViewHolder>{
-    private final List<String> testSavedSessions;
+    private final List<SessionWithStudents> savedSessions;
 
-    public SavedSessionsViewAdapter(List<String> savedSessions) {
+    public SavedSessionsViewAdapter(List<SessionWithStudents> savedSessions) {
         super();
-        this.testSavedSessions = savedSessions;
+        this.savedSessions = savedSessions;
     }
 
     @NonNull
     @Override
-    public com.example.birdsofafeather.SavedSessionsViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SavedSessionsViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.session_row, parent, false);
@@ -31,13 +33,14 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.setSessions(testSavedSessions.get(position));
+    public void onBindViewHolder(@NonNull SavedSessionsViewAdapter.ViewHolder holder, int position) {
+        holder.setSessions(savedSessions.get(position).getSessionName());
+        Log.d("in adapter", "name is: " + savedSessions.get(position).getSessionName());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return savedSessions.size();
     }
 
     public static class ViewHolder

@@ -10,11 +10,11 @@ public class SessionWithStudents {
     public Session session;
 
     @Relation(parentColumn = "sessionId",
-            entityColumn = "studentId",
+            entityColumn = "sessionId",
             entity = Student.class)
     public List<Student> students;
 
-    public String getName() {
+    public String getSessionName() {
         return this.session.name;
     }
     public List<Student> getStudents() {

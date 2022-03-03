@@ -13,9 +13,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -26,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
 import com.example.birdsofafeather.model.db.CoursesDao;
+import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
@@ -34,6 +39,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -168,6 +174,37 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // button is stop
         } else {
+            // only becomes true once confirm save is clicked
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.setCancelable(true);
+            builder.setTitle("Save current session as:");
+            builder.setView(R.layout.save_session_prompt);
+            ArrayList<String> currentCourseArray = new ArrayList<>();
+            for (Course c : ownCoursesSet) {
+                if (c.year.equals("2022") && c.qtr.equals("WI")) {
+                    currentCourseArray.add(c.getCourseFullStringReadable());
+                }
+            }
+            builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog stopDialog = builder.create();
+            stopDialog.setContentView(R.layout.save_session_prompt);
+            stopDialog.show();
+            ArrayAdapter<String> courseListAA = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_spinner_dropdown_item, currentCourseArray);
+            courseListAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Spinner selectCoursesSpinner = stopDialog.findViewById(R.id.selectCurrentCourses);
+            selectCoursesSpinner.setAdapter(courseListAA);
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
@@ -188,17 +225,17 @@ public class ListOfBoFActivity extends AppCompatActivity {
             // use database client to either make a new database
             // or to access a previous one
 
-            String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
-            boolean exist = doesDatabaseExist(getApplicationContext(),testDbName);
-            Log.d("DatabaseExist", "Database exists: " + exist + " existence");
-            // finds current timestamp to name session if not already named
-            if (!exist) {
-                String time = new TimeStamp().getTime();
-                String timeAltered = new TimeStamp().getTimeAlt();
-                testDbName = timeAltered;
-                Log.d("NewDB", "DB is: " + timeAltered);
-            }
-            Log.d("DBNAME", "DB name is: " + testDbName);
+           // String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
+
+            String defaultName = new TimeStamp().getTime();
+            Log.d("TimeShown", "timestamp is " + defaultName);
+            int sessionID = defaultName.hashCode(); // id of session
+
+            Session session = new Session(sessionID,defaultName);
+            Session session2 = new Session(sessionID,defaultName);
+            db.sessionsWithStudentsDao().insert(session);
+            db.sessionsWithStudentsDao().insert(session2);
+            Log.d("in BOFActivity", "name is: " + defaultName);
 
             // Get current data stored in database
             //db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();

@@ -1,8 +1,12 @@
 package com.example.birdsofafeather.model.db;
 
+import android.util.Log;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+
+import java.util.List;
 
 @Entity(tableName = "sessions")
 public class Session {
@@ -15,7 +19,13 @@ public class Session {
 
     public Session(int sessionId, String name){
         this.sessionId = sessionId;
-        this.name = name;
+        if (name.equals("Bill")) {
+            this.name = "Not Bill";
+        }
+        else {
+            this.name = name;
+        }
+        Log.d("in session constructor", "name is: " + this.name);
     }
 
     public int getSessionId(){return this.sessionId;}
