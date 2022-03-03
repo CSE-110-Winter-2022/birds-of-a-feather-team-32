@@ -118,4 +118,8 @@ public class CourseActivity extends AppCompatActivity {
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
     }
+
+    public AppDatabase getDb() {
+        return db;
+    }
 }
