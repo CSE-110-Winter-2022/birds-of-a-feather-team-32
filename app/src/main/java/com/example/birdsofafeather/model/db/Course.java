@@ -25,7 +25,7 @@ public class Course {
 
     // this is how we identify that this course belongs to
     // a particular person
-    @ColumnInfo(name = "student_id")
+    @ColumnInfo(name = "studentId")
     public int studentId;
 
     @ColumnInfo(name = "dept")
@@ -40,6 +40,9 @@ public class Course {
     @ColumnInfo(name = "qtr")
     public String qtr;
 
+    @ColumnInfo(name = "size")
+    public String size;
+
     @ColumnInfo(name = "courseFullString")
     public String courseFullString;
 
@@ -52,11 +55,12 @@ public class Course {
      * @param  dept
      * @param year
      * @param  qtr
+     * @param size
      *
      * return Instantiated Course object
      */
 
-    public Course(int id, int studentId, String dept, String num, String year, String qtr) {
+    public Course(int id, int studentId, String dept, String num, String year, String qtr, String size) {
         this.id = id;
         this.studentId = studentId;
         this.dept = dept.toUpperCase();
@@ -64,6 +68,7 @@ public class Course {
         this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
+        this.size = size;
 
         switch(qtr){
             case "FA":
@@ -91,7 +96,41 @@ public class Course {
                 this.qtr = "SSS";
                 break;
         }
-        this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num;
+
+        switch(size) {
+            case "Tiny":
+            case "TINY":
+            case "Tiny (<40)":
+                this.size = "TINY";
+                break;
+            case "Small":
+            case "SMALL":
+            case "Small (40–75)":
+                this.size = "SMALL";
+                break;
+            case "Medium":
+            case "MEDIUM":
+            case "Medium (75–150)":
+                this.size = "MEDIUM";
+                break;
+            case "Large":
+            case "LARGE":
+            case "Large (150–250)":
+                this.size = "LARGE";
+                break;
+            case "Huge":
+            case "HUGE":
+            case "Huge (250–400)":
+                this.size = "HUGE";
+                break;
+            case "Gigantic":
+            case "GIGANTIC":
+            case "Gigantic (400+)":
+                this.size = "GIGANTIC";
+                break;
+        }
+        this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num +
+                "," + this.size;
     }
 
     /**
