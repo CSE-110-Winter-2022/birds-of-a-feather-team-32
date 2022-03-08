@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Course;
@@ -30,6 +31,7 @@ public class SavedSessionsActivity extends AppCompatActivity{
 
         db = AppDatabase.singleton(this);
         List<SessionWithStudents> sessions = db.sessionsWithStudentsDao().getAll();
+        Log.d("in savesessionsactivity", "name is: " + sessions.get(0).getSessionName());
         savedSessionsRecyclerView = findViewById(R.id.saved_sessions_view);
 
         savedSessionsLayoutManager = new LinearLayoutManager(this);

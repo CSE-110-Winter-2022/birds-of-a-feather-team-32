@@ -1,7 +1,6 @@
 package com.example.birdsofafeather;
 
-import android.content.Context;
-import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,8 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
 
     @Override
     public void onBindViewHolder(@NonNull SavedSessionsViewAdapter.ViewHolder holder, int position) {
-        holder.setSessions(savedSessions.get(position).getName());
+        holder.setSessions(savedSessions.get(position).getSessionName());
+        Log.d("in adapter", "name is: " + savedSessions.get(position).getSessionName());
     }
 
     @Override

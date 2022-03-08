@@ -13,9 +13,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,6 +39,7 @@ import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -171,6 +176,37 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // button is stop
         } else {
+            // only becomes true once confirm save is clicked
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            //builder.setCancelable(true);
+            builder.setTitle("Save current session as:");
+            builder.setView(R.layout.save_session_prompt);
+            ArrayList<String> currentCourseArray = new ArrayList<>();
+            for (Course c : ownCoursesSet) {
+                if (c.year.equals("2022") && c.qtr.equals("WI")) {
+                    currentCourseArray.add(c.getCourseFullStringReadable());
+                }
+            }
+            builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog stopDialog = builder.create();
+            stopDialog.setContentView(R.layout.save_session_prompt);
+            stopDialog.show();
+            ArrayAdapter<String> courseListAA = new ArrayAdapter<String>(
+                    this, android.R.layout.simple_spinner_dropdown_item, currentCourseArray);
+            courseListAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            Spinner selectCoursesSpinner = stopDialog.findViewById(R.id.selectCurrentCourses);
+            selectCoursesSpinner.setAdapter(courseListAA);
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
@@ -189,6 +225,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         Session session = new Session(sessionID,defaultName);
         db.sessionsWithStudentsDao().insert(session);
+        Log.d("in BOFActivity", "name is: " + defaultName);
 
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -307,7 +344,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String course = coursesString[i];
                 String[] courseParts = course.split(",");
 
-                // Ensue that a new course ID is used
+                // Ensure that a new course ID is used
                 int currId = courseDao.numCourses()+1;
 
                 String dept = courseParts[2];
@@ -318,9 +355,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Log.d("Found new year", year);
                 String qtr = courseParts[1];
                 Log.d("Found new qtr", qtr);
+                // TODO: Verify the correctness of class comparison?
+                String size = courseParts[4];
+                Log.d("Found new size", size);
 
                 // Create new course
-                newCourse = new Course(currId, studentId, dept, num, year, qtr);
+                newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
 
                 // If new course matches with one of the user's courses, add it to the database
                 if (ownCoursesSet.contains(newCourse)) {
