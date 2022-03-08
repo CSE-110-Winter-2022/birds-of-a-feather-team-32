@@ -22,6 +22,9 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE studentId=:id")
     StudentWithCourses get(int id);
 
+    @Query("SELECT * FROM students WHERE sessionId=:sessionId")
+    List<StudentWithCourses> getFromSession(int sessionId);
+
     @Query("SELECT COUNT(*) from students")
     int count();
 

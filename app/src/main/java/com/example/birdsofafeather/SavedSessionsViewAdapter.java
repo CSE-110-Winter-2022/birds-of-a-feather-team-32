@@ -1,5 +1,7 @@
 package com.example.birdsofafeather;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,8 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
     }
 
     public static class ViewHolder
-            extends RecyclerView.ViewHolder {
+            extends RecyclerView.ViewHolder
+            implements View.OnClickListener {
         private final TextView savedSessionsView;
 
         ViewHolder(View itemView) {
@@ -54,6 +57,10 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
             this.savedSessionsView.setText(session);
         }
 
+        @Override
+        public void onClick(View view) {
+
+        }
     }
 }
 
