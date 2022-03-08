@@ -1,5 +1,9 @@
 package com.example.birdsofafeather;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.birdsofafeather.model.db.Course;
+import com.example.birdsofafeather.model.db.Session;
 import com.example.birdsofafeather.model.db.SessionWithStudents;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 
@@ -34,7 +39,7 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
 
     @Override
     public void onBindViewHolder(@NonNull SavedSessionsViewAdapter.ViewHolder holder, int position) {
-        holder.setSessions(savedSessions.get(position).getSessionName());
+        holder.setSessions(savedSessions.get(position).session);
         Log.d("in adapter", "name is: " + savedSessions.get(position).getSessionName());
     }
 
@@ -47,19 +52,28 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
             extends RecyclerView.ViewHolder
             implements View.OnClickListener {
         private final TextView savedSessionsView;
+        private Session thisSession;
 
         ViewHolder(View itemView) {
             super(itemView);
             this.savedSessionsView = itemView.findViewById(R.id.saved_session_row_name);
+            itemView.setOnClickListener(this);
         }
 
-        public void setSessions(String session) {
-            this.savedSessionsView.setText(session);
+        public void setSessions(Session session) {
+            this.savedSessionsView.setText(session.getName());
+            thisSession = session;
         }
 
         @Override
         public void onClick(View view) {
-
+            Log.d("In SSViewAdapter", "clicked session " + thisSession.getSessionId());
+            Context context = view.getContext();
+            SharedPreferences preferences = context.getSharedPreferences("BOF", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putInt("lastSessionID", thisSession.getSessionId());
+            editor.apply();
+            ((Activity) context).finish();
         }
     }
 }

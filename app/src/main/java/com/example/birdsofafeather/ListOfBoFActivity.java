@@ -74,10 +74,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
         setContentView(R.layout.activity_boflist);
         Log.d("onCreate", "called onCreate");
 
-        // Get list of messages from Nearby Messages Mock Screen
-        Intent i = getIntent();
-        ArrayList<String> messages = i.getStringArrayListExtra("messages");
-
         // Get user's own Courses
         db = AppDatabase.singleton(this);
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
@@ -93,23 +89,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
         studentViewAdapter = new ListOfBoFViewAdapter(students);
         studentRecyclerView.setAdapter(studentViewAdapter);
 
-        // Initialize our Session
-        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        int lastSessionID = preferences.getInt("lastSessionID", -1);
-        if (lastSessionID != -1) {
-            currentSessionId = lastSessionID;
-            setSession(lastSessionID);
-        }
-
-        // Initialize our Message Listener
-        realListener = new builtInMessageListener();
-
-        // Use Fake Message Listener for the demo
-        this.testListener = new FakedMessageListener(realListener, messages);
-
         // Restarts search for new bof if it was never turned off by user
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
-
+        /*
         /*
         if (isBofSearchOn) {
             buttonState = 0;
@@ -127,6 +110,29 @@ public class ListOfBoFActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
         Log.d("isBofSearchOn", "" + isBofSearchOn);
+
+        // Get list of messages from Nearby Messages Mock Screen
+        Intent i = getIntent();
+        ArrayList<String> messages = i.getStringArrayListExtra("messages");
+
+        // Initialize our Session
+        int lastSessionID = preferences.getInt("lastSessionID", -1);
+        if (lastSessionID != -1) {
+            currentSessionId = lastSessionID;
+            this.setTitle(db.sessionsWithStudentsDao().get(lastSessionID).getSessionName());
+            setSession(lastSessionID);
+        }
+
+        // Initialize our Message Listener
+        realListener = new builtInMessageListener();
+
+        // Use Fake Message Listener for the demo
+        if (messages != null) {
+            this.testListener = new FakedMessageListener(realListener, messages);
+        } else {
+            this.testListener = new FakedMessageListener(realListener, new ArrayList<>());
+        }
+
         /*
         if (isBofSearchOn) {
             buttonState = 0;
