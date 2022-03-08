@@ -6,13 +6,6 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-<<<<<<< HEAD
-import java.util.HashMap;
-import java.util.HashSet;
-=======
-import java.util.List;
->>>>>>> refs/remotes/origin/saveSession3
-
 @Entity(tableName = "sessions")
 public class Session {
     @PrimaryKey
