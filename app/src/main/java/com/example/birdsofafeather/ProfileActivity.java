@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,7 +32,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textview;
     private ImageButton waveButton;
-    private boolean waveClicked = false;
+    private StudentWithCourses student;
+    private int studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,11 @@ public class ProfileActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
 
         Intent intent = getIntent();
-        int studentId = intent.getIntExtra("student_id",0);
+        studentId = intent.getIntExtra("student_id",0);
 
-        StudentWithCourses student = db.studentWithCoursesDao().get(studentId);
+        student = db.studentWithCoursesDao().get(studentId);
         List<Course> courses = student.getCourses();
+        Log.d("wavedAt", String.valueOf(student.student.getWavedAt()));
 
         // set title
         //setTitle(studentName);
@@ -64,6 +67,9 @@ public class ProfileActivity extends AppCompatActivity {
         textview.setText(student.getName());
 
         waveButton = findViewById(R.id.waveButton);
+        if (student.student.getWavedAt()) {
+            waveButton.setImageResource(R.mipmap.wave_filled);
+        }
 
         imageView = findViewById(R.id.profileImageView);
         String url = student.getPhotoURL();
@@ -75,10 +81,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onWaveClicked(View view) {
-        if (!waveClicked) {
+        Log.d("before wave clicked", String.valueOf(student.student.getWavedAt()));
+        if (!student.student.getWavedAt()) {
             waveButton.setImageResource(R.mipmap.wave_filled);
             Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
-            waveClicked = true;
+            db.studentWithCoursesDao().update(true, studentId);
+            Log.d("after wave clicked", String.valueOf(student.student.getWavedAt()));
         }
     }
 

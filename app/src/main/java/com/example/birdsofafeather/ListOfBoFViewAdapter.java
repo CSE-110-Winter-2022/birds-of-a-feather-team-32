@@ -64,6 +64,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
     @Override
     public void onBindViewHolder(@NonNull ListOfBoFViewAdapter.ViewHolder holder, int position) {
+        Log.d("OnBindViewHolder", students.get(position).getName());
         holder.setPerson(students.get(position));
     }
 
@@ -88,6 +89,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         private TextView numClassesOverlap;
         private StudentWithCourses student;
         private ImageView imageView;
+        private ImageView waveView;
         private View itemView;
 
         /**
@@ -101,6 +103,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
             imageView = itemView.findViewById(R.id.imageView);
+            waveView = itemView.findViewById(R.id.waveView);
             this.itemView = itemView;
         }
 
@@ -111,10 +114,11 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
         public void setPerson(StudentWithCourses student) {
             this.student = student;
-            Log.d("In View Adapter", this.student.getName());
-            this.studentNameView.setText(student.getName());
-            Log.d("After setting text", this.studentNameView.getText().toString());
+            this.studentNameView.setText(student.getName().trim());
             this.numClassesOverlap.setText(student.student.getNumOverlap());
+            if (student.student.getWavedFrom()) {
+                this.waveView.setImageResource(R.mipmap.wave_filled);
+            }
             String url = student.student.getPhotoURL();
             url = url.trim();
             Glide.with(itemView)

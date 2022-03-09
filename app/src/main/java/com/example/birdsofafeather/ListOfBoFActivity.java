@@ -279,17 +279,25 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         String name = preferences.getString("name", "");
+        String uuid = preferences.getString("uuid", "");
         String photoURL = preferences.getString("image_url", "");
 
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
 
         // Convert student data into desired format
         String message = "";
-        message += name + ",,,\n";
-        message += photoURL + ",,,\n";
+        message += uuid + ",,,,\n";
+        message += name + ",,,,\n";
+        message += photoURL + ",,,,\n";
 
         for (Course c : ownCourses) {
             message += c.getCourseFullString() + "\n";
+        }
+        for (StudentWithCourses s : students) {
+            if (s.student.getWavedAt()) {
+                message += s.student.getUUID() + ",wave,,,\n";
+            }
         }
         message = message.trim();
 
@@ -332,6 +340,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
             String photoUrl;
             String uuid;
             String waveFromID;
+            boolean wavedFrom = false;
             int numClassesOverlap = 0;
             CoursesDao courseDao = db.coursesDao();
             SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
@@ -340,7 +349,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
             String[] data = studentMessage.split(",,,,");
             uuid = data[0];
             Log.d("Found new device", uuid);
-            studentName = data[1];
+            studentName = data[1].trim();
             Log.d("Found new student name", studentName);
             photoUrl = data[2];
 
@@ -361,6 +370,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
                     waveFromID = courseParts[0];
                     if (waveFromID.equals(preferences.getString("uuid", "no uuid found"))) {
                         Log.d("Found wave", uuid);
+                        wavedFrom = true;
                     }
                 }
                 else {
@@ -392,8 +402,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
             // If new student has 1 or more shared courses, add them to the student database
             if (numClassesOverlap > 0) {
-                Student newStudent = new Student(studentId, currentSessionId, studentName, photoUrl, numClassesOverlap, uuid);
-                Log.d("After constructor", newStudent.getName());
+                Student newStudent = new Student(studentId,
+                        currentSessionId,
+                        studentName,
+                        photoUrl,
+                        numClassesOverlap,
+                        uuid,
+                        wavedFrom,
+                        false);
                 db.studentWithCoursesDao().insert(newStudent);
             }
         }

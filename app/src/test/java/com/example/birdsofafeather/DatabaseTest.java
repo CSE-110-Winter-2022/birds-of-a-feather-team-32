@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
@@ -46,9 +47,11 @@ public class DatabaseTest {
 
     @Test
     public void testPersonEntity() {
+        String randomUUID1 = UUID.randomUUID().toString();
+        String randomUUID2 = UUID.randomUUID().toString();
 
-        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1,0,"Test Student 2", "TESTURL2", 1);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0, randomUUID1, false, false);
+        Student student2 = new Student(1,0,"Test Student 2", "TESTURL2", 1, randomUUID2, false, false);
 
         assertEquals("Test Student 1", student1.getName());
         assertEquals("Test Student 2", student2.getName());
@@ -61,6 +64,9 @@ public class DatabaseTest {
 
         assertEquals("0", student1.getNumOverlap());
         assertEquals("1", student2.getNumOverlap());
+
+        assertEquals(randomUUID1, student1.getUUID());
+        assertEquals(randomUUID2, student2.getUUID());
     }
 
     @Test
@@ -154,11 +160,11 @@ public class DatabaseTest {
 
         assertEquals(0, swcDao.count());
 
-        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0, "", false, false);
         swcDao.insert(student1);
         assertEquals(1, swcDao.count());
 
-        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 1);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 1,"", false, false);
         swcDao.insert(student2);
         assertEquals(2, swcDao.count());
     }
@@ -166,9 +172,9 @@ public class DatabaseTest {
     @Test
     public void testGetAllStudentWithCourses() {
 
-        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 3);
-        Student student3 = new Student(2, 0,"Test Student 3", "TESTURL2", 2);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0,"", false, false);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 3,"", false, false);
+        Student student3 = new Student(2, 0,"Test Student 3", "TESTURL2", 2,"", false, false);
 
         swcDao.insert(student1);
         swcDao.insert(student2);
@@ -184,9 +190,9 @@ public class DatabaseTest {
     @Test
     public void testGetStudentWithCourses() {
 
-        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1,0, "Test Student 2", "TESTURL2", 3);
-        Student student3 = new Student(2,0, "Test Student 3", "TESTURL2", 2);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0,"", false, false);
+        Student student2 = new Student(1,0, "Test Student 2", "TESTURL2", 3,"", false, false);
+        Student student3 = new Student(2,0, "Test Student 3", "TESTURL2", 2,"", false, false);
 
         swcDao.insert(student1);
         swcDao.insert(student2);
