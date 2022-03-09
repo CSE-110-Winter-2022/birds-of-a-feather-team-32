@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BirdsOfAFeather">
         <activity
+            android:name=".SavedSessionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".NearbyMessagesMockScreen"
             android:exported="false" />
 
@@ -24,12 +27,10 @@
 
         <activity
             android:name=".CourseActivity"
-            android:exported="false">
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".ImageActivity"
-            android:exported="false" >
-        </activity>
+            android:exported="false"></activity>
         <activity
             android:name=".ProfileActivity"
             android:exported="false" />

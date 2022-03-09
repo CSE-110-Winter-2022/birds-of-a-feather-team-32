@@ -25,7 +25,7 @@ public class Course {
 
     // this is how we identify that this course belongs to
     // a particular person
-    @ColumnInfo(name = "student_id")
+    @ColumnInfo(name = "studentId")
     public int studentId;
 
     @ColumnInfo(name = "dept")
@@ -98,26 +98,32 @@ public class Course {
         }
 
         switch(size) {
+            case "Tiny":
             case "TINY":
             case "Tiny (<40)":
                 this.size = "TINY";
                 break;
+            case "Small":
             case "SMALL":
             case "Small (40–75)":
                 this.size = "SMALL";
                 break;
+            case "Medium":
             case "MEDIUM":
             case "Medium (75–150)":
                 this.size = "MEDIUM";
                 break;
+            case "Large":
             case "LARGE":
             case "Large (150–250)":
                 this.size = "LARGE";
                 break;
+            case "Huge":
             case "HUGE":
             case "Huge (250–400)":
                 this.size = "HUGE";
                 break;
+            case "Gigantic":
             case "GIGANTIC":
             case "Gigantic (400+)":
                 this.size = "GIGANTIC";

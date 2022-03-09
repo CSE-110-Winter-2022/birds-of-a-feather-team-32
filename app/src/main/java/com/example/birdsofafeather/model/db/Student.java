@@ -2,18 +2,17 @@ package com.example.birdsofafeather.model.db;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Entity(tableName = "students")
 public class Student {
 
     @PrimaryKey
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "studentId")
     public int studentId;
+
+    @ColumnInfo(name = "sessionId")
+    public int sessionId;
 
     @ColumnInfo(name = "numClassOverlap")
     public int numClassOverlap;
@@ -24,8 +23,9 @@ public class Student {
     @ColumnInfo(name = "photoURL")
     public String photoURL;
 
-    public Student(int studentId, String name, String photoURL, int numClassOverlap) {
+    public Student(int studentId, int sessionId, String name, String photoURL, int numClassOverlap) {
         this.studentId = studentId;
+        this.sessionId = sessionId;
         this.name = name;
         this.photoURL = photoURL;
         this.numClassOverlap = numClassOverlap;
@@ -34,6 +34,7 @@ public class Student {
     public String getName() {
         return this.name;
     }
+    public int getSession(){return this.sessionId;}
     public String getPhotoURL() {
         return this.photoURL;
     }

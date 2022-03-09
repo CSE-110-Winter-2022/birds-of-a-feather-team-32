@@ -102,4 +102,23 @@ public class CourseTest {
             assertEquals(dialog, ShadowDialog.getShownDialogs().get(0));
         });
     }
+
+    @Test
+    public void test_scenario() {
+        rule.getScenario().onActivity(activity -> {
+            db = activity.getDb();
+            coursesDao = db.coursesDao();
+            ((TextView) activity.findViewById(R.id.enter_year)).setText("2021");
+            ((TextView) activity.findViewById(R.id.enter_class_dept)).setText("CSE");
+            ((TextView) activity.findViewById(R.id.enter_class_number)).setText("30");
+            ((Spinner) activity.findViewById(R.id.pick_quarter)).setSelection(0);
+            ((Spinner) activity.findViewById(R.id.pick_size)).setSelection(3);
+            Button addClassButton = activity.findViewById(R.id.addclass_button);
+            addClassButton.callOnClick();
+            ((TextView) activity.findViewById(R.id.enter_class_number)).setText("21");
+            addClassButton.callOnClick();
+            assertEquals(new Course(0,0, "CSE", "30", "2021", "FA", "LARGE"), coursesDao.get(1));
+            assertEquals(new Course(0,0, "CSE", "21", "2021", "FA", "LARGE"), coursesDao.get(2));
+        });
+    }
 }

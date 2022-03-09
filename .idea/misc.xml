@@ -16,13 +16,15 @@
         <entry key="app/src/main/res/drawable/border.xml" value="0.3723958333333333" />
         <entry key="app/src/main/res/drawable/ic_android_black_24dp.xml" value="0.18425925925925926" />
         <entry key="app/src/main/res/drawable/ic_baseline_error_24.xml" value="0.18425925925925926" />
-        <entry key="app/src/main/res/layout/activity_boflist.xml" value="0.35625" />
-        <entry key="app/src/main/res/layout/activity_course.xml" value="0.3134057971014493" />
+        <entry key="app/src/main/res/layout/activity_boflist.xml" value="0.34633750711245626" />
+        <entry key="app/src/main/res/layout/activity_course.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23697916666666666" />
-        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.30497929542055513" />
-        <entry key="app/src/main/res/layout/course_row.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_profile.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_saved_sessions.xml" value="0.1503623188405797" />
+        <entry key="app/src/main/res/layout/course_row.xml" value="0.165" />
         <entry key="app/src/main/res/layout/courses_row.xml" value="0.335" />
-        <entry key="app/src/main/res/layout/student_row.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/session_row.xml" value="0.21105072463768115" />
+        <entry key="app/src/main/res/layout/student_row.xml" value="0.1" />
       </map>
     </option>
   </component>

@@ -17,6 +17,13 @@
         <item>Huge (250&#8211;400)</item>
         <item>Gigantic (400+)</item>
     </string-array>
+  
+    <string-array name="current_courses">
+        <item>Test Course 1</item>
+        <item>Test Course 2</item>
+        <item>Test Course 3</item>
+        <item>Test Course 4</item>
+    </string-array>
 
     <string-array name="sort_options">
         <item>Default</item>
