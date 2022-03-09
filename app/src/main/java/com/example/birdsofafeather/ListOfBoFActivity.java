@@ -20,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.provider.Settings.Secure;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -321,19 +322,24 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // Get student data from found message
         public void parseStudentMessage(String studentMessage){
-
             String studentName;
             String photoUrl;
+            String uuid;
+            String waveFromID;
             int numClassesOverlap = 0;
             CoursesDao courseDao = db.coursesDao();
+            SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
 
             // Split message by the 3 commas
-            String[] data = studentMessage.split(",,,");
-            studentName = data[0];
-            photoUrl = data[1];
+            String[] data = studentMessage.split(",,,,");
+            uuid = data[0];
+            Log.d("Found new device", uuid);
+            studentName = data[1];
+            Log.d("Found new student name", studentName);
+            photoUrl = data[2];
 
             // Split message by new line
-            String[] coursesString = data[2].split("\n");
+            String[] coursesString = data[3].split("\n");
 
             Course newCourse;
             // Ensure that a new student ID is used
@@ -344,34 +350,44 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String course = coursesString[i];
                 String[] courseParts = course.split(",");
 
-                // Ensure that a new course ID is used
-                int currId = courseDao.numCourses()+1;
+                // If this "course" ends with a comma, then it is a wave, not a course
+                if (course.charAt(course.length() - 1) == ',') {
+                    waveFromID = courseParts[0];
+                    if (waveFromID.equals(preferences.getString("uuid", "no uuid found"))) {
+                        Log.d("Found wave", uuid);
+                    }
+                }
+                else {
+                    // Ensure that a new course ID is used
+                    int currId = courseDao.numCourses()+1;
 
-                String dept = courseParts[2];
-                Log.d("Found new dept", dept);
-                String num = courseParts[3];
-                Log.d("Found new course num", num);
-                String year = courseParts[0];
-                Log.d("Found new year", year);
-                String qtr = courseParts[1];
-                Log.d("Found new qtr", qtr);
-                // TODO: Verify the correctness of class comparison?
-                String size = courseParts[4];
-                Log.d("Found new size", size);
+                    String dept = courseParts[2];
+                    Log.d("Found new dept", dept);
+                    String num = courseParts[3];
+                    Log.d("Found new course num", num);
+                    String year = courseParts[0];
+                    Log.d("Found new year", year);
+                    String qtr = courseParts[1];
+                    Log.d("Found new qtr", qtr);
+                    // TODO: Verify the correctness of class comparison?
+                    String size = courseParts[4];
+                    Log.d("Found new size", size);
 
-                // Create new course
-                newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
+                    // Create new course
+                    newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
 
-                // If new course matches with one of the user's courses, add it to the database
-                if (ownCoursesSet.contains(newCourse)) {
-                    db.coursesDao().insert(newCourse);
-                    numClassesOverlap++;
+                    // If new course matches with one of the user's courses, add it to the database
+                    if (ownCoursesSet.contains(newCourse)) {
+                        db.coursesDao().insert(newCourse);
+                        numClassesOverlap++;
+                    }
                 }
             }
 
             // If new student has 1 or more shared courses, add them to the student database
             if (numClassesOverlap > 0) {
-                Student newStudent = new Student(studentId, currentSessionId, studentName, photoUrl, numClassesOverlap);
+                Student newStudent = new Student(studentId, currentSessionId, studentName, photoUrl, numClassesOverlap, uuid);
+                Log.d("After constructor", newStudent.getName());
                 db.studentWithCoursesDao().insert(newStudent);
             }
         }

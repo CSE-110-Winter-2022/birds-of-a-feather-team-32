@@ -25,22 +25,10 @@ import android.widget.TextView;
 import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
-import com.google.android.gms.auth.api.identity.BeginSignInRequest;
-import com.google.android.gms.auth.api.identity.BeginSignInResult;
-import com.google.android.gms.auth.api.identity.GetSignInIntentRequest;
-import com.google.android.gms.auth.api.identity.Identity;
-import com.google.android.gms.auth.api.identity.SignInClient;
-import com.google.android.gms.auth.api.identity.SignInCredential;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
-import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-    private SignInClient oneTapClient;
-    private BeginSignInRequest signInRequest;
-    private static final int REQ_ONE_TAP = 2;
     /**
      * Method that starts activity with loaded data from savedInstanceState
      * @param savedInstanceState
@@ -79,8 +67,11 @@ public class MainActivity extends AppCompatActivity {
         // save name to shared preferences
         else{
             editor.putString("name", userName);
+            if (!preferences.contains("uuid"))
+                editor.putString("uuid", UUID.randomUUID().toString());
             editor.apply();
             Log.d("<onEnter>", preferences.getString("name", "No Name?"));
+            Log.d("<onEnter>", preferences.getString("uuid", "No UUID?"));
             Intent intent = new Intent(this, ImageActivity.class);
             startActivity(intent);
         }

@@ -7,8 +7,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.Course;
@@ -28,6 +30,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ProfileActivityViewAdapter profileActivityViewAdapter;
     private ImageView imageView;
     private TextView textview;
+    private ImageButton waveButton;
+    private boolean waveClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
         textview = findViewById(R.id.nameTextView);
         textview.setText(student.getName());
 
+        waveButton = findViewById(R.id.waveButton);
+
         imageView = findViewById(R.id.profileImageView);
         String url = student.getPhotoURL();
         url = url.trim();
@@ -66,6 +72,14 @@ public class ProfileActivity extends AppCompatActivity {
                 .load(url)
                 .override(128,128)
                 .into(imageView);
+    }
+
+    public void onWaveClicked(View view) {
+        if (!waveClicked) {
+            waveButton.setImageResource(R.mipmap.wave_filled);
+            Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
+            waveClicked = true;
+        }
     }
 
     public void onBackClicked(View view) {

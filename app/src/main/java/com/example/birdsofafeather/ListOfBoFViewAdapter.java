@@ -7,6 +7,7 @@ package com.example.birdsofafeather;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,7 +111,9 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
         public void setPerson(StudentWithCourses student) {
             this.student = student;
+            Log.d("In View Adapter", this.student.getName());
             this.studentNameView.setText(student.getName());
+            Log.d("After setting text", this.studentNameView.getText().toString());
             this.numClassesOverlap.setText(student.student.getNumOverlap());
             String url = student.student.getPhotoURL();
             url = url.trim();

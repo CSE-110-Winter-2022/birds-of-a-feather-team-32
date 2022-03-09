@@ -23,12 +23,16 @@ public class Student {
     @ColumnInfo(name = "photoURL")
     public String photoURL;
 
-    public Student(int studentId, int sessionId, String name, String photoURL, int numClassOverlap) {
+    @ColumnInfo(name = "uuid")
+    public String uuid;
+
+    public Student(int studentId, int sessionId, String name, String photoURL, int numClassOverlap, String uuid) {
         this.studentId = studentId;
         this.sessionId = sessionId;
         this.name = name;
         this.photoURL = photoURL;
         this.numClassOverlap = numClassOverlap;
+        this.uuid = uuid;
     }
 
     public String getName() {
@@ -44,4 +48,5 @@ public class Student {
     public String getNumOverlap() {
         return String.valueOf(this.numClassOverlap);
     }
+    public String getUUID() { return uuid; }
 }
