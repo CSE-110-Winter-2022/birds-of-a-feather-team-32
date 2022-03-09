@@ -6,25 +6,14 @@
  */
 package com.example.birdsofafeather;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.IntentSenderRequest;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.os.Bundle;
 import android.view.View;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
-
-import com.example.birdsofafeather.model.db.AppDatabase;
-import com.example.birdsofafeather.model.db.Student;
-import com.example.birdsofafeather.model.db.StudentWithCourses;
 
 import java.util.UUID;
 

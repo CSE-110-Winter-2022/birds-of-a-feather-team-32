@@ -143,6 +143,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
          */
     }
 
+    // NOTE: In order to display Bluetooth permissions dialog box, need to clear Google Play Services Data
     public void onStartClicked(View view) {
         Button startButton = findViewById(R.id.runButton);
 
@@ -385,7 +386,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
                     Log.d("Found new year", year);
                     String qtr = courseParts[1];
                     Log.d("Found new qtr", qtr);
-                    // TODO: Verify the correctness of class comparison?
                     String size = courseParts[4];
                     Log.d("Found new size", size);
 

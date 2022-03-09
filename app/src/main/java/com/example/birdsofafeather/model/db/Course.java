@@ -176,6 +176,16 @@ public class Course {
     }
 
     /**
+     * Returns size of this course
+     *
+     * @return String size
+     */
+
+    public String getCourseSize() {
+        return this.size;
+    }
+
+    /**
      * Creates unique hash code for the concatenated string of fields
      * of the Course Object
      *
