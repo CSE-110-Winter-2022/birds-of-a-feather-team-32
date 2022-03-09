@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,6 +57,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private RecyclerView studentRecyclerView;
     private RecyclerView.LayoutManager studentLayoutManager;
     private ListOfBoFViewAdapter studentViewAdapter;
+    private Spinner sortStrategySpinner;
 
     private MessageListener realListener;
     private FakedMessageListener testListener;
@@ -66,7 +68,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private HashSet<String> seenMessages;
     private HashSet<Course> ownCoursesSet;
     private List<StudentWithCourses> students = new ArrayList<>();
-    private int currentSessionId;
+    private int currentSessionId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
         studentViewAdapter = new ListOfBoFViewAdapter(students);
         studentRecyclerView.setAdapter(studentViewAdapter);
 
+        sortStrategySpinner = (Spinner) findViewById(R.id.sortStrategySpinner);
+
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
@@ -99,7 +103,37 @@ public class ListOfBoFActivity extends AppCompatActivity {
             findViewById(R.id.runButton).performClick();
             Log.d("Performed Click", "True");
         }
-         */
+        */
+
+        sortStrategySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                String selectedStrategy = (String) adapterView.getItemAtPosition(pos);
+                sortStudentsByStrategySorter sorter = new sortStudentsByStrategySorter(students);
+                switch(selectedStrategy) {
+                    case "Default":
+                        if (currentSessionId != -1) {
+                            setSession(currentSessionId);
+                        }
+                        break;
+                    case "Small Classes":
+                        sorter.setStrategy(new SmallClassSizeScoreStrategy());
+                        students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        break;
+                    case "Recent Classes":
+                        // sorter.setStrategy(new RecentClassesScoreStrategy());
+                        // students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        break;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
     }
 
     // Restarts search for new bof if it was never turned off by user

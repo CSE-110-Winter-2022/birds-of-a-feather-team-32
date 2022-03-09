@@ -47,7 +47,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/sortStrategySpinner"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="50dp"
@@ -65,6 +65,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Sort By:"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@id/spinner" />
+        app:layout_constraintBottom_toTopOf="@+id/sortStrategySpinner"
+        app:layout_constraintStart_toStartOf="@id/sortStrategySpinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>
