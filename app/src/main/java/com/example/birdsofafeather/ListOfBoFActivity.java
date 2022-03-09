@@ -8,19 +8,15 @@
  */
 package com.example.birdsofafeather;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.provider.Settings.Secure;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -39,16 +35,10 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ListOfBoFActivity extends AppCompatActivity {
 
@@ -292,9 +282,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
         message += name + ",,,,\n";
         message += photoURL + ",,,,\n";
 
+        // Append all courses
         for (Course c : ownCourses) {
             message += c.getCourseFullString() + "\n";
         }
+        // Append any outgoing waves
         for (StudentWithCourses s : students) {
             if (s.student.getWavedAt()) {
                 message += s.student.getUUID() + ",wave,,,\n";
@@ -369,6 +361,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 // If this "course" ends with a comma, then it is a wave, not a course
                 if (course.charAt(course.length() - 1) == ',') {
                     waveFromID = courseParts[0];
+                    // Check if the wave is directed at me
                     if (waveFromID.equals(preferences.getString("uuid", "no uuid found"))) {
                         Log.d("Found wave", uuid);
                         wavedFrom = true;

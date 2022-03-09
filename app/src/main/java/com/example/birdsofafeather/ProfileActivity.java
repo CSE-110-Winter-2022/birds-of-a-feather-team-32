@@ -47,7 +47,6 @@ public class ProfileActivity extends AppCompatActivity {
 
         student = db.studentWithCoursesDao().get(studentId);
         List<Course> courses = student.getCourses();
-        Log.d("wavedAt", String.valueOf(student.student.getWavedAt()));
 
         // set title
         //setTitle(studentName);
@@ -67,6 +66,8 @@ public class ProfileActivity extends AppCompatActivity {
         textview.setText(student.getName());
 
         waveButton = findViewById(R.id.waveButton);
+
+        // Button should already be filled in if student has been waved at previously in this session
         if (student.student.getWavedAt()) {
             waveButton.setImageResource(R.mipmap.wave_filled);
         }
@@ -81,12 +82,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void onWaveClicked(View view) {
-        Log.d("before wave clicked", String.valueOf(student.student.getWavedAt()));
+        // Only clickable if student has not been waved at yet
         if (!student.student.getWavedAt()) {
             waveButton.setImageResource(R.mipmap.wave_filled);
             Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
+
             db.studentWithCoursesDao().update(true, studentId);
-            Log.d("after wave clicked", String.valueOf(student.student.getWavedAt()));
         }
     }
 
