@@ -5,14 +5,17 @@
  */
 package com.example.birdsofafeather;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,6 +94,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         private ImageView imageView;
         private ImageView waveView;
         private View itemView;
+        private ImageButton favButton;
 
         /**
          * Parameterized Constructor: Instantiates ViewHolder object with passed in View
@@ -104,8 +108,23 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             itemView.setOnClickListener(this);
             imageView = itemView.findViewById(R.id.imageView);
             waveView = itemView.findViewById(R.id.waveView);
+            favButton = itemView.findViewById(R.id.star_hollow_button);
+            favButton.setTag(R.mipmap.star_hollow);
+            favButton.setOnClickListener(view -> {
+                if (!((Integer) favButton.getTag()).equals((Integer) R.mipmap.star_filled)) {
+                    favButton.setImageResource(R.mipmap.star_filled);
+                    favButton.setTag(R.mipmap.star_filled);
+                    Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
+                } else {
+                    favButton.setImageResource(R.mipmap.star_hollow);
+                    favButton.setTag(R.mipmap.star_hollow);
+                    Toast.makeText((Activity) itemView.getContext(), "Favorite Removed! </3", Toast.LENGTH_SHORT).show();
+                }
+            });
             this.itemView = itemView;
+
         }
+
 
         /**
          * Sets the views with the passed in StudentWithCourses object's information

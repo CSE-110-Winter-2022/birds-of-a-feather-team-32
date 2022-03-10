@@ -16,7 +16,9 @@ import android.view.View;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -58,6 +60,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private HashSet<Course> ownCoursesSet;
     private List<StudentWithCourses> students = new ArrayList<>();
     private int currentSessionId;
+    private ImageButton favButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
+
+
         /*
         /*
         if (isBofSearchOn) {
@@ -234,6 +239,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         setSession(sessionID);
 
         Button startButton = findViewById(R.id.runButton);
+
 
         // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
@@ -412,4 +418,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
     }
+
+
 }
