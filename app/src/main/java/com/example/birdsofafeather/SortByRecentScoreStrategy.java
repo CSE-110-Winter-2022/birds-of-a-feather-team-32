@@ -5,7 +5,7 @@ import com.example.birdsofafeather.model.db.Course;
 import java.util.Calendar;
 import java.util.List;
 
-public class SortByRecent implements PrioritizationScoreStrategy{
+public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
 
 
     private List<Course> courses;
@@ -14,7 +14,7 @@ public class SortByRecent implements PrioritizationScoreStrategy{
     public String currYear = Integer.toString(calendar.get(Calendar.YEAR));      //current year
     public String currQuarter;      //current quarter
 
-    public SortByRecent() {
+    public SortByRecentScoreStrategy() {
         setQuarter();
     }
     
@@ -100,7 +100,7 @@ public class SortByRecent implements PrioritizationScoreStrategy{
                     }
             }
         }
-        else if(currYear.equals(year + 1)){
+        else if(Integer.parseInt(currYear) == (Integer.parseInt(year) + 1)){
             switch (currQuarter){
                 case "FA":
                     switch (q){

@@ -114,18 +114,21 @@ public class ListOfBoFActivity extends AppCompatActivity {
                         if (currentSessionId != -1) {
                             setSession(currentSessionId);
                         }
+                        Log.d("Selected Strategy", "Default");
                         break;
                     case "Small Classes":
                         sorter.setStrategy(new SmallClassSizeScoreStrategy());
                         students = sorter.sort();
                         studentViewAdapter = new ListOfBoFViewAdapter(students);
                         studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Small Classes");
                         break;
                     case "Recent Classes":
-                        // sorter.setStrategy(new RecentClassesScoreStrategy());
-                        // students = sorter.sort();
+                        sorter.setStrategy(new SortByRecentScoreStrategy());
+                        students = sorter.sort();
                         studentViewAdapter = new ListOfBoFViewAdapter(students);
                         studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Recent CLasses");
                         break;
                 }
             }

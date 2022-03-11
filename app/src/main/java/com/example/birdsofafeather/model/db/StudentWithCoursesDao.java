@@ -16,13 +16,14 @@ import java.util.List;
 public interface StudentWithCoursesDao {
 
     @Transaction
+    // Change to order by wave status first
     @Query("SELECT * FROM students order by numClassOverlap desc")
     List<StudentWithCourses> getAll();
 
     @Query("SELECT * FROM students WHERE studentId=:id")
     StudentWithCourses get(int id);
 
-    @Query("SELECT * FROM students WHERE sessionId=:sessionId")
+    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by numClassOverlap desc")
     List<StudentWithCourses> getFromSession(int sessionId);
 
     @Query("SELECT COUNT(*) from students")
