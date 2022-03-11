@@ -26,4 +26,6 @@ public class StudentWithCourses {
     public int getId() {
         return this.student.studentId;
     }
+    public Student getStudentObject() {return this.student; }
+
 }

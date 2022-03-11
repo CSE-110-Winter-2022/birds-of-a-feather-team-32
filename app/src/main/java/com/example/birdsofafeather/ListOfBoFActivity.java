@@ -61,6 +61,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private List<StudentWithCourses> students = new ArrayList<>();
     private int currentSessionId;
     private ImageButton favButton;
+    private Session favSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,16 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
+
+
+        // make favorite session
+        String favName = "favorites";
+        int sessionID = -1;
+
+        favSession = new Session(sessionID,favName);
+        if (db.sessionsWithStudentsDao().get(-1) == null) {
+            db.sessionsWithStudentsDao().insert(favSession);
+        }
 
 
         /*
@@ -310,6 +321,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
         super.onStop();
         Log.d("onStop", "onStop called");
         Nearby.getMessagesClient(this).unsubscribe(realListener);
+    }
+
+    public void onFavButtonClicked(View view) {
+        Intent intent = new Intent(this, FavoritesList.class);
+        startActivity(intent);
     }
 
     // Our custom Message Listener

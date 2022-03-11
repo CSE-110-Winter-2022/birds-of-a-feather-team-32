@@ -29,8 +29,11 @@
         <entry key="app/src/main/res/drawable/ic_baseline_error_24.xml" value="0.18425925925925926" />
         <entry key="app/src/main/res/layout/activity_boflist.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_course.xml" value="0.1286231884057971" />
+        <entry key="app/src/main/res/layout/activity_favorites_list.xml" value="0.1286231884057971" />
+        <entry key="app/src/main/res/layout/activity_image.xml" value="0.11775362318840579" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.23697916666666666" />
         <entry key="app/src/main/res/layout/activity_profile.xml" value="0.30497929542055513" />
+        <entry key="app/src/main/res/layout/activity_saved_sessions.xml" value="0.1286231884057971" />
         <entry key="app/src/main/res/layout/course_row.xml" value="0.1" />
         <entry key="app/src/main/res/layout/courses_row.xml" value="0.1" />
         <entry key="app/src/main/res/layout/save_session_prompt.xml" value="0.1286231884057971" />

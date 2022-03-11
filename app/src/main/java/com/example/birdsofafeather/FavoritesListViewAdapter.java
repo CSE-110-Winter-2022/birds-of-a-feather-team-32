@@ -1,8 +1,3 @@
-/**
- * File: ListOfBoFViewAdapter.Java
- * Description: Class that binds our StudentWithCourses object data to each item in the recycler view in
- * our layout file activity_boflist.xml
- */
 package com.example.birdsofafeather;
 
 import android.app.Activity;
@@ -21,14 +16,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Session;
+import com.example.birdsofafeather.model.db.SessionWithStudents;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
-import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdapter.ViewHolder> {
-
+public class FavoritesListViewAdapter extends RecyclerView.Adapter<FavoritesListViewAdapter.ViewHolder> {
     private final List<StudentWithCourses> students;
 
     /**
@@ -36,7 +33,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
      * @param students
      */
 
-    public ListOfBoFViewAdapter(List<StudentWithCourses> students) {
+    public FavoritesListViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
     }
@@ -51,11 +48,11 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoritesListViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.student_row, parent, false);
-        return new ViewHolder(view);
+        return new FavoritesListViewAdapter.ViewHolder(view);
     }
 
     /**
@@ -66,7 +63,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
 
     @Override
-    public void onBindViewHolder(@NonNull ListOfBoFViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoritesListViewAdapter.ViewHolder holder, int position) {
         Log.d("OnBindViewHolder", students.get(position).getName());
         holder.setPerson(students.get(position));
     }
@@ -95,6 +92,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         private ImageView waveView;
         private View itemView;
         private ImageButton favButton;
+        private AppDatabase db;
 
         /**
          * Parameterized Constructor: Instantiates ViewHolder object with passed in View
@@ -110,6 +108,12 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             waveView = itemView.findViewById(R.id.waveView);
             favButton = itemView.findViewById(R.id.star_hollow_button);
             favButton.setTag(R.mipmap.star_hollow);
+            SessionWithStudents favSession = db.sessionsWithStudentsDao().get(-1);
+            List<Student> studentList = favSession.getStudents();
+            if (studentList.contains(student)){
+                favButton.setImageResource(R.mipmap.star_filled);
+                favButton.setTag(R.mipmap.star_filled);
+            }
             favButton.setOnClickListener(view -> {
                 if (!((Integer) favButton.getTag()).equals((Integer) R.mipmap.star_filled)) {
                     favButton.setImageResource(R.mipmap.star_filled);
@@ -117,6 +121,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
                     Student tempStudent = student.getStudentObject();
                     Student favStudent = new Student(tempStudent.getStudentId(), -1, tempStudent.getName(), tempStudent.getPhotoURL(), Integer.parseInt(tempStudent.getNumOverlap()), tempStudent.getUUID(), tempStudent.getWavedFrom(), tempStudent.getWavedAt());
+                    db.studentWithCoursesDao().insert(favStudent);
 
                 }/* else {
                     favButton.setImageResource(R.mipmap.star_hollow);
