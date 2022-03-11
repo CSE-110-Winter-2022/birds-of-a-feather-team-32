@@ -30,6 +30,12 @@ public class sortStudentsByStrategySorter {
             // Checking for wave: add 100000 to score if has wave
             double s1Score = strategy.calculateScore(s1.getCourses());
             double s2Score = strategy.calculateScore(s2.getCourses());
+            if(s1.student.wavedFrom){
+                s1Score = s1Score + 1000;
+            }
+            if(s2.student.wavedFrom){
+                s2Score = s2Score + 1000;
+            }
             if (s1Score == s2Score) {
                 return 0;
             }
