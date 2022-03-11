@@ -6,9 +6,11 @@
 package com.example.birdsofafeather.model.db;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -28,6 +30,9 @@ public interface StudentWithCoursesDao {
 
     @Query("SELECT COUNT(*) from students")
     int count();
+
+    @Query("UPDATE students SET wavedAt=:wavedAt WHERE studentId=:id")
+    void update(boolean wavedAt, int id);
 
     @Insert
     void insert(Student student);
