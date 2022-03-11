@@ -34,6 +34,9 @@ public class Student {
     @ColumnInfo(name = "wavedAt")
     public boolean wavedAt;
 
+    @ColumnInfo(name = "favorite")
+    public boolean favorite;
+
     public Student(int studentId, int sessionId, String name, String photoURL, int numClassOverlap, String uuid, boolean wavedFrom, boolean wavedAt) {
         this.studentId = studentId;
         this.sessionId = sessionId;
@@ -43,6 +46,7 @@ public class Student {
         this.uuid = uuid;
         this.wavedFrom = wavedFrom;
         this.wavedAt = wavedAt;
+        this.favorite = false;
     }
 
     public String getName() {
@@ -61,4 +65,5 @@ public class Student {
     public String getUUID() { return uuid; }
     public boolean getWavedFrom() { return wavedFrom; }
     public boolean getWavedAt() { return wavedAt; }
+    public boolean getFavorite() { return favorite; }
 }

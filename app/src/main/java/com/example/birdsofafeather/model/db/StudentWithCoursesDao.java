@@ -24,6 +24,9 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE studentId=:id")
     StudentWithCourses get(int id);
 
+    @Query("SELECT * FROM students WHERE favorite=1")
+    List<StudentWithCourses> getFavorites();
+
     @Query("SELECT * FROM students WHERE sessionId=:sessionId")
     List<StudentWithCourses> getFromSession(int sessionId);
 
@@ -32,6 +35,9 @@ public interface StudentWithCoursesDao {
 
     @Query("UPDATE students SET wavedAt=:wavedAt WHERE studentId=:id")
     void update(boolean wavedAt, int id);
+
+    @Query("UPDATE students SET favorite=:favorite WHERE studentId=:id")
+    void updateFavorite(boolean favorite, int id);
 
     @Insert
     void insert(Student student);

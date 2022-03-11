@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.birdsofafeather.model.db.AppDatabase;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
 import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
@@ -69,6 +70,10 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
     public void onBindViewHolder(@NonNull ListOfBoFViewAdapter.ViewHolder holder, int position) {
         Log.d("OnBindViewHolder", students.get(position).getName());
         holder.setPerson(students.get(position));
+
+        if (students.get(position).student.getFavorite()){
+            holder.setFavorite();
+        }
     }
 
     /**
@@ -95,6 +100,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
         private ImageView waveView;
         private View itemView;
         private ImageButton favButton;
+        private AppDatabase db;
 
         /**
          * Parameterized Constructor: Instantiates ViewHolder object with passed in View
@@ -103,6 +109,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
         ViewHolder(View itemView) {
             super(itemView);
+            db = AppDatabase.singleton((Activity) itemView.getContext());
             this.studentNameView = itemView.findViewById(R.id.student_row_name);
             this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
@@ -111,20 +118,21 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             favButton = itemView.findViewById(R.id.star_hollow_button);
             favButton.setTag(R.mipmap.star_hollow);
             favButton.setOnClickListener(view -> {
+
                 if (!((Integer) favButton.getTag()).equals((Integer) R.mipmap.star_filled)) {
                     favButton.setImageResource(R.mipmap.star_filled);
                     favButton.setTag(R.mipmap.star_filled);
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
-                    Student tempStudent = student.getStudentObject();
-                    Student favStudent = new Student(tempStudent.getStudentId(), -1, tempStudent.getName(), tempStudent.getPhotoURL(), Integer.parseInt(tempStudent.getNumOverlap()), tempStudent.getUUID(), tempStudent.getWavedFrom(), tempStudent.getWavedAt());
+                    db.studentWithCoursesDao().updateFavorite(true, student.getStudentObject().getStudentId());
 
-                }/* else {
+                } else {
                     favButton.setImageResource(R.mipmap.star_hollow);
                     favButton.setTag(R.mipmap.star_hollow);
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Removed! </3", Toast.LENGTH_SHORT).show();
+                    db.studentWithCoursesDao().updateFavorite(false, student.getStudentObject().getStudentId());
                 }
 
-                 */
+
             });
             this.itemView = itemView;
 
@@ -162,6 +170,12 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             intent.putExtra("student_name", this.student.getName());// should we have an Id?
             intent.putExtra("student_id", this.student.getId());
             context.startActivity(intent);
+        }
+
+        public void setFavorite(){
+            favButton = itemView.findViewById(R.id.star_hollow_button);
+            favButton.setImageResource(R.mipmap.star_filled);
+            favButton.setTag(R.mipmap.star_filled);
         }
     }
 }

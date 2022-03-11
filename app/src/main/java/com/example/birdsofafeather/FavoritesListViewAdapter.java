@@ -101,6 +101,7 @@ public class FavoritesListViewAdapter extends RecyclerView.Adapter<FavoritesList
 
         ViewHolder(View itemView) {
             super(itemView);
+            db = AppDatabase.singleton(this.itemView.getContext());
             this.studentNameView = itemView.findViewById(R.id.student_row_name);
             this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
@@ -108,28 +109,23 @@ public class FavoritesListViewAdapter extends RecyclerView.Adapter<FavoritesList
             waveView = itemView.findViewById(R.id.waveView);
             favButton = itemView.findViewById(R.id.star_hollow_button);
             favButton.setTag(R.mipmap.star_hollow);
-            SessionWithStudents favSession = db.sessionsWithStudentsDao().get(-1);
-            List<Student> studentList = favSession.getStudents();
-            if (studentList.contains(student)){
-                favButton.setImageResource(R.mipmap.star_filled);
-                favButton.setTag(R.mipmap.star_filled);
-            }
-            favButton.setOnClickListener(view -> {
-                if (!((Integer) favButton.getTag()).equals((Integer) R.mipmap.star_filled)) {
-                    favButton.setImageResource(R.mipmap.star_filled);
-                    favButton.setTag(R.mipmap.star_filled);
-                    Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
-                    Student tempStudent = student.getStudentObject();
-                    Student favStudent = new Student(tempStudent.getStudentId(), -1, tempStudent.getName(), tempStudent.getPhotoURL(), Integer.parseInt(tempStudent.getNumOverlap()), tempStudent.getUUID(), tempStudent.getWavedFrom(), tempStudent.getWavedAt());
-                    db.studentWithCoursesDao().insert(favStudent);
 
-                }/* else {
+
+            favButton.setOnClickListener(view -> {
+
+                if (!student.getStudentObject().getFavorite()) {
+                    favButton.setImageResource(R.mipmap.star_filled);
+
+                    Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
+                    db.studentWithCoursesDao().updateFavorite(true, student.getStudentObject().getStudentId());
+                } else {
                     favButton.setImageResource(R.mipmap.star_hollow);
-                    favButton.setTag(R.mipmap.star_hollow);
+
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Removed! </3", Toast.LENGTH_SHORT).show();
+                    db.studentWithCoursesDao().updateFavorite(false, student.getStudentObject().getStudentId());
                 }
 
-                 */
+
             });
             this.itemView = itemView;
 
