@@ -158,7 +158,7 @@ public class DatabaseTest {
         swcDao.insert(student1);
         assertEquals(1, swcDao.count());
 
-        Student student2 = new Student(1,0, "Test Student 2", "TESTURL2", 1);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 1);
         swcDao.insert(student2);
         assertEquals(2, swcDao.count());
     }
@@ -166,9 +166,9 @@ public class DatabaseTest {
     @Test
     public void testGetAllStudentWithCourses() {
 
-        Student student1 = new Student(0, 0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1,0, "Test Student 2", "TESTURL2", 3);
-        Student student3 = new Student(2,0, "Test Student 3", "TESTURL2", 2);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 3);
+        Student student3 = new Student(2, 0,"Test Student 3", "TESTURL2", 2);
 
         swcDao.insert(student1);
         swcDao.insert(student2);

@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -42,6 +43,7 @@ import java.io.File;
 import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -52,9 +54,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     private AppDatabase db;
 
-    protected RecyclerView studentRecyclerView;
-    protected RecyclerView.LayoutManager studentLayoutManager;
-    protected ListOfBoFViewAdapter studentViewAdapter;
+    private RecyclerView studentRecyclerView;
+    private RecyclerView.LayoutManager studentLayoutManager;
+    private ListOfBoFViewAdapter studentViewAdapter;
+    private Spinner sortStrategySpinner;
 
     private MessageListener realListener;
     private FakedMessageListener testListener;
@@ -64,20 +67,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private int buttonState = 0;
     private HashSet<String> seenMessages;
     private HashSet<Course> ownCoursesSet;
-
-    private ExecutorService backgroundThreadExecutor = Executors.newSingleThreadExecutor();
-    private Future<Void> future;
+    private List<StudentWithCourses> students = new ArrayList<>();
+    private int currentSessionId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_boflist);
         Log.d("onCreate", "called onCreate");
-
-        // Get list of messages from Nearby Messages Mock Screen
-        Intent i = getIntent();
-        ArrayList<String> messages = i.getStringArrayListExtra("messages");
-
 
         // Get user's own Courses
         db = AppDatabase.singleton(this);
@@ -86,35 +83,60 @@ public class ListOfBoFActivity extends AppCompatActivity {
         ownCoursesSet = new HashSet<>();
         ownCoursesSet.addAll(ownCourses);
 
-
-        // Initialize a HashSet of messages that we've seen so far
-        seenMessages = new HashSet<>();
-
         // Set up UI
         studentRecyclerView = findViewById(R.id.student_view);
         studentLayoutManager = new LinearLayoutManager(this);
         studentRecyclerView.setLayoutManager(studentLayoutManager);
 
-        //studentViewAdapter = new ListOfBoFViewAdapter(students);
-        //studentRecyclerView.setAdapter(studentViewAdapter);
+        studentViewAdapter = new ListOfBoFViewAdapter(students);
+        studentRecyclerView.setAdapter(studentViewAdapter);
 
-        // Initialize our Message Listener
-        realListener = new builtInMessageListener();
-
-        // Use Fake Message Listener for the demo
-        this.testListener = new FakedMessageListener(realListener, messages);
+        sortStrategySpinner = (Spinner) findViewById(R.id.sortStrategySpinner);
 
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
-
+        /*
         /*
         if (isBofSearchOn) {
             buttonState = 0;
             findViewById(R.id.runButton).performClick();
             Log.d("Performed Click", "True");
         }
-         */
+        */
+
+        sortStrategySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                String selectedStrategy = (String) adapterView.getItemAtPosition(pos);
+                sortStudentsByStrategySorter sorter = new sortStudentsByStrategySorter(students);
+                switch(selectedStrategy) {
+                    case "Default":
+                        if (currentSessionId != -1) {
+                            setSession(currentSessionId);
+                        }
+                        Log.d("Selected Strategy", "Default");
+                        break;
+                    case "Small Classes":
+                        sorter.setStrategy(new SmallClassSizeScoreStrategy());
+                        students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Small Classes");
+                        break;
+                    case "Recent Classes":
+                        sorter.setStrategy(new SortByRecentScoreStrategy());
+                        students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Recent CLasses");
+                        break;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
     }
 
     // Restarts search for new bof if it was never turned off by user
@@ -125,6 +147,29 @@ public class ListOfBoFActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
         Log.d("isBofSearchOn", "" + isBofSearchOn);
+
+        // Get list of messages from Nearby Messages Mock Screen
+        Intent i = getIntent();
+        ArrayList<String> messages = i.getStringArrayListExtra("messages");
+
+        // Initialize our Session
+        int lastSessionID = preferences.getInt("lastSessionID", -1);
+        if (lastSessionID != -1) {
+            currentSessionId = lastSessionID;
+            this.setTitle(db.sessionsWithStudentsDao().get(lastSessionID).getSessionName());
+            setSession(lastSessionID);
+        }
+
+        // Initialize our Message Listener
+        realListener = new builtInMessageListener();
+
+        // Use Fake Message Listener for the demo
+        if (messages != null) {
+            this.testListener = new FakedMessageListener(realListener, messages);
+        } else {
+            this.testListener = new FakedMessageListener(realListener, new ArrayList<>());
+        }
+
         /*
         if (isBofSearchOn) {
             buttonState = 0;
@@ -134,6 +179,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
          */
     }
 
+    // NOTE: In order to display Bluetooth permissions dialog box, need to clear Google Play Services Data
     public void onStartClicked(View view) {
         Button startButton = findViewById(R.id.runButton);
 
@@ -213,54 +259,30 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.apply();
         }
 
-
-
-
-
     }
 
     public void onNewSessionClicked(){
 
-        this.future = backgroundThreadExecutor.submit(() -> {
-            // use database client to either make a new database
-            // or to access a previous one
+        String defaultName = new TimeStamp().getTime();
+        Log.d("TimeShown", "timestamp is " + defaultName);
+        int sessionID = db.sessionsWithStudentsDao().count()+1; // id of session
 
-           // String testDbName = "TestDbName";// works 02-25-2022-06-50-PM
+        Session session = new Session(sessionID,defaultName);
+        db.sessionsWithStudentsDao().insert(session);
+        Log.d("in BOFActivity", "name is: " + defaultName);
 
-            String defaultName = new TimeStamp().getTime();
-            Log.d("TimeShown", "timestamp is " + defaultName);
-            int sessionID = defaultName.hashCode(); // id of session
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("lastSessionID", sessionID);
 
-            Session session = new Session(sessionID,defaultName);
-            Session session2 = new Session(sessionID,defaultName);
-            db.sessionsWithStudentsDao().insert(session);
-            db.sessionsWithStudentsDao().insert(session2);
-            Log.d("in BOFActivity", "name is: " + defaultName);
-
-            // Get current data stored in database
-            //db = DatabaseClient.getInstance(getApplicationContext(), testDbName).getAppDatabase();
-            List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
-            studentViewAdapter = new ListOfBoFViewAdapter(students);
-            studentRecyclerView.setAdapter(studentViewAdapter);
-
-            // Get user's own Courses
-            // AppDatabase ownCoursesDb = DatabaseClient.getInstance(getApplicationContext(), "ownCourses").getAppDatabase();
-
-            //List<Course> ownCourses = ownCoursesDb.coursesDao().getCoursesFromStudentId(0);
-            // reformat these courses into a hashset to make comparisons easier
-            //ownCoursesSet = new HashSet<>();
-            // ownCoursesSet.addAll(ownCourses);
-
-            return null;
-        });
+        // Get current data stored in database
+        currentSessionId = sessionID;
+        setSession(sessionID);
 
         Button startButton = findViewById(R.id.runButton);
 
         // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
-
-        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
 
         // if start and new session is clicked
         // Search is currently off
@@ -280,9 +302,16 @@ public class ListOfBoFActivity extends AppCompatActivity {
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
         } */
-
-
     }
+
+    public void setSession(int sessionId) {
+        students = db.studentWithCoursesDao().getFromSession(sessionId);
+        studentViewAdapter = new ListOfBoFViewAdapter(students);
+        studentRecyclerView.setAdapter(studentViewAdapter);
+        // Initialize a HashSet of messages that we've seen so far
+        // seenMessages = db.sessionsWithStudentsDao().get(sessionId).session.getSeenMessages();
+    }
+
     public String buildMessage() {
 
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
@@ -322,16 +351,16 @@ public class ListOfBoFActivity extends AppCompatActivity {
             Log.d(TAG, "Found message: " + rawString);
 
             // Do not process repeated messages
-            if(!seenMessages.contains(rawString)){
+            //if(!seenMessages.contains(rawString)){
                 // Add message to seen messages
-                seenMessages.add(rawString);
+                //seenMessages.add(rawString);
                 // Parse data from raw messages
                 parseStudentMessage(rawString);
                 // Refresh screen with new data after processing
-                List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+                students = db.studentWithCoursesDao().getFromSession(currentSessionId);
                 studentViewAdapter = new ListOfBoFViewAdapter(students);
                 studentRecyclerView.setAdapter(studentViewAdapter);
-            }
+            //}
         }
 
         // Get student data from found message
@@ -370,7 +399,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 Log.d("Found new year", year);
                 String qtr = courseParts[1];
                 Log.d("Found new qtr", qtr);
-                // TODO: Verify the correctness of class comparison?
                 String size = courseParts[4];
                 Log.d("Found new size", size);
 
@@ -384,11 +412,9 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 }
             }
 
-            int testSessionId = 0;
-
             // If new student has 1 or more shared courses, add them to the student database
             if (numClassesOverlap > 0) {
-                Student newStudent = new Student(studentId, testSessionId, studentName, photoUrl, numClassesOverlap);
+                Student newStudent = new Student(studentId, currentSessionId, studentName, photoUrl, numClassesOverlap);
                 db.studentWithCoursesDao().insert(newStudent);
             }
         }
@@ -397,10 +423,5 @@ public class ListOfBoFActivity extends AppCompatActivity {
         public void onLost(@NonNull Message message) {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
-    }
-
-    private boolean doesDatabaseExist(Context context, String dbString) {
-        File dbFile = context.getDatabasePath(dbString);
-        return dbFile.exists();
     }
 }
