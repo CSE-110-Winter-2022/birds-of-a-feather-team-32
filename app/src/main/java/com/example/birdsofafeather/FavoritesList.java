@@ -48,9 +48,10 @@ public class FavoritesList extends AppCompatActivity {
         studentViewAdapter = new ListOfBoFViewAdapter(students);
         studentRecyclerView.setAdapter(studentViewAdapter);
 
-
     }
 
 
-
+    public void onBackButtonClicked(View view) {
+        finish();
+    }
 }
