@@ -58,7 +58,6 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
             case 11: currQuarter = "FA";
                      break;
         }
-
     }
 
     /**

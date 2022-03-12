@@ -70,6 +70,11 @@ public class SavedSessionsViewAdapter extends RecyclerView.Adapter<SavedSessions
             thisSession = session;
         }
 
+        /**
+         * When a specific session is clicked, the user is prompted to enter a new name
+         * If confirm is clicked, then the database is updated and the session information is displayed
+         * If cancel is clicked, then the action is cancelled
+         */
         @Override
         public void onClick(View view) {
             Log.d("In SSViewAdapter", "clicked session " + thisSession.getSessionId());

@@ -7,7 +7,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 /**
- * Our mock of the real message listener
+ * Our mock of the real message listener for Nearby Messages
  */
 public class FakedMessageListener extends MessageListener {
 
@@ -29,7 +29,7 @@ public class FakedMessageListener extends MessageListener {
     }
 
     /**
-     * Mocks the finding of a message
+     * Mocks the finding of a message by calling the onFound method of the message listener
      */
     public void getMessage() {
         for (Message m : allMessages) {

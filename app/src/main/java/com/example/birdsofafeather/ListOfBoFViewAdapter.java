@@ -149,6 +149,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             this.numClassesOverlap.setText(student.student.getNumOverlap());
             if (student.student.getWavedFrom()) {
                 this.waveView.setImageResource(R.mipmap.wave_filled);
+                this.waveView.setTag(R.mipmap.wave_filled);
             }
             String url = student.student.getPhotoURL();
             url = url.trim();

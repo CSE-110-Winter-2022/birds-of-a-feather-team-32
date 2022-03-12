@@ -47,6 +47,10 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * The main activity screen of our application, the Birds of a Feather Screen
+ * This screen displays the students who have shared classes with our user
+ */
 public class ListOfBoFActivity extends AppCompatActivity {
 
     private AppDatabase db;
@@ -189,7 +193,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
      */
     // NOTE: In order to display Bluetooth permissions dialog box, need to clear Google Play Services Data
     public void onStartClicked(View view) {
-
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
                         Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION},
@@ -205,14 +208,16 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // button is start
         if (buttonState == 0) {
+            buttonState = 1;
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //builder.setCancelable(true);
+            builder.setCancelable(false);
             builder.setTitle("Would you like to resume a previous session or create a new one?");
             //builder.setMessage("Message");
             String[] options = {"Resume Session", "New Session"};
             builder.setItems(options, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     if (which == 0) {
+                        buttonState = 0;
                         Log.d("Resume was clicked", "Resume was clicked");
 
                         Intent intent = new Intent(ListOfBoFActivity.this, SavedSessionsActivity.class);
@@ -236,14 +241,14 @@ public class ListOfBoFActivity extends AppCompatActivity {
         } else {
             // only becomes true once confirm save is clicked
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            //builder.setCancelable(true);
+            builder.setCancelable(false);
             LayoutInflater layoutInflater = LayoutInflater.from(this);
             View promptView = layoutInflater.inflate(R.layout.save_session_prompt, null);
             builder.setTitle("Save current session as:");
             builder.setView(promptView);
             ArrayList<String> currentCourseArray = new ArrayList<>();
             for (Course c : ownCoursesSet) {
-                if (c.year.equals("2022") && c.qtr.equals("WI")) {
+                if (c.year.equals(new TimeStamp().getYear()) && c.qtr.equals(new TimeStamp().getQuarter())) {
                     currentCourseArray.add(c.getCourseFullStringReadable());
                 }
             }
@@ -377,10 +382,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
      */
     @Override
     public void onStop() {
-        super.onStop();
         Log.d("onStop", "onStop called");
         Nearby.getMessagesClient(this).unsubscribe(realListener);
         Log.d("" + Nearby.getMessagesClient(this).getClass().getSimpleName(), "called unsubscribe");
+        super.onStop();
     }
 
     /**

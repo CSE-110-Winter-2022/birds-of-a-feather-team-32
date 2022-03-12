@@ -11,19 +11,34 @@ public class sortStudentsByStrategySorter {
     private List<StudentWithCourses> students;
     PrioritizationScoreStrategy strategy;
 
+    /**
+     * Set the list of students to be sorted
+     * @param students the list of students
+     */
     public sortStudentsByStrategySorter(List<StudentWithCourses> students) {
         this.students = students;
     }
 
+    /**
+     * Set the sorting strategy to be used by the student sorter
+     * @param strategy the strategy to be used
+     */
     public void setStrategy(PrioritizationScoreStrategy strategy) {
         this.strategy = strategy;
     }
 
+    /**
+     * Performs the sorting of the list of students
+     * @return students the final sorted list
+     */
     public List<StudentWithCourses> sort() {
         Collections.sort(students, new CustomComparator());
         return students;
     }
 
+    /**
+     * A custom comparator to be used to sort the list of the students
+     */
     class CustomComparator implements Comparator<StudentWithCourses> {
         @Override
         public int compare(StudentWithCourses s1, StudentWithCourses s2) {
