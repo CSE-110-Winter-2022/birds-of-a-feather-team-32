@@ -10,7 +10,7 @@ import java.util.List;
 @Dao
 public interface SessionWithStudentsDao {
     @Transaction
-    @Query("SELECT * FROM sessions")
+    @Query("SELECT * FROM sessions WHERE sessionId!=-1")
     List<SessionWithStudents> getAll();
 
     @Query("SELECT * FROM sessions WHERE sessionId=:id")

@@ -1,8 +1,3 @@
-/**
- * File: ListOfBoFViewAdapter.Java
- * Description: Class that binds our StudentWithCourses object data to each item in the recycler view in
- * our layout file activity_boflist.xml
- */
 package com.example.birdsofafeather;
 
 import android.app.Activity;
@@ -22,14 +17,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.AppDatabase;
+import com.example.birdsofafeather.model.db.Session;
+import com.example.birdsofafeather.model.db.SessionWithStudents;
 import com.example.birdsofafeather.model.db.Student;
 import com.example.birdsofafeather.model.db.StudentWithCourses;
-import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdapter.ViewHolder> {
-
+public class FavoritesListViewAdapter extends RecyclerView.Adapter<FavoritesListViewAdapter.ViewHolder> {
     private final List<StudentWithCourses> students;
 
     /**
@@ -37,7 +33,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
      * @param students
      */
 
-    public ListOfBoFViewAdapter(List<StudentWithCourses> students) {
+    public FavoritesListViewAdapter(List<StudentWithCourses> students) {
         super();
         this.students = students;
     }
@@ -52,11 +48,11 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FavoritesListViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater
                 .from(parent.getContext())
                 .inflate(R.layout.student_row, parent, false);
-        return new ViewHolder(view);
+        return new FavoritesListViewAdapter.ViewHolder(view);
     }
 
     /**
@@ -67,13 +63,9 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
 
     @Override
-    public void onBindViewHolder(@NonNull ListOfBoFViewAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FavoritesListViewAdapter.ViewHolder holder, int position) {
         Log.d("OnBindViewHolder", students.get(position).getName());
         holder.setPerson(students.get(position));
-
-        if (students.get(position).student.getFavorite()){
-            holder.setFavorite();
-        }
     }
 
     /**
@@ -109,7 +101,7 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
         ViewHolder(View itemView) {
             super(itemView);
-            db = AppDatabase.singleton((Activity) itemView.getContext());
+            db = AppDatabase.singleton(this.itemView.getContext());
             this.studentNameView = itemView.findViewById(R.id.student_row_name);
             this.numClassesOverlap = itemView.findViewById(R.id.numOverlap);
             itemView.setOnClickListener(this);
@@ -117,17 +109,18 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             waveView = itemView.findViewById(R.id.waveView);
             favButton = itemView.findViewById(R.id.star_hollow_button);
             favButton.setTag(R.mipmap.star_hollow);
+
+
             favButton.setOnClickListener(view -> {
 
-                if (!((Integer) favButton.getTag()).equals((Integer) R.mipmap.star_filled)) {
+                if (!student.getStudentObject().getFavorite()) {
                     favButton.setImageResource(R.mipmap.star_filled);
-                    favButton.setTag(R.mipmap.star_filled);
+
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Added! <3", Toast.LENGTH_SHORT).show();
                     db.studentWithCoursesDao().updateFavorite(true, student.getStudentObject().getStudentId());
-
                 } else {
                     favButton.setImageResource(R.mipmap.star_hollow);
-                    favButton.setTag(R.mipmap.star_hollow);
+
                     Toast.makeText((Activity) itemView.getContext(), "Favorite Removed! </3", Toast.LENGTH_SHORT).show();
                     db.studentWithCoursesDao().updateFavorite(false, student.getStudentObject().getStudentId());
                 }
@@ -170,12 +163,6 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
             intent.putExtra("student_name", this.student.getName());// should we have an Id?
             intent.putExtra("student_id", this.student.getId());
             context.startActivity(intent);
-        }
-
-        public void setFavorite(){
-            favButton = itemView.findViewById(R.id.star_hollow_button);
-            favButton.setImageResource(R.mipmap.star_filled);
-            favButton.setTag(R.mipmap.star_filled);
         }
     }
 }
