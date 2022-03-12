@@ -6,14 +6,12 @@ import java.util.List;
 
 public class SmallClassSizeScoreStrategy implements PrioritizationScoreStrategy {
 
-    private List<Course> courses;
+    public SmallClassSizeScoreStrategy() {
 
-    public SmallClassSizeScoreStrategy(List<Course> courses) {
-        this.courses = courses;
     }
 
     @Override
-    public double calculateScore() {
+    public double calculateScore(List<Course> courses) {
         double score = 0;
         for (Course c: courses) {
             score += classSizeToScore(c.getCourseSize());
