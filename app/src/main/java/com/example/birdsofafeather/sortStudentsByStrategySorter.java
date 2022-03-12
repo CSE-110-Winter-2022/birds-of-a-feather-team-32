@@ -27,7 +27,7 @@ public class sortStudentsByStrategySorter {
     class CustomComparator implements Comparator<StudentWithCourses> {
         @Override
         public int compare(StudentWithCourses s1, StudentWithCourses s2) {
-            // Checking for wave: add 100000 to score if has wave
+            // Checking for wave: add 1000 to score if has wave
             double s1Score = strategy.calculateScore(s1.getCourses());
             double s2Score = strategy.calculateScore(s2.getCourses());
             if(s1.student.wavedFrom){
