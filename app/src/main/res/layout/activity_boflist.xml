@@ -66,8 +66,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Sort By:"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@id/spinner" />
+        app:layout_constraintBottom_toTopOf="@+id/sortStrategySpinner"
+        app:layout_constraintStart_toStartOf="@id/sortStrategySpinner" />
 
     <Button
         android:id="@+id/favoriteButton"
@@ -80,5 +80,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/student_view" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

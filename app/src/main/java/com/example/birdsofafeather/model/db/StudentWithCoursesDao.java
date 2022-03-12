@@ -28,7 +28,7 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE favorite=1")
     List<StudentWithCourses> getFavorites();
 
-    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by numClassOverlap desc")
+    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by wavedFrom desc,numClassOverlap desc")
     List<StudentWithCourses> getFromSession(int sessionId);
 
     @Query("SELECT COUNT(*) from students")

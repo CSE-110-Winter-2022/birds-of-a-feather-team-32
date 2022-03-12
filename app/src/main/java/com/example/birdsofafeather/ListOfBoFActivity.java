@@ -177,6 +177,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
             this.testListener = new FakedMessageListener(realListener, new ArrayList<>());
         }
 
+        if (buttonState == 1) {
+            Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
+            Nearby.getMessagesClient(this).unpublish(myMessage);
+            Nearby.getMessagesClient(this).publish(myMessage);
+        }
+
         /*
         if (isBofSearchOn) {
             buttonState = 0;
@@ -328,7 +334,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         String photoURL = preferences.getString("image_url", "");
 
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getFromSession(currentSessionId);
 
         // Convert student data into desired format
         String message = "";
