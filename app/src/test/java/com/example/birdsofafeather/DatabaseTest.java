@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RunWith(AndroidJUnit4.class)
 public class DatabaseTest {
@@ -46,9 +47,11 @@ public class DatabaseTest {
 
     @Test
     public void testPersonEntity() {
+        String randomUUID1 = UUID.randomUUID().toString();
+        String randomUUID2 = UUID.randomUUID().toString();
 
-        Student student1 = new Student(0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1,"Test Student 2", "TESTURL2", 1);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0, randomUUID1, false, false);
+        Student student2 = new Student(1,0,"Test Student 2", "TESTURL2", 1, randomUUID2, false, false);
 
         assertEquals("Test Student 1", student1.getName());
         assertEquals("Test Student 2", student2.getName());
@@ -61,21 +64,24 @@ public class DatabaseTest {
 
         assertEquals("0", student1.getNumOverlap());
         assertEquals("1", student2.getNumOverlap());
+
+        assertEquals(randomUUID1, student1.getUUID());
+        assertEquals(randomUUID2, student2.getUUID());
     }
 
     @Test
     public void testCourseEntity() {
 
-        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter");
-        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI");
-        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA");
+        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter", "Small (40–75)");
+        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI", "SMALL");
+        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA", "Huge (250–400)");
 
         assertEquals(course1, course2);
         assertNotEquals(course1, course3);
 
-        assertEquals("2022,WI,CSE,110", course1.getCourseFullString());
-        assertEquals("2022,WI,CSE,110", course2.getCourseFullString());
-        assertEquals("2022,FA,CSE,110", course3.getCourseFullString());
+        assertEquals("2022,WI,CSE,110,SMALL", course1.getCourseFullString());
+        assertEquals("2022,WI,CSE,110,SMALL", course2.getCourseFullString());
+        assertEquals("2022,FA,CSE,110,HUGE", course3.getCourseFullString());
     }
 
     @Test
@@ -83,11 +89,11 @@ public class DatabaseTest {
 
         assertEquals(0, coursesDao.numCourses());
 
-        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter");
+        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter", "Small (40-75)");
         coursesDao.insert(course1);
         assertEquals(1, coursesDao.numCourses());
 
-        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI");
+        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI", "Small (40-75)");
         coursesDao.insert(course2);
         assertEquals(2, coursesDao.numCourses());
 
@@ -111,7 +117,7 @@ public class DatabaseTest {
         assertEquals(allCourses, coursesDao.getAll());
 
         for (int i = 0; i < 8; i++) {
-            Course newCourse = new Course(courseId, 0, "CSE", "110", "2022", "Winter");
+            Course newCourse = new Course(courseId, 0, "CSE", "110", "2022", "Winter", "Small (40-75)");
             correctCourses1.add(newCourse);
             allCourses.add(newCourse);
             coursesDao.insert(newCourse);
@@ -122,7 +128,7 @@ public class DatabaseTest {
         assertEquals(allCourses, coursesDao.getAll());
 
         for (int i = 0; i < 8; i++) {
-            Course newCourse = new Course(courseId, 1, "CSE", "110", "2022", "Winter");
+            Course newCourse = new Course(courseId, 1, "CSE", "110", "2022", "Winter", "Small (40-75)");
             correctCourses2.add(newCourse);
             allCourses.add(newCourse);
             coursesDao.insert(newCourse);
@@ -136,9 +142,9 @@ public class DatabaseTest {
     @Test
     public void getCorrectCourseWithId() {
 
-        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter");
-        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI");
-        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA");
+        Course course1 = new Course(0, 0, "CSE", "110", "2022", "Winter", "Small (40-75)");
+        Course course2 = new Course(1, 1, "CSE", "110", "2022", "WI", "Small (40-75)");
+        Course course3 = new Course(2, 1, "CSE", "110", "2022", "FA", "Small (40-75)");
 
         coursesDao.insert(course1);
         coursesDao.insert(course2);
@@ -154,11 +160,11 @@ public class DatabaseTest {
 
         assertEquals(0, swcDao.count());
 
-        Student student1 = new Student(0,"Test Student 1", "TESTURL1", 0);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0, "", false, false);
         swcDao.insert(student1);
         assertEquals(1, swcDao.count());
 
-        Student student2 = new Student(1, "Test Student 2", "TESTURL2", 1);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 1,"", false, false);
         swcDao.insert(student2);
         assertEquals(2, swcDao.count());
     }
@@ -166,9 +172,9 @@ public class DatabaseTest {
     @Test
     public void testGetAllStudentWithCourses() {
 
-        Student student1 = new Student(0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1, "Test Student 2", "TESTURL2", 3);
-        Student student3 = new Student(2, "Test Student 3", "TESTURL2", 2);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0,"", false, false);
+        Student student2 = new Student(1, 0,"Test Student 2", "TESTURL2", 3,"", false, false);
+        Student student3 = new Student(2, 0,"Test Student 3", "TESTURL2", 2,"", false, false);
 
         swcDao.insert(student1);
         swcDao.insert(student2);
@@ -184,9 +190,9 @@ public class DatabaseTest {
     @Test
     public void testGetStudentWithCourses() {
 
-        Student student1 = new Student(0,"Test Student 1", "TESTURL1", 0);
-        Student student2 = new Student(1, "Test Student 2", "TESTURL2", 3);
-        Student student3 = new Student(2, "Test Student 3", "TESTURL2", 2);
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0,"", false, false);
+        Student student2 = new Student(1,0, "Test Student 2", "TESTURL2", 3,"", false, false);
+        Student student3 = new Student(2,0, "Test Student 3", "TESTURL2", 2,"", false, false);
 
         swcDao.insert(student1);
         swcDao.insert(student2);
@@ -202,7 +208,7 @@ public class DatabaseTest {
 
         int courseId = 0;
         for (int i = 0; i < 8; i++) {
-            Course newCourse = new Course(courseId, 0, "CSE", "110", "2022", "Winter");
+            Course newCourse = new Course(courseId, 0, "CSE", "110", "2022", "Winter", "Small (40-75)");
             correctCourses1.add(newCourse);
             coursesDao.insert(newCourse);
             courseId++;
@@ -210,7 +216,7 @@ public class DatabaseTest {
         assertEquals(correctCourses1, swcDao.get(0).getCourses());
 
         for (int i = 0; i < 8; i++) {
-            Course newCourse = new Course(courseId, 1, "CSE", "110", "2022", "Winter");
+            Course newCourse = new Course(courseId, 1, "CSE", "110", "2022", "Winter", "Small (40-75)");
             correctCourses2.add(newCourse);
             coursesDao.insert(newCourse);
             courseId++;
@@ -219,7 +225,7 @@ public class DatabaseTest {
         assertEquals(correctCourses2, swcDao.get(1).getCourses());
 
         for (int i = 0; i < 8; i++) {
-            Course newCourse = new Course(courseId, 2, "CSE", "110", "2022", "Winter");
+            Course newCourse = new Course(courseId, 2, "CSE", "110", "2022", "Winter", "Small (40-75)");
             correctCourses3.add(newCourse);
             coursesDao.insert(newCourse);
             courseId++;

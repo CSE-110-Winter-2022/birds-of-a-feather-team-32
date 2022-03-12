@@ -15,11 +15,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.birdsofafeather.model.db.AppDatabase;
-import com.example.birdsofafeather.model.db.Student;
-import com.example.birdsofafeather.model.db.StudentWithCourses;
-
-import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
     /**
@@ -60,8 +56,11 @@ public class MainActivity extends AppCompatActivity {
         // save name to shared preferences
         else{
             editor.putString("name", userName);
+            if (!preferences.contains("uuid"))
+                editor.putString("uuid", UUID.randomUUID().toString());
             editor.apply();
             Log.d("<onEnter>", preferences.getString("name", "No Name?"));
+            Log.d("<onEnter>", preferences.getString("uuid", "No UUID?"));
             Intent intent = new Intent(this, ImageActivity.class);
             startActivity(intent);
         }

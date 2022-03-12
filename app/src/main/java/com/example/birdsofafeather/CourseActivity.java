@@ -40,6 +40,15 @@ public class CourseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course);
+
+        //if classes already inputted, skip to next activity
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        String coursesDone = preferences.getString("done", "don't skip");
+        if(coursesDone != "don't skip"){
+            Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
+            startActivity(intent);
+        }
+
         setTitle("Modify Courses");
 
         db = AppDatabase.singleton(this);
@@ -53,14 +62,6 @@ public class CourseActivity extends AppCompatActivity {
             db.coursesDao().delete(course);
         });
         coursesRecyclerView.setAdapter(coursesViewAdapter);
-
-        //if classes already inputted, skip to next activity
-        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        String coursesDone = preferences.getString("done", "don't skip");
-        if(coursesDone != "don't skip"){
-            Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
-            startActivity(intent);
-        }
     }
 
     /**
@@ -74,17 +75,19 @@ public class CourseActivity extends AppCompatActivity {
         TextView newCourseNumTextView = findViewById(R.id.enter_class_number);
         TextView newCourseYearTextView = findViewById(R.id.enter_year);
         Spinner newCourseQtrSpinner = findViewById(R.id.pick_quarter);
+        Spinner newCourseSizeSpinner = findViewById(R.id.pick_size);
 
         String newCourseDeptText = newCourseDeptTextView.getText().toString();
         String newCourseNumText = newCourseNumTextView.getText().toString();
         String newCourseYearText = newCourseYearTextView.getText().toString();
         String newCourseQtrText = newCourseQtrSpinner.getSelectedItem().toString();
+        String newCourseSizeText = newCourseSizeSpinner.getSelectedItem().toString();
 
         // Check if any fields are empty
         if (!newCourseDeptText.equals("") && !newCourseNumText.equals("") &&
                 !newCourseYearText.equals("")) {
             Course newCourse = new Course(newCourseId, 0, newCourseDeptText,
-                    newCourseNumText, newCourseYearText, newCourseQtrText);
+                    newCourseNumText, newCourseYearText, newCourseQtrText, newCourseSizeText);
 
             // Check duplicate courses
             if(!db.coursesDao().getAll().contains(newCourse)){
@@ -115,5 +118,9 @@ public class CourseActivity extends AppCompatActivity {
         editor.apply();
         Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
         startActivity(intent);
+    }
+
+    public AppDatabase getDb() {
+        return db;
     }
 }

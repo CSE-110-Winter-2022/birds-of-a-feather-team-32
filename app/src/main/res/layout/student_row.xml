@@ -13,21 +13,22 @@
         android:id="@+id/student_row_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16sp"
+        android:layout_marginStart="100sp"
         android:layout_marginTop="16sp"
         android:height="32sp"
         android:lineHeight="32sp"
         android:textSize="24sp"
         android:textStyle="bold"
-        tools:text="@tools:sample/full_names"/>
+        android:visibility="visible"
+        tools:text="@tools:sample/full_names" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="50sp"
         android:layout_height="50sp"
-        android:layout_marginEnd="26sp"
-        android:layout_marginTop="7sp"
         android:layout_gravity="right"
+        android:layout_marginTop="7sp"
+        android:layout_marginEnd="26sp"
         app:srcCompat="@drawable/resource_default" />
 
     <TextView
@@ -35,10 +36,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_marginEnd="100sp"
         android:layout_marginTop="16sp"
-        android:textSize="24sp"
+        android:layout_marginEnd="100sp"
         android:text="0"
+        android:textSize="24sp"
         android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/waveView"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_gravity="left"
+        android:layout_marginTop="7sp"
+        android:layout_marginEnd="150sp" />
+
+    <ImageButton
+        android:id="@+id/star_hollow_button"
+        android:onClick="onFavClicked"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:layout_marginStart="50sp"
+        android:layout_marginTop="7sp"
+        app:srcCompat="@mipmap/star_hollow" />
 
 </FrameLayout>

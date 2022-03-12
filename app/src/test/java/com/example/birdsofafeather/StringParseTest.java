@@ -84,8 +84,8 @@ public class StringParseTest {
      */
     @Test
     public void testSanityStringParse(){
-        Student student1 = new Student(0,"Test Student 1", "TESTURL1", 0);
-        Course course1 = new Course(0, 0, "CSE", "210", "2021", "FA");
+        Student student1 = new Student(0,0,"Test Student 1", "TESTURL1", 0,"", false, false);
+        Course course1 = new Course(0, 0, "CSE", "210", "2021", "FA", "SMALL");
 
         ActivityScenario scenario = scenarioRule.getScenario();
         scenario.onActivity(activity -> {
