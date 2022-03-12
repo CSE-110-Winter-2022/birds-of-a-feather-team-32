@@ -20,14 +20,14 @@
 
     <EditText
         android:id="@+id/enter_class_number"
-        android:layout_width="188dp"
+        android:layout_width="90dp"
         android:layout_height="56dp"
         android:ems="10"
-        android:hint="Course Number"
+        android:hint="Number"
         android:inputType="text"
         android:maxLength="5"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.95"
+        app:layout_constraintHorizontal_bias="0.339"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,15 +35,15 @@
 
     <EditText
         android:id="@+id/enter_class_dept"
-        android:layout_width="188dp"
+        android:layout_width="90dp"
         android:layout_height="56dp"
+        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:ems="10"
-        android:hint="Course Department"
+        android:hint="Dept."
         android:inputType="textPersonName"
         android:maxLength="4"
-        android:digits="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintHorizontal_bias="0.034"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -58,11 +58,11 @@
         android:inputType="number"
         android:maxLength="4"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.831" />
+        app:layout_constraintVertical_bias="0.727" />
 
     <Spinner
         android:id="@+id/pick_quarter"
@@ -70,6 +70,19 @@
         android:layout_height="56dp"
         android:contentDescription="Class quarter"
         android:entries="@array/class_quarters"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.049"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.831" />
+
+    <Spinner
+        android:id="@+id/pick_size"
+        android:layout_width="188dp"
+        android:layout_height="56dp"
+        android:contentDescription="Class size"
+        android:entries="@array/class_sizes"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.95"
         app:layout_constraintLeft_toLeftOf="parent"

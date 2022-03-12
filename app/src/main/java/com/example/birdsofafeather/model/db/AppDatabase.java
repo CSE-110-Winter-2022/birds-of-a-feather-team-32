@@ -12,7 +12,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Student.class, Course.class}, version = 1)
+@Database(entities = {Session.class, Student.class, Course.class}, version = 7)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase singletonInstance;
 
@@ -41,6 +41,7 @@ public abstract class AppDatabase extends RoomDatabase {
                 .build();
     }
 
+    public abstract SessionWithStudentsDao sessionsWithStudentsDao();
     public abstract CoursesDao coursesDao(); // Stores course info
     public abstract StudentWithCoursesDao studentWithCoursesDao(); // Stores student info
 }

@@ -25,7 +25,7 @@ public class Course {
 
     // this is how we identify that this course belongs to
     // a particular person
-    @ColumnInfo(name = "student_id")
+    @ColumnInfo(name = "studentId")
     public int studentId;
 
     @ColumnInfo(name = "dept")
@@ -40,6 +40,9 @@ public class Course {
     @ColumnInfo(name = "qtr")
     public String qtr;
 
+    @ColumnInfo(name = "size")
+    public String size;
+
     @ColumnInfo(name = "courseFullString")
     public String courseFullString;
 
@@ -52,11 +55,12 @@ public class Course {
      * @param  dept
      * @param year
      * @param  qtr
+     * @param size
      *
      * return Instantiated Course object
      */
 
-    public Course(int id, int studentId, String dept, String num, String year, String qtr) {
+    public Course(int id, int studentId, String dept, String num, String year, String qtr, String size) {
         this.id = id;
         this.studentId = studentId;
         this.dept = dept.toUpperCase();
@@ -64,6 +68,7 @@ public class Course {
         this.num = num.toUpperCase();
         this.year = year;
         this.qtr = qtr;
+        this.size = size;
 
         switch(qtr){
             case "FA":
@@ -91,23 +96,42 @@ public class Course {
                 this.qtr = "SSS";
                 break;
         }
-        this.courseFullString = this.dept + " " + this.num + " " + this.qtr + " " + this.year;
-        Log.d("qtr:", this.qtr);
 
-    }
-/*
-    @Override
-    public boolean equals(Object other){
-        if(this == other) { return true;}
-        if(other == null || getClass() != other.getClass()) { return false;}
-        Course course = (Course) other;
-        if((this.dept.equals(course.dept)) && (this.num.equals(course.num))
-            && (this.qtr.equals(course.qtr)) && (this.year.equals(course.year))){
-            return true;
+        switch(size) {
+            case "Tiny":
+            case "TINY":
+            case "Tiny (<40)":
+                this.size = "TINY";
+                break;
+            case "Small":
+            case "SMALL":
+            case "Small (40–75)":
+                this.size = "SMALL";
+                break;
+            case "Medium":
+            case "MEDIUM":
+            case "Medium (75–150)":
+                this.size = "MEDIUM";
+                break;
+            case "Large":
+            case "LARGE":
+            case "Large (150–250)":
+                this.size = "LARGE";
+                break;
+            case "Huge":
+            case "HUGE":
+            case "Huge (250–400)":
+                this.size = "HUGE";
+                break;
+            case "Gigantic":
+            case "GIGANTIC":
+            case "Gigantic (400+)":
+                this.size = "GIGANTIC";
+                break;
         }
-        return false;
+        this.courseFullString = this.year + "," + this.qtr + "," + this.dept + "," + this.num +
+                "," + this.size;
     }
-    */
 
     /**
      * Overriden equals() function to compare each Course Object
@@ -128,10 +152,7 @@ public class Course {
             return false;
         }
         Course courseObj = (Course) obj;
-        if (this.courseFullString.equals(courseObj.getCourseFullString())) {
-            return true;
-        }
-        return false;
+        return this.courseFullString.equals(courseObj.getCourseFullString());
     }
 
     /**
@@ -139,9 +160,29 @@ public class Course {
      *
      * @return String courseFullString
      */
-
+  
     public String getCourseFullString() {
         return courseFullString;
+    }
+
+    /**
+     * Returns all fields in Course object concatenated into a more readable single string
+     *
+     * @return String courseFullStringReadable
+     */
+
+    public String getCourseFullStringReadable() {
+        return this.dept + " " + this.num + " " + this.qtr + " " + this.year;
+    }
+
+    /**
+     * Returns size of this course
+     *
+     * @return String size
+     */
+
+    public String getCourseSize() {
+        return this.size;
     }
 
     /**

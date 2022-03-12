@@ -1,3 +1,9 @@
+/**
+ * Filename: MainActivity.java
+ *
+ * Description: This file is responsible for saving the appropriate user name based on the
+ * Name Text View.
+ */
 package com.example.birdsofafeather;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,43 +15,55 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.example.birdsofafeather.model.db.AppDatabase;
-import com.example.birdsofafeather.model.db.Student;
-import com.example.birdsofafeather.model.db.StudentWithCourses;
-
-import java.util.List;
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
-
+    /**
+     * Method that starts activity with loaded data from savedInstanceState
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
 
-    // Clicked enter
-    public void onEnterClicked(View view) {
+        //if name already inputted, skip to next activity
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        String userName = ((TextView)findViewById(R.id.name)).getText().toString();
-
-
-        if(userName.equals("")){
-            ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name");
-            Log.d("<onEnter>", "Empty Name");
-        }
-        else{
-            editor.putString("name", userName);
-            editor.apply();
-            Log.d("<onEnter>", preferences.getString("name", "No Name?"));
+        String retrievedName = preferences.getString("name", "name not found");
+        if(retrievedName != "name not found"){
             Intent intent = new Intent(this, ImageActivity.class);
             startActivity(intent);
         }
     }
 
-    /*public void onFindStudentsClicked(View view) {
-        Intent intent = new Intent(this, NearbyMessagesMockScreen.class);
-        startActivity(intent);
-    }
+    /**
+     * Method that is responsible for saving name to shared preferences. Two cases:
+     * 1. entered text: save to SharedPreferences
+     * 2. empty text: show alert to that no name is entered
+     * @param view
      */
+    public void onEnterClicked(View view) {
+        // get string userName from Name Text View
+        SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        String userName = ((TextView)findViewById(R.id.name)).getText().toString();
+
+        // case when user entered nothing
+        if(userName.equals("")){
+            ErrorUtilities.showAlert(this, "Whoa! Don't forget to set your name!");
+            Log.d("<onEnter>", "Empty Name");
+        }
+        // save name to shared preferences
+        else{
+            editor.putString("name", userName);
+            if (!preferences.contains("uuid"))
+                editor.putString("uuid", UUID.randomUUID().toString());
+            editor.apply();
+            Log.d("<onEnter>", preferences.getString("name", "No Name?"));
+            Log.d("<onEnter>", preferences.getString("uuid", "No UUID?"));
+            Intent intent = new Intent(this, ImageActivity.class);
+            startActivity(intent);
+        }
+    }
+
 }
