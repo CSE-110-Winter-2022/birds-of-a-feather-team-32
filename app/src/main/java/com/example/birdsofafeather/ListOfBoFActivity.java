@@ -15,10 +15,13 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -49,6 +52,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private RecyclerView studentRecyclerView;
     private RecyclerView.LayoutManager studentLayoutManager;
     private ListOfBoFViewAdapter studentViewAdapter;
+    private Spinner sortStrategySpinner;
 
     private MessageListener realListener;
     private FakedMessageListener testListener;
@@ -60,6 +64,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private HashSet<Course> ownCoursesSet;
     private List<StudentWithCourses> students = new ArrayList<>();
     private int currentSessionId;
+    private ImageButton favButton;
+    private Session favSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,9 +88,23 @@ public class ListOfBoFActivity extends AppCompatActivity {
         studentViewAdapter = new ListOfBoFViewAdapter(students);
         studentRecyclerView.setAdapter(studentViewAdapter);
 
+        sortStrategySpinner = (Spinner) findViewById(R.id.sortStrategySpinner);
+
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
+
+
+        // make favorite session
+        String favName = "favorites";
+        int sessionID = -1;
+
+        favSession = new Session(sessionID,favName);
+        if (db.sessionsWithStudentsDao().get(-1) == null) {
+            db.sessionsWithStudentsDao().insert(favSession);
+        }
+
+
         /*
         /*
         if (isBofSearchOn) {
@@ -92,7 +112,40 @@ public class ListOfBoFActivity extends AppCompatActivity {
             findViewById(R.id.runButton).performClick();
             Log.d("Performed Click", "True");
         }
-         */
+        */
+
+        sortStrategySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
+                String selectedStrategy = (String) adapterView.getItemAtPosition(pos);
+                sortStudentsByStrategySorter sorter = new sortStudentsByStrategySorter(students);
+                switch(selectedStrategy) {
+                    case "Default":
+                        if (currentSessionId != -1) {
+                            setSession(currentSessionId);
+                        }
+                        Log.d("Selected Strategy", "Default");
+                        break;
+                    case "Small Classes":
+                        sorter.setStrategy(new SmallClassSizeScoreStrategy());
+                        students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Small Classes");
+                        break;
+                    case "Recent Classes":
+                        sorter.setStrategy(new SortByRecentScoreStrategy());
+                        students = sorter.sort();
+                        studentViewAdapter = new ListOfBoFViewAdapter(students);
+                        studentRecyclerView.setAdapter(studentViewAdapter);
+                        Log.d("Selected Strategy", "Recent CLasses");
+                        break;
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                return;
+            }
+        });
     }
 
     // Restarts search for new bof if it was never turned off by user
@@ -124,6 +177,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
             this.testListener = new FakedMessageListener(realListener, messages);
         } else {
             this.testListener = new FakedMessageListener(realListener, new ArrayList<>());
+        }
+
+        if (buttonState == 1) {
+            Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
+            Nearby.getMessagesClient(this).unpublish(myMessage);
+            Nearby.getMessagesClient(this).publish(myMessage);
         }
 
         /*
@@ -247,6 +306,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         Button startButton = findViewById(R.id.runButton);
 
+
         // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
 
@@ -286,7 +346,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
         String photoURL = preferences.getString("image_url", "");
 
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
-        List<StudentWithCourses> students = db.studentWithCoursesDao().getAll();
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getFromSession(currentSessionId);
 
         // Convert student data into desired format
         String message = "";
@@ -316,6 +376,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
         super.onStop();
         Log.d("onStop", "onStop called");
         Nearby.getMessagesClient(this).unsubscribe(realListener);
+    }
+
+    public void onFavButtonClicked(View view) {
+        Intent intent = new Intent(this, FavoritesList.class);
+        startActivity(intent);
     }
 
     // Our custom Message Listener
@@ -424,4 +489,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
     }
+
+
 }

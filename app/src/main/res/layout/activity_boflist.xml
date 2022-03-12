@@ -36,6 +36,7 @@
         android:layout_width="414dp"
         android:layout_height="0dp"
         android:layout_marginTop="80dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/border"
         android:fadeScrollbars="false"
         android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -47,7 +48,7 @@
         app:layout_constraintVertical_bias="1.0" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/sortStrategySpinner"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginStart="50dp"
@@ -65,6 +66,18 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="Sort By:"
-        app:layout_constraintBottom_toTopOf="@+id/spinner"
-        app:layout_constraintStart_toStartOf="@id/spinner" />
+        app:layout_constraintBottom_toTopOf="@+id/sortStrategySpinner"
+        app:layout_constraintStart_toStartOf="@id/sortStrategySpinner" />
+
+    <Button
+        android:id="@+id/favoriteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="View Favorites"
+        android:onClick="onFavButtonClicked"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/student_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>

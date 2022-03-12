@@ -9,7 +9,7 @@ public class StudentWithCourses {
     @Embedded
     public Student student;
 
-    @Relation(parentColumn = "sessionId",
+    @Relation(parentColumn = "studentId",
             entityColumn = "studentId",
             entity = Course.class)
     public List<Course> courses;
@@ -26,4 +26,6 @@ public class StudentWithCourses {
     public int getId() {
         return this.student.studentId;
     }
+    public Student getStudentObject() {return this.student; }
+
 }

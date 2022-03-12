@@ -18,13 +18,17 @@ import java.util.List;
 public interface StudentWithCoursesDao {
 
     @Transaction
+    // Change to order by wave status first
     @Query("SELECT * FROM students order by numClassOverlap desc")
     List<StudentWithCourses> getAll();
 
     @Query("SELECT * FROM students WHERE studentId=:id")
     StudentWithCourses get(int id);
 
-    @Query("SELECT * FROM students WHERE sessionId=:sessionId")
+    @Query("SELECT * FROM students WHERE favorite=1")
+    List<StudentWithCourses> getFavorites();
+
+    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by wavedFrom desc,numClassOverlap desc")
     List<StudentWithCourses> getFromSession(int sessionId);
 
     @Query("SELECT COUNT(*) from students")
@@ -32,6 +36,9 @@ public interface StudentWithCoursesDao {
 
     @Query("UPDATE students SET wavedAt=:wavedAt WHERE studentId=:id")
     void update(boolean wavedAt, int id);
+
+    @Query("UPDATE students SET favorite=:favorite WHERE studentId=:id")
+    void updateFavorite(boolean favorite, int id);
 
     @Insert
     void insert(Student student);

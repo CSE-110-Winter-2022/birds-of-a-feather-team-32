@@ -54,7 +54,7 @@ public class ProfileActivityViewAdapter extends RecyclerView.Adapter<ProfileActi
         }
 
         public void setCourse(Course course) {
-            this.courseView.setText(course.dept + " " + course.num + " " + course.year + " " + course.qtr);
+            this.courseView.setText(course.getCourseFullString());
 
         }
 
