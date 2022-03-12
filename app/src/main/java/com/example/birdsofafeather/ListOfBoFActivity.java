@@ -21,15 +21,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -316,7 +313,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
 
-        buttonState = 1;
         startButton.setText("Stop");
         Nearby.getMessagesClient(this).subscribe(realListener).addOnFailureListener((e -> Log.d("Failed", "to subscribe")));
         Log.d("" + Nearby.getMessagesClient(this).getClass().getSimpleName(), "called subscribe");

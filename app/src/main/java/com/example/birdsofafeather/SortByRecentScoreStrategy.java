@@ -17,7 +17,13 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
     public SortByRecentScoreStrategy() {
         setQuarter();
     }
-    
+
+    /**
+     * calculateScore(List<Course> courses)
+     * parameters: courses(List<Course>)
+     * Adds all of the course scores to the students score
+     * return: double
+     */
     @Override
     public double calculateScore(List<Course> courses) {
         double score = 0;
@@ -27,7 +33,12 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
         return score;
     }
 
-    //sets the current quarter
+    /**
+     * setQuarter()
+     * parameters: none
+     * sets the quarter to the current quarter
+     * return: void
+     */
     public void setQuarter(){
         switch (month) {
             case 0:
@@ -50,19 +61,31 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
 
     }
 
+    /**
+     * calc(String year, String quarter)
+     * parameters: year(string), quarter(string)
+     * calls calc to get the score
+     * return: int
+     */
     public int Score(String quarter, String year){
         int s = 0;
-
+        //sets all the summer session quarters to one summer quarter
         if(quarter == "SS1" || quarter == "SS2" || quarter == "SSS"){
             quarter = "SU";
         }
-        s = comp(year, quarter);
+        s = calc(year, quarter);    //calculates the score based on recent classes
         return s;
     }
+    /**
+     * calc(String year, String q)
+     * parameters: year(string), q(string)
+     * calculate the weight of the class based on how recent it was
+     * return: int
+     */
 
-    public int comp(String year, String q){
+    public int calc(String year, String q){
         int i = 0;
-        if(currYear.equals(year)){
+        if(currYear.equals(year)){      //class was within the year
             switch (currQuarter){
                 case "FA":
                     switch (q){
@@ -100,6 +123,7 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
                     }
             }
         }
+        //class was last year
         else if(Integer.parseInt(currYear) == (Integer.parseInt(year) + 1)){
             switch (currQuarter){
                 case "FA":
@@ -158,6 +182,7 @@ public class SortByRecentScoreStrategy implements PrioritizationScoreStrategy{
                     }
             }
         }
+        //class was more than a year ago
         else{
             i = 1;
         }
