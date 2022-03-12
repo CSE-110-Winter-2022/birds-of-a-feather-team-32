@@ -15,6 +15,9 @@ import com.example.birdsofafeather.model.db.SessionWithStudents;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity displays all the past saved sessions of the user
+ */
 public class SavedSessionsActivity extends AppCompatActivity{
 
     private AppDatabase db;
@@ -22,6 +25,9 @@ public class SavedSessionsActivity extends AppCompatActivity{
     private RecyclerView.LayoutManager savedSessionsLayoutManager;
     private SavedSessionsViewAdapter savedSessionsViewAdapter;
 
+    /**
+     * Initializes the UI, fetches the list of past saved sessions
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

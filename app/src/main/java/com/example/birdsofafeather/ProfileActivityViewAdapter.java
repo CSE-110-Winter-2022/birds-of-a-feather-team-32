@@ -16,6 +16,9 @@ import com.example.birdsofafeather.model.db.Course;
 
 import java.util.List;
 
+/**
+ * Class that helps display the specific overlapping classes of another student
+ */
 public class ProfileActivityViewAdapter extends RecyclerView.Adapter<ProfileActivityViewAdapter.ViewHolder> {
 
     private final List<Course> courses;
