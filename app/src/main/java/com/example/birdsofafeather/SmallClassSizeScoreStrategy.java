@@ -10,6 +10,11 @@ public class SmallClassSizeScoreStrategy implements PrioritizationScoreStrategy 
 
     }
 
+    /**
+     * Calculates the value of a student's shared courses
+     * @param courses a list of shared courses
+     * @return score the final calculated score
+     */
     @Override
     public double calculateScore(List<Course> courses) {
         double score = 0;
@@ -19,6 +24,9 @@ public class SmallClassSizeScoreStrategy implements PrioritizationScoreStrategy 
         return score;
     }
 
+    /**
+     * Associates each class size with a value, where smaller class sizes are weighed more heavily
+     */
     private double classSizeToScore(String size) {
         switch (size) {
             case "TINY":

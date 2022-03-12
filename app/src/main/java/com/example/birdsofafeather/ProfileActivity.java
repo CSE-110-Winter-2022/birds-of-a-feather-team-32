@@ -23,6 +23,9 @@ import com.example.birdsofafeather.model.db.StudentWithCoursesDao;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Displays more detailed information about a specific student
+ */
 public class ProfileActivity extends AppCompatActivity {
 
     private AppDatabase db;
@@ -35,6 +38,9 @@ public class ProfileActivity extends AppCompatActivity {
     private StudentWithCourses student;
     private int studentId;
 
+    /**
+     * Initializes the UI, fetches the data of the student to be displayed
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +87,9 @@ public class ProfileActivity extends AppCompatActivity {
                 .into(imageView);
     }
 
+    /**
+     * Defines the behavior when the wave button is clicked by the user
+     */
     public void onWaveClicked(View view) {
         // Only clickable if student has not been waved at yet
         if (!student.student.getWavedAt()) {
@@ -91,6 +100,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Returns to the previous activity screen
+     */
     public void onBackClicked(View view) {
         finish();
     }

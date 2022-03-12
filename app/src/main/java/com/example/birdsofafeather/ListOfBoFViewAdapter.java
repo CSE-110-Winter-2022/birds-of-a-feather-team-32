@@ -138,7 +138,6 @@ public class ListOfBoFViewAdapter extends RecyclerView.Adapter<ListOfBoFViewAdap
 
         }
 
-
         /**
          * Sets the views with the passed in StudentWithCourses object's information
          * @param student

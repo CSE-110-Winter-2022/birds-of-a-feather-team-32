@@ -15,6 +15,9 @@ import com.example.birdsofafeather.model.db.SessionWithStudents;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity displays all the past saved sessions of the user
+ */
 public class SavedSessionsActivity extends AppCompatActivity{
 
     private AppDatabase db;
@@ -22,6 +25,9 @@ public class SavedSessionsActivity extends AppCompatActivity{
     private RecyclerView.LayoutManager savedSessionsLayoutManager;
     private SavedSessionsViewAdapter savedSessionsViewAdapter;
 
+    /**
+     * Initializes the UI, fetches the list of past saved sessions
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +42,6 @@ public class SavedSessionsActivity extends AppCompatActivity{
 
         savedSessionsLayoutManager = new LinearLayoutManager(this);
         savedSessionsRecyclerView.setLayoutManager(savedSessionsLayoutManager);
-
-       /* List<String> testSessions = new ArrayList<>();
-        testSessions.add("1/1/1011");
-        testSessions.add("2/2/2022");
-        testSessions.add("3/3/3033"); */
 
         savedSessionsViewAdapter = new SavedSessionsViewAdapter(sessions);
         savedSessionsRecyclerView.setAdapter(savedSessionsViewAdapter);

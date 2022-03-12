@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/**
+ * Activity to display the list of favorite students, across all saved sessions
+ */
 public class FavoritesList extends AppCompatActivity {
 
     private AppDatabase db;
@@ -33,6 +36,9 @@ public class FavoritesList extends AppCompatActivity {
     private ListOfBoFViewAdapter studentViewAdapter;
     private List<StudentWithCourses> students = new ArrayList<>();
 
+    /**
+     * Initializes the UI as well as the databased
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +56,9 @@ public class FavoritesList extends AppCompatActivity {
 
     }
 
-
+    /**
+     * Returns to the previous activity screen
+     */
     public void onBackButtonClicked(View view) {
         finish();
     }
