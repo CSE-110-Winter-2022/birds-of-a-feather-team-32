@@ -12,11 +12,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -236,18 +238,29 @@ public class ListOfBoFActivity extends AppCompatActivity {
             // only becomes true once confirm save is clicked
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             //builder.setCancelable(true);
+            LayoutInflater layoutInflater = LayoutInflater.from(this);
+            View promptView = layoutInflater.inflate(R.layout.save_session_prompt, null);
             builder.setTitle("Save current session as:");
-            builder.setView(R.layout.save_session_prompt);
+            builder.setView(promptView);
             ArrayList<String> currentCourseArray = new ArrayList<>();
             for (Course c : ownCoursesSet) {
                 if (c.year.equals("2022") && c.qtr.equals("WI")) {
                     currentCourseArray.add(c.getCourseFullStringReadable());
                 }
             }
+            Spinner selectCoursesSpinner = promptView.findViewById(R.id.selectCurrentCourses);
+            EditText typeText = promptView.findViewById(R.id.typeCourse);
             builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-
+                    String newName;
+                    int sessionID = db.sessionsWithStudentsDao().count(); // id of session
+                    if (!typeText.getText().toString().equals(""))
+                        newName = typeText.getText().toString();
+                    else
+                        newName = selectCoursesSpinner.getSelectedItem().toString();
+                    db.sessionsWithStudentsDao().update(newName, sessionID);
+                    Log.d("updated session", newName);
                 }
             });
             builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -258,12 +271,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
             });
             AlertDialog stopDialog = builder.create();
             stopDialog.setContentView(R.layout.save_session_prompt);
-            stopDialog.show();
             ArrayAdapter<String> courseListAA = new ArrayAdapter<String>(
                     this, android.R.layout.simple_spinner_dropdown_item, currentCourseArray);
             courseListAA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-            Spinner selectCoursesSpinner = stopDialog.findViewById(R.id.selectCurrentCourses);
             selectCoursesSpinner.setAdapter(courseListAA);
+            stopDialog.show();
             buttonState = 0;
             startButton.setText("Start");
             Nearby.getMessagesClient(this).unsubscribe(realListener);
