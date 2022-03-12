@@ -9,6 +9,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/**
+ * Activity to help with grey box testing of Nearby Messages
+ */
 public class NearbyMessagesMockScreen extends AppCompatActivity {
 
     private ArrayList<String> messages;

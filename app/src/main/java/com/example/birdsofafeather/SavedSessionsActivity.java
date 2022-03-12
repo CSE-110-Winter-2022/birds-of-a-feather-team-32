@@ -37,11 +37,6 @@ public class SavedSessionsActivity extends AppCompatActivity{
         savedSessionsLayoutManager = new LinearLayoutManager(this);
         savedSessionsRecyclerView.setLayoutManager(savedSessionsLayoutManager);
 
-       /* List<String> testSessions = new ArrayList<>();
-        testSessions.add("1/1/1011");
-        testSessions.add("2/2/2022");
-        testSessions.add("3/3/3033"); */
-
         savedSessionsViewAdapter = new SavedSessionsViewAdapter(sessions);
         savedSessionsRecyclerView.setAdapter(savedSessionsViewAdapter);
     }

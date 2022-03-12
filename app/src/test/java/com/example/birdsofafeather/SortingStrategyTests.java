@@ -107,6 +107,16 @@ public class SortingStrategyTests {
         assertEquals(result.get(3).getName(), "Test Student 7");
     }
 
+    @Test
+    public void testDefaultSorting() {
+        List<StudentWithCourses> result = db.studentWithCoursesDao().getFromSession(0);
+
+        assertEquals(result.get(0).getName(), "Test Student 2");
+        assertEquals(result.get(1).getName(), "Test Student 3");
+        assertEquals(result.get(2).getName(), "Test Student 1");
+
+    }
+
     @After
     public void end() {
         db.close();
