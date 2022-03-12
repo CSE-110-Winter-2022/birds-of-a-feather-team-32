@@ -8,19 +8,18 @@
  */
 package com.example.birdsofafeather;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -39,16 +38,10 @@ import com.google.android.gms.nearby.Nearby;
 import com.google.android.gms.nearby.messages.Message;
 import com.google.android.gms.nearby.messages.MessageListener;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 public class ListOfBoFActivity extends AppCompatActivity {
 
@@ -68,7 +61,9 @@ public class ListOfBoFActivity extends AppCompatActivity {
     private HashSet<String> seenMessages;
     private HashSet<Course> ownCoursesSet;
     private List<StudentWithCourses> students = new ArrayList<>();
-    private int currentSessionId = -1;
+    private int currentSessionId;
+    private ImageButton favButton;
+    private Session favSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +91,18 @@ public class ListOfBoFActivity extends AppCompatActivity {
         // Restarts search for new bof if it was never turned off by user
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         boolean isBofSearchOn = preferences.getBoolean("bofSearchOn", false);
+
+
+        // make favorite session
+        String favName = "favorites";
+        int sessionID = -1;
+
+        favSession = new Session(sessionID,favName);
+        if (db.sessionsWithStudentsDao().get(-1) == null) {
+            db.sessionsWithStudentsDao().insert(favSession);
+        }
+
+
         /*
         /*
         if (isBofSearchOn) {
@@ -168,6 +175,12 @@ public class ListOfBoFActivity extends AppCompatActivity {
             this.testListener = new FakedMessageListener(realListener, messages);
         } else {
             this.testListener = new FakedMessageListener(realListener, new ArrayList<>());
+        }
+
+        if (buttonState == 1) {
+            Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
+            Nearby.getMessagesClient(this).unpublish(myMessage);
+            Nearby.getMessagesClient(this).publish(myMessage);
         }
 
         /*
@@ -281,6 +294,7 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         Button startButton = findViewById(R.id.runButton);
 
+
         // Build user message to publish to other students
         Message myMessage = new Message(buildMessage().getBytes(StandardCharsets.UTF_8));
 
@@ -316,17 +330,27 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
         String name = preferences.getString("name", "");
+        String uuid = preferences.getString("uuid", "");
         String photoURL = preferences.getString("image_url", "");
 
         List<Course> ownCourses = db.coursesDao().getCoursesFromStudentId(0);
+        List<StudentWithCourses> students = db.studentWithCoursesDao().getFromSession(currentSessionId);
 
         // Convert student data into desired format
         String message = "";
-        message += name + ",,,\n";
-        message += photoURL + ",,,\n";
+        message += uuid + ",,,,\n";
+        message += name + ",,,,\n";
+        message += photoURL + ",,,,\n";
 
+        // Append all courses
         for (Course c : ownCourses) {
             message += c.getCourseFullString() + "\n";
+        }
+        // Append any outgoing waves
+        for (StudentWithCourses s : students) {
+            if (s.student.getWavedAt()) {
+                message += s.student.getUUID() + ",wave,,,\n";
+            }
         }
         message = message.trim();
 
@@ -340,6 +364,11 @@ public class ListOfBoFActivity extends AppCompatActivity {
         super.onStop();
         Log.d("onStop", "onStop called");
         Nearby.getMessagesClient(this).unsubscribe(realListener);
+    }
+
+    public void onFavButtonClicked(View view) {
+        Intent intent = new Intent(this, FavoritesList.class);
+        startActivity(intent);
     }
 
     // Our custom Message Listener
@@ -365,19 +394,25 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
         // Get student data from found message
         public void parseStudentMessage(String studentMessage){
-
             String studentName;
             String photoUrl;
+            String uuid;
+            String waveFromID;
+            boolean wavedFrom = false;
             int numClassesOverlap = 0;
             CoursesDao courseDao = db.coursesDao();
+            SharedPreferences preferences = getSharedPreferences("BOF", MODE_PRIVATE);
 
             // Split message by the 3 commas
-            String[] data = studentMessage.split(",,,");
-            studentName = data[0];
-            photoUrl = data[1];
+            String[] data = studentMessage.split(",,,,");
+            uuid = data[0];
+            Log.d("Found new device", uuid);
+            studentName = data[1].trim();
+            Log.d("Found new student name", studentName);
+            photoUrl = data[2];
 
             // Split message by new line
-            String[] coursesString = data[2].split("\n");
+            String[] coursesString = data[3].split("\n");
 
             Course newCourse;
             // Ensure that a new student ID is used
@@ -388,33 +423,51 @@ public class ListOfBoFActivity extends AppCompatActivity {
                 String course = coursesString[i];
                 String[] courseParts = course.split(",");
 
-                // Ensure that a new course ID is used
-                int currId = courseDao.numCourses()+1;
+                // If this "course" ends with a comma, then it is a wave, not a course
+                if (course.charAt(course.length() - 1) == ',') {
+                    waveFromID = courseParts[0];
+                    // Check if the wave is directed at me
+                    if (waveFromID.equals(preferences.getString("uuid", "no uuid found"))) {
+                        Log.d("Found wave", uuid);
+                        wavedFrom = true;
+                    }
+                }
+                else {
+                    // Ensure that a new course ID is used
+                    int currId = courseDao.numCourses()+1;
 
-                String dept = courseParts[2];
-                Log.d("Found new dept", dept);
-                String num = courseParts[3];
-                Log.d("Found new course num", num);
-                String year = courseParts[0];
-                Log.d("Found new year", year);
-                String qtr = courseParts[1];
-                Log.d("Found new qtr", qtr);
-                String size = courseParts[4];
-                Log.d("Found new size", size);
+                    String dept = courseParts[2];
+                    Log.d("Found new dept", dept);
+                    String num = courseParts[3];
+                    Log.d("Found new course num", num);
+                    String year = courseParts[0];
+                    Log.d("Found new year", year);
+                    String qtr = courseParts[1];
+                    Log.d("Found new qtr", qtr);
+                    String size = courseParts[4];
+                    Log.d("Found new size", size);
 
-                // Create new course
-                newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
+                    // Create new course
+                    newCourse = new Course(currId, studentId, dept, num, year, qtr, size);
 
-                // If new course matches with one of the user's courses, add it to the database
-                if (ownCoursesSet.contains(newCourse)) {
-                    db.coursesDao().insert(newCourse);
-                    numClassesOverlap++;
+                    // If new course matches with one of the user's courses, add it to the database
+                    if (ownCoursesSet.contains(newCourse)) {
+                        db.coursesDao().insert(newCourse);
+                        numClassesOverlap++;
+                    }
                 }
             }
 
             // If new student has 1 or more shared courses, add them to the student database
             if (numClassesOverlap > 0) {
-                Student newStudent = new Student(studentId, currentSessionId, studentName, photoUrl, numClassesOverlap);
+                Student newStudent = new Student(studentId,
+                        currentSessionId,
+                        studentName,
+                        photoUrl,
+                        numClassesOverlap,
+                        uuid,
+                        wavedFrom,
+                        false);
                 db.studentWithCoursesDao().insert(newStudent);
             }
         }
@@ -424,4 +477,6 @@ public class ListOfBoFActivity extends AppCompatActivity {
             Log.d(TAG, "Lost sight of message: " + new String(message.getContent()));
         }
     }
+
+
 }

@@ -6,9 +6,11 @@
 package com.example.birdsofafeather.model.db;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -23,11 +25,20 @@ public interface StudentWithCoursesDao {
     @Query("SELECT * FROM students WHERE studentId=:id")
     StudentWithCourses get(int id);
 
-    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by numClassOverlap desc")
+    @Query("SELECT * FROM students WHERE favorite=1")
+    List<StudentWithCourses> getFavorites();
+
+    @Query("SELECT * FROM students WHERE sessionId=:sessionId order by wavedFrom desc,numClassOverlap desc")
     List<StudentWithCourses> getFromSession(int sessionId);
 
     @Query("SELECT COUNT(*) from students")
     int count();
+
+    @Query("UPDATE students SET wavedAt=:wavedAt WHERE studentId=:id")
+    void update(boolean wavedAt, int id);
+
+    @Query("UPDATE students SET favorite=:favorite WHERE studentId=:id")
+    void updateFavorite(boolean favorite, int id);
 
     @Insert
     void insert(Student student);

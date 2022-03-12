@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.birdsofafeather.model.db.Course;
@@ -28,6 +31,9 @@ public class ProfileActivity extends AppCompatActivity {
     private ProfileActivityViewAdapter profileActivityViewAdapter;
     private ImageView imageView;
     private TextView textview;
+    private ImageButton waveButton;
+    private StudentWithCourses student;
+    private int studentId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +43,9 @@ public class ProfileActivity extends AppCompatActivity {
         db = AppDatabase.singleton(this);
 
         Intent intent = getIntent();
-        int studentId = intent.getIntExtra("student_id",0);
+        studentId = intent.getIntExtra("student_id",0);
 
-        StudentWithCourses student = db.studentWithCoursesDao().get(studentId);
+        student = db.studentWithCoursesDao().get(studentId);
         List<Course> courses = student.getCourses();
 
         // set title
@@ -59,6 +65,13 @@ public class ProfileActivity extends AppCompatActivity {
         textview = findViewById(R.id.nameTextView);
         textview.setText(student.getName());
 
+        waveButton = findViewById(R.id.waveButton);
+
+        // Button should already be filled in if student has been waved at previously in this session
+        if (student.student.getWavedAt()) {
+            waveButton.setImageResource(R.mipmap.wave_filled);
+        }
+
         imageView = findViewById(R.id.profileImageView);
         String url = student.getPhotoURL();
         url = url.trim();
@@ -66,6 +79,16 @@ public class ProfileActivity extends AppCompatActivity {
                 .load(url)
                 .override(128,128)
                 .into(imageView);
+    }
+
+    public void onWaveClicked(View view) {
+        // Only clickable if student has not been waved at yet
+        if (!student.student.getWavedAt()) {
+            waveButton.setImageResource(R.mipmap.wave_filled);
+            Toast.makeText(this, "Wave sent!", Toast.LENGTH_LONG).show();
+
+            db.studentWithCoursesDao().update(true, studentId);
+        }
     }
 
     public void onBackClicked(View view) {
