@@ -8,6 +8,7 @@
  */
 package com.example.birdsofafeather;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -196,6 +198,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     // NOTE: In order to display Bluetooth permissions dialog box, need to clear Google Play Services Data
     public void onStartClicked(View view) {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_ADVERTISE,
+                        Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.ACCESS_FINE_LOCATION},
+                100);
         Button startButton = findViewById(R.id.runButton);
 
         // Build user message to publish to other students
@@ -278,8 +284,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
             stopDialog.show();
             buttonState = 0;
             startButton.setText("Start");
-            Nearby.getMessagesClient(this).unsubscribe(realListener);
             Nearby.getMessagesClient(this).unpublish(myMessage);
+            Nearby.getMessagesClient(this).unsubscribe(realListener);
             editor.putBoolean("bofSearchOn", false);
             editor.apply();
         }
@@ -315,8 +321,8 @@ public class ListOfBoFActivity extends AppCompatActivity {
         //if (buttonState == 0) {
             buttonState = 1;
             startButton.setText("Stop");
-            Nearby.getMessagesClient(this).subscribe(realListener);
             Nearby.getMessagesClient(this).publish(myMessage);
+            Nearby.getMessagesClient(this).subscribe(realListener);
             editor.putBoolean("bofSearchOn", true);
             editor.apply();
             testListener.getMessage();
@@ -373,9 +379,9 @@ public class ListOfBoFActivity extends AppCompatActivity {
 
     @Override
     public void onStop() {
-        super.onStop();
         Log.d("onStop", "onStop called");
         Nearby.getMessagesClient(this).unsubscribe(realListener);
+        super.onStop();
     }
 
     public void onFavButtonClicked(View view) {
@@ -482,6 +488,10 @@ public class ListOfBoFActivity extends AppCompatActivity {
                         false);
                 db.studentWithCoursesDao().insert(newStudent);
             }
+        }
+
+        public ListOfBoFViewAdapter getViewAdapter() {
+            return studentViewAdapter;
         }
 
         @Override
